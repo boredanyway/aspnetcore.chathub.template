@@ -134,8 +134,8 @@ namespace Oqtane.ChatHubs
                     var items = this.ChatHubService.Rooms.Swap(e.DraggableItemOldIndex, e.DraggableItemNewIndex);
                     this.ChatHubService.Rooms = items.ToList<ChatHubRoom>();
 
-                    await this.BlazorVideoService.RestartStreamTaskIfExists(this.ChatHubService.Rooms[e.DraggableItemOldIndex].Id.ToString());
-                    await this.BlazorVideoService.RestartStreamTaskIfExists(this.ChatHubService.Rooms[e.DraggableItemNewIndex].Id.ToString());
+                    await this.BlazorVideoService.RestartStreamTaskIfExists(this.ChatHubService.Rooms[e.DraggableItemOldIndex].Id.ToString(), ChatHubService.Connection.ConnectionId);
+                    await this.BlazorVideoService.RestartStreamTaskIfExists(this.ChatHubService.Rooms[e.DraggableItemNewIndex].Id.ToString(), ChatHubService.Connection.ConnectionId);
 
                     this.UpdateUIStateHasChanged();
                 }
@@ -418,7 +418,7 @@ namespace Oqtane.ChatHubs
         {
             foreach (var item in this.ChatHubService.Rooms)
             {
-                await this.BlazorVideoService.RestartStreamTaskIfExists(item.Id.ToString());
+                await this.BlazorVideoService.RestartStreamTaskIfExists(item.Id.ToString(), ChatHubService.Connection.ConnectionId);
             }
         }
 

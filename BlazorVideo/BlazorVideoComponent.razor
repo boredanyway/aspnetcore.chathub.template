@@ -55,7 +55,7 @@
             <div class="video-item-resize-container-@Id position-relative">
 
                 <div class="align-items-center justify-content-center px-3 h-100 @(BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.VideoOverlay == true) ? "d-flex" : "d-none")">
-                    <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id)">
+                    <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id, ConnectionId)">
                         ▷ @Name
                     </button>
                 </div>
@@ -86,7 +86,7 @@
             <div class="video-item-resize-container-@Id position-relative">
 
                 <div class="align-items-center justify-content-center px-3 h-100 @(BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.VideoOverlay == true) ? "d-flex" : "d-none")">
-                    <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id)">
+                    <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id, ConnectionId)">
                         ▷ @Name
                     </button>
                 </div>
@@ -95,7 +95,7 @@
                     <div class="text-white px-2 py-2 mb-0 position-absolute video-item-ellipsis">
                         <small>[rem.] @Name</small>
                     </div>
-                    <video id="remote-livestream-element-id-@Id" class="blazor-video-item mb-0 w-100 h-100" controls></video>
+                    <video id="remote-livestream-element-id-@(Id + ConnectionId)" class="blazor-video-item mb-0 w-100 h-100" controls></video>
                 </div>
 
             </div>

@@ -45,6 +45,8 @@ namespace Oqtane.Shared.Models
         public ICollection<ChatHubWaitingRoomItem> WaitingRoomItems { get; set; } = new List<ChatHubWaitingRoomItem>();
         [NotMapped]
         public virtual ChatHubUser Creator { get; set; }
+        [NotMapped]
+        public virtual ChatHubUser RemoteCreator { get; set; }
 
     }
 }

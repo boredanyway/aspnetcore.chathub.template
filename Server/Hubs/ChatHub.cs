@@ -527,7 +527,7 @@ namespace Oqtane.ChatHubs.Hubs
                 Connections = connectionClientModels.ToList(),
             };
 
-            await Clients.GroupExcept(roomId, connectionsIds).SendAsync("DownloadBytes", dataURIresult, roomId);
+            await Clients.GroupExcept(roomId, connectionsIds).SendAsync("DownloadBytes", dataURIresult, roomId, Context.ConnectionId, creatorClientModel);
         }
 
         [AllowAnonymous]

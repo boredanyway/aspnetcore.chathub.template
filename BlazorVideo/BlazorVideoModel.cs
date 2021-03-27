@@ -7,6 +7,8 @@ namespace BlazorVideo
 
         public string Id { get; set; }
 
+        public string ConnectionId { get; set; }
+
         public BlazorVideoType Type { get; set; }
 
         public IJSObjectReference JsObjRef { get; set; }

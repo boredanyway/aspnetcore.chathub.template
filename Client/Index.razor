@@ -325,11 +325,21 @@
                                     </WindowTitle>
                                     <WindowLivestream>
 
-                                        @{
-                                            BlazorVideoType videoType = ChatHubService.ConnectedUser.UserId == room.CreatorId ? BlazorVideoType.LocalLivestream : BlazorVideoType.RemoteLivestream;
+                                        @if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
+                                        {
+                                            <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title"></BlazorVideoComponent>
                                         }
+                                        else
+                                        {
+                                            if(room.RemoteCreator != null) {
 
-                                        <BlazorVideoComponent Id="@room.Id.ToString()" Type="@videoType" BackgroundColor="@room.BackgroundColor" Name="@room.Title"></BlazorVideoComponent>
+                                                foreach (var connection in room.RemoteCreator?.Connections)
+                                                {
+                                                    <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@connection.ConnectionId" Type="@BlazorVideoType.RemoteLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title"></BlazorVideoComponent>
+                                                }
+
+                                            }                                                                                      
+                                        }
 
                                     </WindowLivestream>
                                     <WindowContent>
@@ -664,8 +674,23 @@
 
                                                                     <h5>Webcam Live Streams <span class="badge badge-success">NEW</span></h5>
 
-                                                                    <button type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(room.Id.ToString())">Start Streaming</button>
-                                                                    <button type="button" @onclick="async () => await BlazorVideoService.StopVideoChat(room.Id.ToString())">Stop Streaming</button>
+                                                                    @if (ChatHubService.ConnectedUser.UserId == room.CreatorId)
+                                                                    {
+                                                                        <button type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(room.Id.ToString(), ChatHubService.Connection.ConnectionId)">Start Streaming</button>
+                                                                        <button type="button" @onclick="async () => await BlazorVideoService.StopVideoChat(room.Id.ToString(), ChatHubService.Connection.ConnectionId)">Stop Streaming</button>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if(room.RemoteCreator != null) {
+
+                                                                            foreach (var connection in room.RemoteCreator?.Connections)
+                                                                            {
+                                                                                <button type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(room.Id.ToString(), connection.ConnectionId)">Start Streaming</button>
+                                                                                <button type="button" @onclick="async () => await BlazorVideoService.StopVideoChat(room.Id.ToString(), connection.ConnectionId)">Stop Streaming</button>
+                                                                            }
+
+                                                                        }
+                                                                    }
 
                                                                 </div>
 

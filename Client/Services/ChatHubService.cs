@@ -77,7 +77,7 @@ namespace Oqtane.ChatHubs.Services
         public event EventHandler<dynamic> OnRemoveWhitelistUserEvent;
         public event EventHandler<dynamic> OnAddBlacklistUserEvent;
         public event EventHandler<dynamic> OnRemoveBlacklistUserEvent;
-        public event EventHandler<dynamic> OnDownloadBytesEvent;
+        public event Action<string, string, string, ChatHubUser> OnDownloadBytesEvent;
         public event EventHandler<int> OnClearHistoryEvent;
         public event EventHandler<ChatHubUser> OnDisconnectEvent;
         public event EventHandler<dynamic> OnExceptionEvent;
@@ -117,7 +117,7 @@ namespace Oqtane.ChatHubs.Services
             this.OnRemoveWhitelistUserEvent += OnRemoveWhitelistUserExecute;
             this.OnAddBlacklistUserEvent += OnAddBlacklistUserExecute;
             this.OnRemoveBlacklistUserEvent += OnRemoveBlacklistUserExecute;
-            this.OnDownloadBytesEvent += OnDownloadBytesExecuteAsync;
+            this.OnDownloadBytesEvent += async (string dataURI, string id, string connectionId, ChatHubUser creator) => await OnDownloadBytesExecuteAsync(dataURI, id, connectionId, creator);
             this.OnRemoveIgnoredByUserEvent += OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent += OnClearHistoryExecute;
             this.OnDisconnectEvent += OnDisconnectExecute;
@@ -195,7 +195,7 @@ namespace Oqtane.ChatHubs.Services
             this.Connection.On("RemoveIgnoredUser", (ChatHubUser ignoredUser) => OnRemoveIgnoredUserEvent(this, ignoredUser));
             this.Connection.On("AddIgnoredByUser", (ChatHubUser ignoredUser) => OnAddIgnoredByUserEvent(this, ignoredUser));
             this.Connection.On("RemoveIgnoredByUser", (ChatHubUser ignoredUser) => OnRemoveIgnoredByUserEvent(this, ignoredUser));
-            this.Connection.On("DownloadBytes", (string dataURI, string id) => OnDownloadBytesEvent(this, new { dataURI = dataURI, id = id}));
+            this.Connection.On("DownloadBytes", (string dataURI, string id, string connectionId, ChatHubUser creator) => OnDownloadBytesEvent(dataURI, id, connectionId, creator));
             this.Connection.On("AddModerator", (ChatHubModerator moderator, int roomId) => OnAddModeratorEvent(this, new { moderator = moderator, roomId = roomId }));
             this.Connection.On("RemoveModerator", (ChatHubModerator moderator, int roomId) => OnRemoveModeratorEvent(this, new { moderator = moderator, roomId = roomId }));
             this.Connection.On("AddWhitelistUser", (ChatHubWhitelistUser whitelistUser, int roomId) => OnAddWhitelistUserEvent(this, new { whitelistUser = whitelistUser, roomId = roomId }));
@@ -253,14 +253,18 @@ namespace Oqtane.ChatHubs.Services
                 Console.WriteLine(ex.Message);
             }
         }
-        public void OnDownloadBytesExecuteAsync(object sender, dynamic e)
+        
+        public async Task OnDownloadBytesExecuteAsync(string dataURI, string id, string connectionId, ChatHubUser creator)
         {
-            string dataURI = e.dataURI;
-            string id = e.id;
-
             try
             {
-                this.BlazorVideoService.AppendBufferRemoteLivestream(dataURI, id);
+                var room = this.Rooms.FirstOrDefault(item => item.Id.ToString() == id);
+                if(room != null)
+                {
+                    room.RemoteCreator = creator;
+                }
+
+                await this.BlazorVideoService.AppendBufferRemoteLivestream(dataURI, id, connectionId);
             }
             catch (Exception ex)
             {
@@ -673,7 +677,7 @@ namespace Oqtane.ChatHubs.Services
             this.OnAddIgnoredByUserEvent -= OnAddIgnoredByUserExecute;
             this.OnAddModeratorEvent -= OnAddModeratorExecute;
             this.OnRemoveModeratorEvent -= OnRemoveModeratorExecute;
-            this.OnDownloadBytesEvent -= OnDownloadBytesExecuteAsync;
+            this.OnDownloadBytesEvent -= async (string dataURI, string id, string connectionId, ChatHubUser creator) => await OnDownloadBytesExecuteAsync(dataURI, id, connectionId, creator);
             this.OnRemoveIgnoredByUserEvent -= OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent -= OnClearHistoryExecute;
             this.OnDisconnectEvent -= OnDisconnectExecute;

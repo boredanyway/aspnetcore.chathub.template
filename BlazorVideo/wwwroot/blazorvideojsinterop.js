@@ -1,8 +1,8 @@
-export function initblazorvideo(dotnetobjref, id, connectionid, type) {
+export function initblazorvideo(dotnetobjref, id, type) {
 
     var __obj = {
 
-        blazorvideomap: function (dotnetobjref, id, connectionid, type) {
+        blazorvideomap: function (dotnetobjref, id, type) {
             
             var __selfblazorvideomap = this;
 
@@ -48,29 +48,29 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
             };
 
             this.livestreams = [];
-            this.getlivestream = function (roomId) {
+            this.getlivestream = function (roomid, connectionid) {
 
-                return __selfblazorvideomap.livestreams.find(item => item.id === roomId);
+                return __selfblazorvideomap.livestreams.find(item => item.id === roomid && item.connectionid == connectionid);
             };
             this.addlivestream = function (obj) {
 
-                var item = __selfblazorvideomap.getlivestream(obj.id);
+                var item = __selfblazorvideomap.getlivestream(obj.id, obj.connectionid);
                 if (item === undefined) {
 
                     __selfblazorvideomap.livestreams.push(obj);
                 }
             };
-            this.removelivestream = function (roomId) {
+            this.removelivestream = function (roomid, connectionid) {
 
                 //__selfblazorvideomap.livestreams = __selfblazorvideomap.livestreams.filter(item => item.id !== roomId);
-                var livestream = __selfblazorvideomap.getlivestream(roomId);
+                var livestream = __selfblazorvideomap.getlivestream(roomid, connectionid);
                 if (livestream !== undefined) {
 
                     __selfblazorvideomap.livestreams.splice(__selfblazorvideomap.livestreams.indexOf(livestream), 1);
                 }
             };
 
-            this.locallivestream = function () {
+            this.locallivestream = function (connectionid) {
 
                 var __selflocallivestream = this;
 
@@ -314,17 +314,18 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                 };
 
             };
-            this.initlocallivestream = function () {
+            this.initlocallivestream = function (connectionid) {
 
                 try {
 
-                    __selfblazorvideomap.getlivestream(id);
+                    __selfblazorvideomap.getlivestream(id, connectionid);
                     if (livestream === undefined) {
 
-                        var livestream = new __selfblazorvideomap.locallivestream();
+                        var livestream = new __selfblazorvideomap.locallivestream(connectionid);
                         var livestreamdicitem = {
 
                             id: id,
+                            connectionid: connectionid,
                             item: livestream,
                         };
 
@@ -336,11 +337,11 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                     console.warn(ex);
                 }
             };
-            this.initdeviceslocallivestream = async function () {
+            this.initdeviceslocallivestream = async function (connectionid) {
 
                 try {
 
-                    var livestream = __selfblazorvideomap.getlivestream(id);
+                    var livestream = __selfblazorvideomap.getlivestream(id, connectionid);
                     if (livestream !== undefined && livestream.item instanceof __selfblazorvideomap.locallivestream) {
 
                         await livestream.item.initdevices();
@@ -351,11 +352,11 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                     console.warn(ex);
                 }
             };
-            this.startbroadcastinglocallivestream = async function () {
+            this.startbroadcastinglocallivestream = async function (connectionid) {
 
                 try {
 
-                    var livestream = __selfblazorvideomap.getlivestream(id);
+                    var livestream = __selfblazorvideomap.getlivestream(id, connectionid);
                     if (livestream !== undefined && livestream.item instanceof __selfblazorvideomap.locallivestream) {
 
                         await livestream.item.initstream();
@@ -366,40 +367,40 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                     console.warn(ex);
                 }
             };
-            this.startsequencelocallivestream = function () {
+            this.startsequencelocallivestream = function (connectionid) {
 
-                var livestream = __selfblazorvideomap.getlivestream(id);
+                var livestream = __selfblazorvideomap.getlivestream(id, connectionid);
                 if (livestream !== undefined && livestream.item instanceof __selfblazorvideomap.locallivestream) {
 
                     livestream.item.startsequence();
                 }
             };
-            this.stopsequencelocallivestream = function () {
+            this.stopsequencelocallivestream = function (connectionid) {
 
-                var livestream = __selfblazorvideomap.getlivestream(id);
+                var livestream = __selfblazorvideomap.getlivestream(id, connectionid);
                 if (livestream !== undefined && livestream.item instanceof __selfblazorvideomap.locallivestream) {
 
                     livestream.item.stopsequence();
                 }
             };
-            this.closelocallivestream = async function () {
+            this.closelocallivestream = async function (connectionid) {
 
-                var livestream = __selfblazorvideomap.getlivestream(id);
+                var livestream = __selfblazorvideomap.getlivestream(id, connectionid);
                 if (livestream !== undefined && livestream.item instanceof __selfblazorvideomap.locallivestream) {
 
                     livestream.item.audioselect.removeEventListener("change", livestream.item.handleonchangeevent);
                     livestream.item.videoselect.removeEventListener("change", livestream.item.handleonchangeevent);
 
                     await livestream.item.cancel();
-                    __selfblazorvideomap.removelivestream(id);
+                    __selfblazorvideomap.removelivestream(id, connectionid);
                 }
             };
 
-            this.remotelivestream = function () {
+            this.remotelivestream = function (connectionid) {
 
                 var __selfremotelivestream = this;
 
-                this.videoelementid = __selfblazorvideomap.remotelivestreamelementidprefix + id;
+                this.videoelementid = __selfblazorvideomap.remotelivestreamelementidprefix + id + connectionid;
                 this.getvideoelement = function () {
                     return document.querySelector(__selfremotelivestream.videoelementid);
                 };
@@ -486,17 +487,18 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                     }
                 };
             };
-            this.initremotelivestream = function () {
+            this.initremotelivestream = function (connectionid) {
 
                 try {
 
-                    __selfblazorvideomap.getlivestream(id);
+                    __selfblazorvideomap.getlivestream(id, connectionid);
                     if (livestream === undefined) {
 
-                        var livestream = new __selfblazorvideomap.remotelivestream();
+                        var livestream = new __selfblazorvideomap.remotelivestream(connectionid);
                         var livestreamdicitem = {
 
                             id: id,
+                            connectionid: connectionid,
                             item: livestream,
                         };
 
@@ -508,11 +510,11 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                     console.warn(ex);
                 }
             };
-            this.appendbufferremotelivestream = function (base64str) {
+            this.appendbufferremotelivestream = function (base64str, connectionid) {
 
                 try {
 
-                    var livestream = __selfblazorvideomap.getlivestream(id);
+                    var livestream = __selfblazorvideomap.getlivestream(id, connectionid);
                     if (livestream !== undefined && livestream.item instanceof __selfblazorvideomap.remotelivestream) {
 
                         livestream.item.appendbuffer(base64str);
@@ -523,16 +525,16 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                     console.warn(ex);
                 }
             };
-            this.closeremotelivestream = async function () {
+            this.closeremotelivestream = async function (connectionid) {
 
-                var livestream = __selfblazorvideomap.getlivestream(id);
+                var livestream = __selfblazorvideomap.getlivestream(id, connectionid);
                 if (livestream !== undefined && livestream.item instanceof __selfblazorvideomap.remotelivestream) {
 
-                    __selfblazorvideomap.removelivestream(id);
+                    __selfblazorvideomap.removelivestream(id, connectionid);
                 }
             };
         }
     }
 
-    return new __obj.blazorvideomap(dotnetobjref, id, connectionid, type);
+    return new __obj.blazorvideomap(dotnetobjref, id, type);
 };

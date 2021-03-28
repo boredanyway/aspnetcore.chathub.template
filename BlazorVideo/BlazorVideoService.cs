@@ -179,11 +179,7 @@ namespace BlazorVideo
         }
         public async Task RestartStreamTaskIfExists(string roomId, string connectionId)
         {
-            if (this.LocalStreamTasks.Any(item => item.Value.roomId == roomId && item.Value.connectionId == connectionId) || this.RemoteStreamTasks.Any(item => item.Value.roomId == roomId && item.Value.connectionId == connectionId))
-            {
-                await this.StartVideoChat(roomId, connectionId);
-            }
-
+            await this.StartVideoChat(roomId, connectionId);
             this.RunUpdateUI.Invoke();
         }
         public void AddLocalStreamTask(string roomId, string connectionId, Task task, CancellationTokenSource tokenSource)
@@ -285,9 +281,9 @@ namespace BlazorVideo
         }
 
         [JSInvokable("PauseLivestreamTask")]
-        public void PauseLivestreamTask(string id)
+        public void PauseLivestreamTask(string id, string connectionId)
         {
-            List<KeyValuePair<Guid, dynamic>> list = this.BlazorVideoService.LocalStreamTasks.Where(item => item.Value.roomId == id && item.Value.connectionId).ToList();
+            List<KeyValuePair<Guid, dynamic>> list = this.BlazorVideoService.LocalStreamTasks.Where(item => item.Value.roomId == id && item.Value.connectionId == connectionId).ToList();
             if (list.Any())
             {
                 KeyValuePair<Guid, dynamic> keyValuePair = list.FirstOrDefault();

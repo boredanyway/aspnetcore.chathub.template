@@ -134,8 +134,27 @@ namespace Oqtane.ChatHubs
                     var items = this.ChatHubService.Rooms.Swap(e.DraggableItemOldIndex, e.DraggableItemNewIndex);
                     this.ChatHubService.Rooms = items.ToList<ChatHubRoom>();
 
-                    await this.BlazorVideoService.RestartStreamTaskIfExists(this.ChatHubService.Rooms[e.DraggableItemOldIndex].Id.ToString(), ChatHubService.Connection.ConnectionId);
-                    await this.BlazorVideoService.RestartStreamTaskIfExists(this.ChatHubService.Rooms[e.DraggableItemNewIndex].Id.ToString(), ChatHubService.Connection.ConnectionId);
+                    List<ChatHubRoom> rooms = new List<ChatHubRoom>();
+                    rooms.Add(this.ChatHubService.Rooms[e.DraggableItemOldIndex]);
+                    rooms.Add(this.ChatHubService.Rooms[e.DraggableItemNewIndex]);
+
+                    foreach(var room in rooms)
+                    {
+                        if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
+                        {
+                            await this.BlazorVideoService.RestartStreamTaskIfExists(room.Id.ToString(), ChatHubService.Connection.ConnectionId);
+                        }
+                        else
+                        {
+                            if (room.RemoteCreator != null)
+                            {
+                                foreach (var connection in room.RemoteCreator?.Connections)
+                                {
+                                    await this.BlazorVideoService.RestartStreamTaskIfExists(room.Id.ToString(), connection.ConnectionId);
+                                }
+                            }
+                        }
+                    }
 
                     this.UpdateUIStateHasChanged();
                 }
@@ -416,9 +435,22 @@ namespace Oqtane.ChatHubs
         }
         public async void RemovedWindow(WindowEvent e)
         {
-            foreach (var item in this.ChatHubService.Rooms)
+            foreach (var room in this.ChatHubService.Rooms)
             {
-                await this.BlazorVideoService.RestartStreamTaskIfExists(item.Id.ToString(), ChatHubService.Connection.ConnectionId);
+                if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
+                {
+                    await this.BlazorVideoService.RestartStreamTaskIfExists(room.Id.ToString(), ChatHubService.Connection.ConnectionId);
+                }
+                else
+                {
+                    if (room.RemoteCreator != null)
+                    {
+                        foreach (var connection in room.RemoteCreator?.Connections)
+                        {
+                            await this.BlazorVideoService.RestartStreamTaskIfExists(room.Id.ToString(), connection.ConnectionId);
+                        }
+                    }
+                }
             }
         }
 

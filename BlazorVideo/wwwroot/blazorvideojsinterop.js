@@ -282,7 +282,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                 };
                 this.pauselivestreamtask = function () {
 
-                    dotnetobjref.invokeMethodAsync('PauseLivestreamTask', id);
+                    dotnetobjref.invokeMethodAsync('PauseLivestreamTask', id, connectionid);
                 };
                 this.continuelivestreamtask = function () {
 
@@ -306,6 +306,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                             resolve();
                         }
                         catch (err) {
+
                             console.warn(err);
                         }
                     });
@@ -486,6 +487,22 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                         console.error(ex);
                     }
                 };
+                this.cancel = function () {
+
+                    var promise = new Promise(function (resolve) {
+
+                        try {
+
+                            resolve();
+                        }
+                        catch (err) {
+
+                            console.warn(err);
+                        }
+                    });
+
+                    return promise;
+                };
             };
             this.initremotelivestream = function () {
 
@@ -530,9 +547,11 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                 var livestream = __selfblazorvideomap.getlivestream(id, connectionid);
                 if (livestream !== undefined && livestream.item instanceof __selfblazorvideomap.remotelivestream) {
 
+                    await livestream.item.cancel();
                     __selfblazorvideomap.removelivestream(id, connectionid);
                 }
             };
+
         }
     }
 

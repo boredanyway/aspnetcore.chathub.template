@@ -252,8 +252,7 @@ namespace Oqtane.ChatHubs.Services
             {
                 Console.WriteLine(ex.Message);
             }
-        }
-        
+        }        
         public async Task OnDownloadBytesExecuteAsync(string dataURI, string id, string connectionId, ChatHubUser creator)
         {
             try
@@ -262,6 +261,7 @@ namespace Oqtane.ChatHubs.Services
                 if(room != null)
                 {
                     room.RemoteCreator = creator;
+                    this.RunUpdateUI();
                 }
 
                 await this.BlazorVideoService.AppendBufferRemoteLivestream(dataURI, id, connectionId);

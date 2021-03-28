@@ -327,7 +327,7 @@
 
                                         @if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
                                         {
-                                            <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title"></BlazorVideoComponent>
+                                            <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title"></BlazorVideoComponent>
                                         }
                                         else
                                         {

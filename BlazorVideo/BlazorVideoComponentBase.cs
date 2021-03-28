@@ -19,7 +19,7 @@ namespace BlazorVideo
             this.BlazorVideoService.RunUpdateUI += UpdateUIStateHasChanged;
 
             await this.BlazorVideoService.InitBlazorVideo();
-            await this.BlazorVideoService.InitBlazorVideoMap(this.Id, this.Type);
+            await this.BlazorVideoService.InitBlazorVideoMap(this.Id, this.ConnectionId, this.Type);
 
             await base.OnInitializedAsync();
         }

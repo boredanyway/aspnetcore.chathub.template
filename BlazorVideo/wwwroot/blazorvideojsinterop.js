@@ -74,16 +74,16 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
 
                 var __selflocallivestream = this;
 
-                this.videoelementid = __selfblazorvideomap.locallivestreamelementidprefix + id;
+                this.videoelementid = __selfblazorvideomap.locallivestreamelementidprefix + id + connectionid;
                 this.getvideoelement = function () {
                     return document.querySelector(__selflocallivestream.videoelementid);
                 };
 
-                this.audiosourcelocalid = __selfblazorvideomap.audiosourcelocalid + id;
+                this.audiosourcelocalid = __selfblazorvideomap.audiosourcelocalid + id + connectionid;
                 this.getaudiosourcelocaldomelement = function () {
                     return document.querySelector(__selflocallivestream.audiosourcelocalid);
                 };
-                this.videosourcelocalid = __selfblazorvideomap.videosourcelocalid + id;
+                this.videosourcelocalid = __selfblazorvideomap.videosourcelocalid + id + connectionid;
                 this.getvideosourcelocaldomelement = function () {
                     return document.querySelector(__selflocallivestream.videosourcelocalid);
                 };

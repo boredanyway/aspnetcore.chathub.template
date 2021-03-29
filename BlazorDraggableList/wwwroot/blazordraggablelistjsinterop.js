@@ -23,11 +23,17 @@
             });
             document.getElementById(elementId).addEventListener('dragenter', function (event) {
 
-                event.target.classList.add('active-dropzone');
+                if (event.target.classList !== undefined) {
+
+                    event.target.classList.add('active-dropzone');
+                }
             });
             document.getElementById(elementId).addEventListener('dragleave', function (event) {
 
-                event.target.classList.remove('active-dropzone');
+                if (event.target.classList !== undefined) {
+
+                    event.target.classList.remove('active-dropzone');
+                }
             });
             document.getElementById(elementId).addEventListener('dragover', function (event) {
 

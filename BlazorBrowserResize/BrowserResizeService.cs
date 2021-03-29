@@ -25,9 +25,9 @@ namespace BlazorBrowserResize
             this.BrowserResizeMap = await this.Module.InvokeAsync<IJSObjectReference>("initbrowserresize", this.DotNetObjRef);
         }
 
-        public void RegisterWindowResizeCallback()
+        public async Task RegisterWindowResizeCallback()
         {
-            this.BrowserResizeMap.InvokeVoidAsync("registerResizeCallback");
+            await this.BrowserResizeMap.InvokeVoidAsync("registerResizeCallback");
         }
         public async Task<int> GetInnerHeight()
         {

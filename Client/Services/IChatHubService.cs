@@ -40,8 +40,8 @@ namespace Oqtane.ChatHubs.Services
         public event EventHandler<ChatHubUser> OnUpdateConnectedUserEvent;
         public event EventHandler<ChatHubRoom> OnAddChatHubRoomEvent;
         public event EventHandler<ChatHubRoom> OnRemoveChatHubRoomEvent;
-        public event EventHandler<dynamic> OnAddChatHubUserEvent;
-        public event EventHandler<dynamic> OnRemoveChatHubUserEvent;
+        public event Action<ChatHubUser, string> OnAddChatHubUserEvent;
+        public event Action<ChatHubUser, string> OnRemoveChatHubUserEvent;
         public event EventHandler<ChatHubMessage> OnAddChatHubMessageEvent;
         public event EventHandler<ChatHubInvitation> OnAddChatHubInvitationEvent;
         public event EventHandler<ChatHubInvitation> OnRemoveChatHubInvitationEvent;

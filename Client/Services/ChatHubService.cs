@@ -59,8 +59,8 @@ namespace Oqtane.ChatHubs.Services
         public event EventHandler<ChatHubUser> OnUpdateConnectedUserEvent;
         public event EventHandler<ChatHubRoom> OnAddChatHubRoomEvent;
         public event EventHandler<ChatHubRoom> OnRemoveChatHubRoomEvent;
-        public event EventHandler<dynamic> OnAddChatHubUserEvent;
-        public event EventHandler<dynamic> OnRemoveChatHubUserEvent;
+        public event Action<ChatHubUser, string> OnAddChatHubUserEvent;
+        public event Action<ChatHubUser, string> OnRemoveChatHubUserEvent;
         public event EventHandler<ChatHubMessage> OnAddChatHubMessageEvent;
         public event EventHandler<ChatHubInvitation> OnAddChatHubInvitationEvent;
         public event EventHandler<ChatHubInvitation> OnRemoveChatHubInvitationEvent;
@@ -70,8 +70,8 @@ namespace Oqtane.ChatHubs.Services
         public event EventHandler<ChatHubUser> OnRemoveIgnoredUserEvent;
         public event EventHandler<ChatHubUser> OnAddIgnoredByUserEvent;
         public event EventHandler<ChatHubUser> OnRemoveIgnoredByUserEvent;
-        public event EventHandler<dynamic> OnAddModeratorEvent;
-        public event EventHandler<dynamic> OnRemoveModeratorEvent;
+        public event Action<ChatHubModerator, int> OnAddModeratorEvent;
+        public event Action<ChatHubModerator, int> OnRemoveModeratorEvent;
         public event EventHandler<dynamic> OnAddWhitelistUserEvent;
         public event EventHandler<dynamic> OnRemoveWhitelistUserEvent;
         public event EventHandler<dynamic> OnAddBlacklistUserEvent;
@@ -182,8 +182,8 @@ namespace Oqtane.ChatHubs.Services
             this.Connection.On("OnUpdateConnectedUser", (ChatHubUser user) => OnUpdateConnectedUserEvent(this, user));
             this.Connection.On("AddRoom", (ChatHubRoom room) => OnAddChatHubRoomEvent(this, room));
             this.Connection.On("RemoveRoom", (ChatHubRoom room) => OnRemoveChatHubRoomEvent(this, room));
-            this.Connection.On("AddUser", (ChatHubUser user, string roomId) => OnAddChatHubUserEvent(this, new { userModel = user, roomId = roomId }));
-            this.Connection.On("RemoveUser", (ChatHubUser user, string roomId) => OnRemoveChatHubUserEvent(this, new { userModel = user, roomId = roomId }));
+            this.Connection.On("AddUser", (ChatHubUser user, string roomId) => OnAddChatHubUserEvent(user, roomId));
+            this.Connection.On("RemoveUser", (ChatHubUser user, string roomId) => OnRemoveChatHubUserEvent(user, roomId));
             this.Connection.On("AddMessage", (ChatHubMessage message) => OnAddChatHubMessageEvent(this, message));
             this.Connection.On("AddInvitation", (ChatHubInvitation invitation) => OnAddChatHubInvitationEvent(this, invitation));
             this.Connection.On("RemoveInvitation", (ChatHubInvitation invitation) => OnRemoveChatHubInvitationEvent(this, invitation));
@@ -194,8 +194,8 @@ namespace Oqtane.ChatHubs.Services
             this.Connection.On("AddIgnoredByUser", (ChatHubUser ignoredUser) => OnAddIgnoredByUserEvent(this, ignoredUser));
             this.Connection.On("RemoveIgnoredByUser", (ChatHubUser ignoredUser) => OnRemoveIgnoredByUserEvent(this, ignoredUser));
             this.Connection.On("DownloadBytes", (string dataURI, string id, string connectionId, ChatHubUser creator) => OnDownloadBytesEvent(dataURI, id, connectionId, creator));
-            this.Connection.On("AddModerator", (ChatHubModerator moderator, int roomId) => OnAddModeratorEvent(this, new { moderator = moderator, roomId = roomId }));
-            this.Connection.On("RemoveModerator", (ChatHubModerator moderator, int roomId) => OnRemoveModeratorEvent(this, new { moderator = moderator, roomId = roomId }));
+            this.Connection.On("AddModerator", (ChatHubModerator moderator, int roomId) => OnAddModeratorEvent(moderator, roomId));
+            this.Connection.On("RemoveModerator", (ChatHubModerator moderator, int roomId) => OnRemoveModeratorEvent(moderator, roomId));
             this.Connection.On("AddWhitelistUser", (ChatHubWhitelistUser whitelistUser, int roomId) => OnAddWhitelistUserEvent(this, new { whitelistUser = whitelistUser, roomId = roomId }));
             this.Connection.On("RemoveWhitelistUser", (ChatHubWhitelistUser whitelistUser, int roomId) => OnRemoveWhitelistUserEvent(this, new { whitelistUser = whitelistUser, roomId = roomId }));
             this.Connection.On("AddBlacklistUser", (ChatHubBlacklistUser blacklistUser, int roomId) => OnAddBlacklistUserEvent(this, new { blacklistUser = blacklistUser, roomId = roomId }));
@@ -474,14 +474,14 @@ namespace Oqtane.ChatHubs.Services
             this.Rooms.RemoveRoom(room);
             this.RunUpdateUI();
         }
-        private void OnAddChatHubUserExecute(object sender, dynamic obj)
+        private void OnAddChatHubUserExecute(ChatHubUser user, string roomId)
         {
-            this.Rooms.AddUser(obj.userModel as ChatHubUser, obj.roomId as string);
+            this.Rooms.AddUser(user, roomId);
             this.RunUpdateUI();
         }
-        private void OnRemoveChatHubUserExecute(object sender, dynamic obj)
+        private void OnRemoveChatHubUserExecute(ChatHubUser user, string roomId)
         {
-            this.Rooms.RemoveUser(obj.userModel as ChatHubUser, obj.roomId as string);
+            this.Rooms.RemoveUser(user, roomId);
             this.RunUpdateUI();
         }
         public async void OnAddChatHubMessageExecute(object sender, ChatHubMessage message)
@@ -536,14 +536,14 @@ namespace Oqtane.ChatHubs.Services
             this.IgnoredByUsers.RemoveIgnoredByUser(user);
             this.RunUpdateUI();
         }
-        private void OnAddModeratorExecute(object sender, dynamic e)
+        private void OnAddModeratorExecute(ChatHubModerator moderator, int roomId)
         {
-            this.Rooms.AddModerator(e.moderator as ChatHubModerator, (int)e.roomId);
+            this.Rooms.AddModerator(moderator, roomId);
             this.RunUpdateUI();
         }
-        private void OnRemoveModeratorExecute(object sender, dynamic e)
+        private void OnRemoveModeratorExecute(ChatHubModerator moderator, int roomId)
         {
-            this.Rooms.RemoveModerator(e.moderator as ChatHubModerator, (int)e.roomId);
+            this.Rooms.RemoveModerator(moderator, roomId);
             this.RunUpdateUI();
         }
         private void OnAddWhitelistUserExecute(object sender, dynamic e)

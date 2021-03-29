@@ -1,4 +1,4 @@
-﻿![Module](https://raw.githubusercontent.com/boredanyway/oqtane.chathubs/master/Server/wwwroot/Modules/Oqtane.ChatHubs/images/anyways-logo.png "anyways logo")
+﻿![Module](https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/Modules/Oqtane.ChatHubs/images/anyways-logo.png "anyways logo")
 
 ## asp .net core blazor signalR entity framework chat hub template
 
@@ -105,7 +105,7 @@ else if (segments[0] == "chathub")
 
 #### Example Screenshots
 
-<img src="https://raw.githubusercontent.com/boredanyway/oqtane.chathubs/master/screenshot1.png" height="400">
+<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" height="400">
 
 #### Demo Site
 
@@ -115,4 +115,4 @@ Demo Website [Link](https://sub.anyways.tv/).
 Anyways Corporation
 South Beach, San Francisco, California, USA
 
-<img src="https://raw.githubusercontent.com/boredanyway/oqtane.chathubs/master/sanfranciscooffice.png" height="100">
+<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/sanfranciscooffice.png" height="100">

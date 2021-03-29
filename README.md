@@ -105,7 +105,12 @@ else if (segments[0] == "chathub")
 
 #### Example Screenshots
 
-<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" height="400">
+<div class="float-left">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" height="200">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyways_black.png" height="200">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway_white.png" height="200">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway_black.png" height="200">
+</div>
 
 #### Demo Site
 

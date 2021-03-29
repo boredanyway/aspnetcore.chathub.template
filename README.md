@@ -15,6 +15,7 @@ The oqtane chathubs module allows developers to code and run realtime chat. Post
 ```HTML
 <script src="_content/MatBlazor/dist/matBlazor.js"></script>
 <link href="_content/MatBlazor/dist/matBlazor.css" rel="stylesheet" />
+<link href="_content/BlazorAlerts/css/blazoralerts.min.css" rel="stylesheet" />
 <link href="modules/oqtane.chathubs/chat-hub-stylesheets.css" rel="stylesheet" />
 ```
 

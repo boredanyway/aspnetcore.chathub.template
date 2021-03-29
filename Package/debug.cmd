@@ -31,7 +31,7 @@ XCOPY "..\BlazorBrowserResize\bin\Debug\net5.0\BlazorBrowserResize.pdb" "..\..\o
 
 XCOPY "..\Server\wwwroot\Modules\Oqtane.ChatHubs\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\Modules\Oqtane.ChatHubs\" /Y /S /I
 
-XCOPY "..\BlazorAlerts\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\Modules\Oqtane.ChatHubs\" /Y /S /I
+XCOPY "..\BlazorAlerts\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\BlazorAlerts\" /Y /S /I
 XCOPY "..\BlazorVideo\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\BlazorVideo\" /Y /S /I
 XCOPY "..\BlazorBrowserResize\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\BlazorBrowserResize\" /Y /S /I
 XCOPY "..\BlazorFileUpload\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\BlazorFileUpload\" /Y /S /I

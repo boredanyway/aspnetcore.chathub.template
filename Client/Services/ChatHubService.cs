@@ -53,7 +53,7 @@ namespace Oqtane.ChatHubs.Services
         public List<ChatHubUser> IgnoredUsers { get; set; } = new List<ChatHubUser>();
         public List<ChatHubUser> IgnoredByUsers { get; set; } = new List<ChatHubUser>();
 
-        public System.Timers.Timer GetLobbyRoomsTimer { get; set; } = new System.Timers.Timer();
+        public Timer GetLobbyRoomsTimer { get; set; } = new Timer();
 
         public event EventHandler OnUpdateUI;
         public event EventHandler<ChatHubUser> OnUpdateConnectedUserEvent;
@@ -79,7 +79,6 @@ namespace Oqtane.ChatHubs.Services
         public event Action<string, string, string, ChatHubUser> OnDownloadBytesEvent;
         public event EventHandler<int> OnClearHistoryEvent;
         public event EventHandler<ChatHubUser> OnDisconnectEvent;
-        public event EventHandler<dynamic> OnExceptionEvent;
 
         public ChatHubService(HttpClient httpClient, SiteState siteState, NavigationManager navigationManager, IJSRuntime JSRuntime, ScrollService scrollService, BlazorAlertsService blazorAlertsService, BlazorDraggableListService blazorDraggableListService, BlazorBrowserResizeService browserResizeService, BlazorVideoService blazorVideoService ) : base (httpClient)
         {

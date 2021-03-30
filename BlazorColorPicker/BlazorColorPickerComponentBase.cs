@@ -13,41 +13,51 @@ namespace BlazorColorPicker
         [Inject] public BlazorColorPickerService BlazorColorPickerService { get; set; }
 
         [Parameter] public string ContextColor { get; set; }
-
         [Parameter] public BlazorColorPickerType ColorPickerType { get; set; }
 
         [Parameter]
         public Dictionary<string, dynamic> ColorSet { get; set; } = new Dictionary<string, dynamic>()
         {
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#dbdbdb" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#e5e5e5" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#eeeAeA" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#eee0F5" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#e8e8ee" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#ede5e6" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#e5eeea" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#e0eeee" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#e6e6ea" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#e0eee0" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#e5e5e5" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#eef9d8" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#eae7e0" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#ceafec" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#eaead2" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#eaf0e6" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#eaebd7" } },
-            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#eeceaf" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FAEBD7" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#F0F8FF" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFEBCD" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFE4C4" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#F8F8FF" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#DCDCDC" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#F0FFF0" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFF0F5" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFFACD" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#E0FFFF" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FAFAD2" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFB6C1" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#87CEFA" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFB6C1" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#E6E6FA" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FAF0E6" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFE4E1" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFEFD5" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFDAB9" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#B0E0E6" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#D8BFD8" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFF5EE" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#F5DEB3" } },
+            { Guid.NewGuid().ToString(), new { itemchecked = false, itemcolor = "#FFFFE0" } },
         };
 
         protected override Task OnInitializedAsync()
         {
+            if(ColorPickerType == BlazorColorPickerType.CustomColorPicker && !string.IsNullOrEmpty(this.ColorSet.FirstOrDefault().Value?.itemcolor))
+            {
+                this.ContextColor = this.ColorSet.FirstOrDefault().Value.itemcolor;
+            }
+
             return base.OnInitializedAsync();
         }
 
-        public void ContextColor_OnChange(string color)
+        public async Task ContextColor_OnChangeAsync(string color)
         {
             this.ContextColor = color;
-            this.BlazorColorPickerService.InvokeColorPickerEvent(color);
+            await this.BlazorColorPickerService.InvokeColorPickerEvent(color);
         }
 
         public void ColorSetItem_OnClicked(KeyValuePair<string, dynamic> clickedkvpair)

@@ -29,6 +29,7 @@ namespace BlazorFileUpload
         protected override async Task OnInitializedAsync()
         {
             await this.BlazorFileUploadService.InitFileUploadDropzone(this.InputFileId, this.DropzoneElementId);
+
             this.BlazorFileUploadService.BlazorFileUploadServiceExtension.OnDropEvent += OnFileUploadDropEventExecute;
             this.OnUploadImagesEvent += OnUploadImagesExecute;
 

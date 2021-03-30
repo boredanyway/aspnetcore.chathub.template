@@ -5,7 +5,7 @@
 
     @if (ColorPickerType == BlazorColorPickerType.HTML5ColorPicker)
     {
-        <input type="color" value="@ContextColor" @onchange="@((ChangeEventArgs e) => ContextColor_OnChange(e.Value.ToString()))" class="w-100" />
+        <input type="color" value="@ContextColor" @onchange="@((ChangeEventArgs e) => ContextColor_OnChangeAsync(e.Value.ToString()))" class="w-100" />
     }
 
     @if (ColorPickerType == BlazorColorPickerType.CustomColorPicker)

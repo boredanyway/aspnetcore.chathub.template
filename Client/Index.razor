@@ -178,7 +178,7 @@
                     {
                         <div>
 
-                            <div class="jumbotron jumbotron-fluid bg-white py-1 mb-0">
+                            <div class="jumbotron jumbotron-fluid px-1 px-sm-3 py-sm-3 py-5 mb-0" style="background-color: transparent">
                                 <div class="container">
                                     <h1 class="display-4">@contextRoom?.Title</h1>
                                     <p class="lead">Posted by @contextRoom?.Creator.DisplayName on @contextRoom?.CreatedOn.ToShortDateString()</p>
@@ -192,13 +192,27 @@
                 else
                 {
 
-                    <div class="jumbotron jumbotron-fluid bg-white py-1 mb-0">
+                    <div class="jumbotron jumbotron-fluid px-1 px-sm-3 py-sm-3 py-5 mb-0" style="background-color: transparent">
                         <div class="container">
 
-                            <h1 class="display-4">Video chat app</h1>
+                            <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
 
-                            <p class="lead">This is a base video chat implementation in its beta version but free to use and have fun. Use any web browser you like a common thing is <a href="https://www.google.com/search?client=firefox-b-d&q=firefox+download" title="download firefox">Firefox</a>. Try also out the wasm experimental site on <a href="https://wasm.anyways.tv/" target="_blank" title="wasm">https://wasm.anyways.tv/</a></p>
+                                <div class="p-0 pr-sm-3">
+                                    
+                                    <img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" class="img-fluid" alt="preview" style="max-width: 256px;" />
 
+                                </div>
+
+                                <div class="p-0 pl-sm-3">
+
+                                    <h1 class="display-4">Video chat app</h1>
+
+                                    <p class="lead">This is a base video chat implementation in its beta version but free to use and have fun. Use any web browser you like a common thing is <a href="https://www.google.com/search?client=firefox-b-d&q=firefox+download" title="download firefox">Firefox</a>. Try also out the wasm experimental site on <a href="https://wasm.anyways.tv/" target="_blank" title="wasm">https://wasm.anyways.tv/</a></p>
+
+                                </div>
+
+                            </div>
+                            
                         </div>
                     </div>
 
@@ -206,11 +220,11 @@
 
                         <BlazorPagerItem>
 
-                            <div class="d-flex flex-wrap flex-sm-nowrap align-items-center w-100 py-2" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #ffffdd; border-top: 1px solid red;" : "background-color: white; border-top: 1px solid #dcdcdc")">
+                            <div class="d-flex flex-wrap flex-sm-nowrap align-items-center w-100 py-2" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff; border-top: 1px solid red;" : "background-color: #fff; border-top: 1px solid #bb99ff")">
 
                                 <div class="px-1">
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid bg-light")" style="max-width: 120px" />
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid bg-light" : "d-none")" style="max-width: 120px" />
+                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff1f1 B6C1; border-top: 1px solid red;" : "background-color: #f1f1ff; border-top: 1px solid #bb99ff"); max-width: 120px;" />
+                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff1f1; border-top: 1px solid red;" : "background-color: #f1f1ff; border-top: 1px solid #bb99ff"); max-width: 120px;" />
                                 </div>
 
                                 <div class="px-1 py-2">

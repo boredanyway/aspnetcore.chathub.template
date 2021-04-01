@@ -223,13 +223,15 @@
                             <div class="d-flex flex-wrap flex-sm-nowrap align-items-center w-100 py-2" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff; border-top: 1px solid red;" : "background-color: #fff; border-top: 1px solid #bb99ff")">
 
                                 <div class="px-1">
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff1f1 B6C1; border-top: 1px solid red;" : "background-color: #f1f1ff; border-top: 1px solid #bb99ff"); max-width: 120px;" />
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff1f1; border-top: 1px solid red;" : "background-color: #f1f1ff; border-top: 1px solid #bb99ff"); max-width: 120px;" />
+                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff1f1 B6C1; border-top: 1px solid red;" : "background-color: #f1f1ff; border-top: 1px solid #bb99ff"); max-width: 100px;" />
+                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff1f1; border-top: 1px solid red;" : "background-color: #f1f1ff; border-top: 1px solid #bb99ff"); max-width: 100px;" />
                                 </div>
 
                                 <div class="px-1 py-2">
                                     <a href="@NavigateUrl(PageState.Page.Path, "moduleid=" + context.ModuleId.ToString() + "&" + "roomid=" + context.Id.ToString())">
-                                        <h5>@context.Title</h5>
+                                        <h5>                                           
+                                            @context.Title                                        
+                                        </h5>
                                     </a>
                                     <div>
                                         <div>@context.Content</div>
@@ -238,8 +240,15 @@
                                             <span class="badge badge-secondary">@context.Users.Count() Users Online</span>
                                             <span class="badge badge-secondary">@context.Status</span>
                                         </div>
-                                        <div>
-                                            <small class="text-muted">Posted by @context.Creator.DisplayName on @context.CreatedOn.ToShortDateString()</small>
+                                        <div>                                            
+                                            <small class="text-muted">
+                                                @if(context.Creator.Connections.Any()) {
+
+                                                    <span class="oi oi-media-record text-danger "></span><span> connected | </span>
+                                                }
+                                                @context.Creator.DisplayName <span class="oi oi-check"></span>
+                                            </small><br />
+                                            <small class="text-muted">Posted on @context.CreatedOn.ToShortDateString() <span class="oi oi-clock"></span></small>
                                         </div>
                                     </div>
                                 </div>

@@ -44,6 +44,7 @@ namespace Oqtane.ChatHubs.Services
             IList<ChatHubBlacklistUser> blacklistUsersList = await blacklistUsersQuery.ToListAsync();
 
             ChatHubUser creator = await this.chatHubRepository.GetUserByIdAsync(room.CreatorId);
+            ChatHubUser creatorClientModel = this.CreateChatHubUserClientModel(creator);
 
             return new ChatHubRoom()
             {

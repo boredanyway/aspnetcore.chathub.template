@@ -106,12 +106,12 @@ else if (segments[0] == "chathub")
 #### Example Screenshots
 
 <div class="float-left">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" height="200">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyways_black.png" height="200">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway_white.png" height="200">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway_black.png" height="200">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway__white.png" height="200">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway__black.png" height="200">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" height="134">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyways_black.png" height="134">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway_white.png" height="134">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway_black.png" height="134">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway__white.png" height="134">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway__black.png" height="134">
 </div>
 
 #### Demo Site

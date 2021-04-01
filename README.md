@@ -110,6 +110,8 @@ else if (segments[0] == "chathub")
 	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyways_black.png" height="200">
 	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway_white.png" height="200">
 	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway_black.png" height="200">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway__white.png" height="200">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway__black.png" height="200">
 </div>
 
 #### Demo Site

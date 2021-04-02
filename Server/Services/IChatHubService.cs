@@ -21,6 +21,8 @@ namespace Oqtane.ChatHubs.Services
 
         ChatHubBlacklistUser CreateChatHubBlacklistUserClientModel(ChatHubBlacklistUser blacklistUser);
 
+        Task<ChatHubRoomChatHubCam> AddChatHubRoomChatHubCam(int roomId, string connectionId);
+
         void IgnoreUser(ChatHubUser guest, ChatHubUser targetUser);
 
         List<string> GetAllExceptConnectionIds(ChatHubUser user);

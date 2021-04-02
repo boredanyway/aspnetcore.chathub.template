@@ -70,7 +70,6 @@ namespace Oqtane.ChatHubs.Services
                 ModifiedOn = room.ModifiedOn
             };
         }
-
         public ChatHubUser CreateChatHubUserClientModel(ChatHubUser user)
         {
             List<ChatHubConnection> activeConnections = this.chatHubRepository.GetConnectionsByUserId(user.UserId).Active().ToList();
@@ -93,7 +92,6 @@ namespace Oqtane.ChatHubs.Services
                 ModifiedBy = user.ModifiedBy
             };
         }
-
         public ChatHubMessage CreateChatHubMessageClientModel(ChatHubMessage message)
         {
             List<ChatHubPhoto> photos = message.Photos != null && message.Photos.Any() ? message.Photos.Select(item => CreateChatHubPhotoClientModel(item)).ToList() : null;
@@ -115,10 +113,9 @@ namespace Oqtane.ChatHubs.Services
                 ModifiedBy = message.ModifiedBy
             };
         }
-
         public ChatHubConnection CreateChatHubConnectionClientModel(ChatHubConnection connection)
         {
-            ChatHubCam cam = this.chatHubRepository.GetChatHubCam(connection.Id);
+            ChatHubCam cam = this.chatHubRepository.GetChatHubCamByConnectionId(connection.Id);
             ChatHubCam camClientModel = cam != null ? this.CreateChatHubCamClientModel(cam) : null;
 
             return new ChatHubConnection()
@@ -134,7 +131,6 @@ namespace Oqtane.ChatHubs.Services
                 ModifiedBy = connection.ModifiedBy
             };
         }
-
         public ChatHubPhoto CreateChatHubPhotoClientModel(ChatHubPhoto photo)
         {
             return new ChatHubPhoto()
@@ -152,7 +148,6 @@ namespace Oqtane.ChatHubs.Services
                 ModifiedBy = photo.ModifiedBy
             };
         }
-
         public ChatHubCam CreateChatHubCamClientModel(ChatHubCam cam)
         {
             return new ChatHubCam()
@@ -166,7 +161,6 @@ namespace Oqtane.ChatHubs.Services
                 ModifiedBy = cam.ModifiedBy
             };
         }
-
         public ChatHubSettings CreateChatHubSettingClientModel(ChatHubSettings settings)
         {
             return new ChatHubSettings()
@@ -179,7 +173,6 @@ namespace Oqtane.ChatHubs.Services
                 ModifiedBy = settings.ModifiedBy
             };
         }
-
         public ChatHubModerator CreateChatHubModeratorClientModel(ChatHubModerator moderator)
         {
             return new ChatHubModerator()
@@ -189,7 +182,6 @@ namespace Oqtane.ChatHubs.Services
                 ChatHubUserId = moderator.ChatHubUserId,
             };
         }
-
         public ChatHubWhitelistUser CreateChatHubWhitelistUserClientModel(ChatHubWhitelistUser whitelistUser)
         {
             return new ChatHubWhitelistUser()
@@ -199,7 +191,6 @@ namespace Oqtane.ChatHubs.Services
                 ChatHubUserId = whitelistUser.ChatHubUserId,
             };
         }
-
         public ChatHubBlacklistUser CreateChatHubBlacklistUserClientModel(ChatHubBlacklistUser blacklistUser)
         {
             return new ChatHubBlacklistUser()
@@ -208,6 +199,25 @@ namespace Oqtane.ChatHubs.Services
                 BlacklistUserDisplayName = blacklistUser.BlacklistUserDisplayName,
                 ChatHubUserId = blacklistUser.ChatHubUserId,
             };
+        }
+
+        public async Task<ChatHubRoomChatHubCam> AddChatHubRoomChatHubCam(int roomId, string connectionId)
+        {
+            var connection = await this.chatHubRepository.GetConnectionByConnectionId(connectionId);
+            var cam = this.chatHubRepository.GetChatHubCamByConnectionId(connection.Id);
+
+            if (cam == null)
+            {
+                cam = this.chatHubRepository.AddChatHubCam(connection, ChatHubCamStatus.Inactive);
+                ChatHubRoomChatHubCam room_cam = new ChatHubRoomChatHubCam()
+                {
+                    ChatHubRoomId = roomId,
+                    ChatHubCamId = cam.Id,
+                };
+                return this.chatHubRepository.AddChatHubRoomChatHubCam(room_cam);
+            }
+
+            return null;
         }
 
         public void IgnoreUser(ChatHubUser callerUser, ChatHubUser targetUser)

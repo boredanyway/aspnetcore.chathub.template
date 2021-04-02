@@ -350,7 +350,18 @@ namespace Oqtane.ChatHubs.Repository
                     .Where(item => item.ChatHubBlacklistUserId == chatHubBlacklistUserId)
                     .FirstOrDefault();
         }
-        public ChatHubCam GetChatHubCam(int ChatHubConnectionId)
+        public ChatHubCam GetChatHubCamById(int ChatHubCamId)
+        {
+            try
+            {
+                return db.ChatHubCam.FirstOrDefault(item => item.Id == ChatHubCamId);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public ChatHubCam GetChatHubCamByConnectionId(int ChatHubConnectionId)
         {
             try
             {
@@ -622,7 +633,7 @@ namespace Oqtane.ChatHubs.Repository
         {
             try
             {
-                ChatHubCam ChatHubCam = this.GetChatHubCam(targetConnection.Id);
+                ChatHubCam ChatHubCam = this.GetChatHubCamByConnectionId(targetConnection.Id);
                 if (ChatHubCam == null)
                 {
                     ChatHubCam = new ChatHubCam()

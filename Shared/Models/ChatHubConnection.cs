@@ -13,7 +13,5 @@ namespace Oqtane.Shared.Models
 
         [NotMapped] public virtual ChatHubUser User { get; set; }
 
-        [NotMapped] public virtual ChatHubCam Cam { get; set; }
-
     }
 }

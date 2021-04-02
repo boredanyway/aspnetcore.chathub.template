@@ -179,8 +179,12 @@ namespace BlazorVideo
         }
         public async Task RestartStreamTaskIfExists(string roomId, string connectionId)
         {
-            await this.StartVideoChat(roomId, connectionId);
-            this.RunUpdateUI.Invoke();
+            var keyvaluepair = this.GetBlazorVideoMap(roomId, connectionId);
+            if(keyvaluepair.Value.VideoOverlay == false)
+            {
+                await this.StartVideoChat(roomId, connectionId);
+                this.RunUpdateUI.Invoke();
+            }
         }
         public void AddLocalStreamTask(string roomId, string connectionId, Task task, CancellationTokenSource tokenSource)
         {

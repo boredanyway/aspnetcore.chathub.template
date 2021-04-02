@@ -44,7 +44,7 @@ namespace Oqtane.ChatHubs.Repository
         ChatHubBlacklistUser GetChatHubBlacklistUser(int ChatHubUserId);
         IQueryable<ChatHubBlacklistUser> GetChatHubBlacklistUsers(ChatHubRoom ChatHubRoom);
         ChatHubRoomChatHubBlacklistUser GetChatHubRoomChatHubBlacklistUser(int chatHubRoomId, int chatHubBlacklistUserId);
-        ChatHubCam GetChatHubRoomChatHubCam(int ChatHubCamId);
+        ChatHubCam GetChatHubRoomChatHubCam(int ChatHubConnectionId);
         IQueryable<ChatHubCam> GetChatHubRoomChatHubCams(ChatHubRoom ChatHubRoom);
         ChatHubRoomChatHubCam GetChatHubRoomChatHubCam(int chatHubRoomId, int chatHubCamId);
 

@@ -112,6 +112,7 @@ GO
 
 CREATE TABLE [dbo].[ChatHubCam](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[ChatHubConnectionId] [int] NOT NULL,
 	[Status] [nvarchar](256) NOT NULL,
 	[CreatedBy] [nvarchar](256) NOT NULL,
 	[CreatedOn] [datetime] NOT NULL,

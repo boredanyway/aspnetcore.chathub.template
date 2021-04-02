@@ -18,8 +18,8 @@ namespace BlazorVideo
         public DotNetObjectReference<BlazorVideoServiceExtension> DotNetObjectRef;
         public BlazorVideoServiceExtension BlazorVideoServiceExtension;
 
-        public event Action<string, string, BlazorVideoType> StartVideoEvent;
-        public event Action<string, string, BlazorVideoType> StopVideoEvent;
+        public event Action<BlazorVideoModel> StartVideoEvent;
+        public event Action<BlazorVideoModel> StopVideoEvent;
         public event Action RunUpdateUI;
 
         public Dictionary<Guid, dynamic> LocalStreamTasks { get; set; } = new Dictionary<Guid, dynamic>();
@@ -142,7 +142,7 @@ namespace BlazorVideo
                     this.AddLocalStreamTask(keyvaluepair.Value.Id, connectionId, task, tokenSource);
                     task.Start();
 
-                    this.StartVideoEvent?.Invoke(roomId, connectionId, keyvaluepair.Value.Type);
+                    this.StartVideoEvent?.Invoke(keyvaluepair.Value);
                 }
                 else if(keyvaluepair.Value.Type == BlazorVideoType.RemoteLivestream)
                 {
@@ -150,7 +150,7 @@ namespace BlazorVideo
                     this.AddRemoteStreamTask(roomId, connectionId);
                     this.BlazorVideoMaps[keyvaluepair.Key] = new BlazorVideoModel() { Id = keyvaluepair.Value.Id, ConnectionId = keyvaluepair.Value.ConnectionId, JsObjRef = keyvaluepair.Value.JsObjRef, Type = keyvaluepair.Value.Type, VideoOverlay = false };
 
-                    this.StartVideoEvent?.Invoke(roomId, connectionId, keyvaluepair.Value.Type);
+                    this.StartVideoEvent?.Invoke(keyvaluepair.Value);
                 }
             }
             catch (Exception ex)
@@ -158,7 +158,7 @@ namespace BlazorVideo
                 Console.WriteLine(ex);
             }
 
-            this.RunUpdateUI.Invoke();
+            this.RunUpdateUI?.Invoke();
         }
         public async Task StopVideoChat(string roomId, string connectionId)
         {
@@ -166,25 +166,23 @@ namespace BlazorVideo
             if (keyvaluepair.Value.Type == BlazorVideoType.LocalLivestream)
             {
                 this.BlazorVideoMaps[keyvaluepair.Key] = new BlazorVideoModel() { Id = keyvaluepair.Value.Id, ConnectionId = keyvaluepair.Value.ConnectionId, JsObjRef = keyvaluepair.Value.JsObjRef, Type = keyvaluepair.Value.Type, VideoOverlay = true };
-                this.RunUpdateUI.Invoke();
 
                 this.RemoveLocalStreamTask(roomId, connectionId);
                 await this.CloseLocalLivestream(roomId, connectionId);
 
-                this.StopVideoEvent?.Invoke(roomId, connectionId, keyvaluepair.Value.Type);
+                this.StopVideoEvent?.Invoke(keyvaluepair.Value);
             }
             else if (keyvaluepair.Value.Type == BlazorVideoType.RemoteLivestream)
             {
                 this.BlazorVideoMaps[keyvaluepair.Key] = new BlazorVideoModel() { Id = keyvaluepair.Value.Id, ConnectionId = keyvaluepair.Value.ConnectionId, JsObjRef = keyvaluepair.Value.JsObjRef, Type = keyvaluepair.Value.Type, VideoOverlay = true };
-                this.RunUpdateUI.Invoke();
 
                 this.RemoveRemoteStreamTask(roomId, connectionId);
                 await this.CloseRemoteLivestream(roomId, connectionId);
 
-                this.StopVideoEvent?.Invoke(roomId, connectionId, keyvaluepair.Value.Type);
+                this.StopVideoEvent?.Invoke(keyvaluepair.Value);
             }
 
-            this.RunUpdateUI.Invoke();
+            this.RunUpdateUI?.Invoke();
         }
         public async Task RestartStreamTaskIfExists(string roomId, string connectionId)
         {

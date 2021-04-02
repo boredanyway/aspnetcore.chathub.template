@@ -92,6 +92,8 @@ namespace Oqtane.ChatHubs.Services
             this.BrowserResizeService = browserResizeService;
             this.BlazorVideoService = blazorVideoService;
 
+            this.BlazorVideoService.StartVideoEvent += async (BlazorVideoModel model) => await this.StartCam(model);
+            this.BlazorVideoService.StopVideoEvent += async (BlazorVideoModel model) => await this.StopCam(model);
             this.BlazorVideoService.BlazorVideoServiceExtension.OnDataAvailableEventHandler += async (string data, string id) => await OnDataAvailableEventHandlerExecute(data, id);
 
             this.BlazorAlertsService.OnAlertConfirmed += OnAlertConfirmedExecute;
@@ -290,17 +292,17 @@ namespace Oqtane.ChatHubs.Services
                 }
             });
         }
-        public async Task StartCam(int roomId)
+        public async Task StartCam(BlazorVideoModel model)
         {
-            await this.Connection.InvokeAsync("StartCam", roomId).ContinueWith((task) =>
+            await this.Connection.InvokeAsync("StartCam", model.Id).ContinueWith((task) =>
             {
                 if (task.IsCompleted)
                 {
                     this.HandleException(task);
                 }
-            });
+            });            
         }
-        public async Task StopCam()
+        public async Task StopCam(BlazorVideoModel model)
         {
             await this.Connection.InvokeAsync("StopCam").ContinueWith((task) =>
             {
@@ -676,6 +678,8 @@ namespace Oqtane.ChatHubs.Services
 
         public void Dispose()
         {
+            this.BlazorVideoService.StartVideoEvent -= async (BlazorVideoModel model) => await this.StartCam(model);
+            this.BlazorVideoService.StopVideoEvent -= async (BlazorVideoModel model) => await this.StopCam(model);
             this.BlazorVideoService.BlazorVideoServiceExtension.OnDataAvailableEventHandler -= async (string data, string id) => await OnDataAvailableEventHandlerExecute(data, id);
 
             this.BlazorAlertsService.OnAlertConfirmed -= OnAlertConfirmedExecute;

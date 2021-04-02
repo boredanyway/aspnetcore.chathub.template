@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Oqtane.Shared.Models
 {
-    public class ChatHubRoomChatHubCam
+    public class ChatHubRoomChatHubCam : ChatHubBaseModel
     {
 
         public int ChatHubRoomId { get; set; }

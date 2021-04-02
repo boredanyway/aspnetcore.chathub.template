@@ -290,6 +290,26 @@ namespace Oqtane.ChatHubs.Services
                 }
             });
         }
+        public async Task StartCam(int roomId)
+        {
+            await this.Connection.InvokeAsync("StartCam", roomId).ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                }
+            });
+        }
+        public async Task StopCam()
+        {
+            await this.Connection.InvokeAsync("StopCam").ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                }
+            });
+        }
         public async Task GetLobbyRooms(int moduleId)
         {
             try

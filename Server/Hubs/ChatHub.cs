@@ -505,8 +505,8 @@ namespace Oqtane.ChatHubs.Hubs
         }
 
         [AllowAnonymous]
-        public async Task StopCam(string roomId){
-
+        public async Task StopCam()
+        {
             ChatHubConnection connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
             ChatHubCam cam = this.chatHubRepository.GetChatHubCamByConnectionId(connection.Id);
             cam.Status = ChatHubCamStatus.Broadcasting.ToString();

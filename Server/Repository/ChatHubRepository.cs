@@ -350,6 +350,37 @@ namespace Oqtane.ChatHubs.Repository
                     .Where(item => item.ChatHubBlacklistUserId == chatHubBlacklistUserId)
                     .FirstOrDefault();
         }
+        public ChatHubCam GetChatHubRoomChatHubCam(int ChatHubCamId)
+        {
+            try
+            {
+                return db.ChatHubCam.FirstOrDefault(item => item.Id == ChatHubCamId);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public IQueryable<ChatHubCam> GetChatHubRoomChatHubCams(ChatHubRoom ChatHubRoom)
+        {
+            try
+            {
+                return db.Entry(ChatHubRoom)
+                      .Collection(item => item.RoomCams)
+                      .Query().Select(item => item.ChatHubCam);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public ChatHubRoomChatHubCam GetChatHubRoomChatHubCam(int chatHubRoomId, int chatHubCamId)
+        {
+            return db.ChatHubRoomChatHubCam
+                    .Where(item => item.ChatHubRoomId == chatHubRoomId)
+                    .Where(item => item.ChatHubCamId == chatHubCamId)
+                    .FirstOrDefault();
+        }
 
         #endregion
 

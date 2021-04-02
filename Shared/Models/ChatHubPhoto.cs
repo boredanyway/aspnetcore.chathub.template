@@ -14,8 +14,7 @@ namespace Oqtane.Shared.Models
         public int Height { get; set; }
 
         
-        [NotMapped]
-        public virtual ChatHubMessage Message { get; set; }
+        [NotMapped] public virtual ChatHubMessage Message { get; set; }
 
     }
 }

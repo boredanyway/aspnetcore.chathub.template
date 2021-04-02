@@ -9,10 +9,8 @@ namespace Oqtane.Shared.Models
         public int ChatHubUserId { get; set; }
         public string BlacklistUserDisplayName { get; set; }
 
-        [NotMapped]
-        public virtual ChatHubUser User { get; set; }
-        [NotMapped]
-        public virtual ICollection<ChatHubRoomChatHubBlacklistUser> BlacklistUserRooms { get; set; }
+        [NotMapped] public virtual ChatHubUser User { get; set; }
+        [NotMapped] public virtual ICollection<ChatHubRoomChatHubBlacklistUser> BlacklistUserRooms { get; set; }
 
     }
 }

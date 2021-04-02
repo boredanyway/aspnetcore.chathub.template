@@ -2,7 +2,8 @@
 {
     public enum ChatHubCamStatus
     {
-        Active,
-        Inactive
+        Inactive,
+        Broadcasting,
+        Streaming,
     }
 }

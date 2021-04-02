@@ -4,12 +4,11 @@ namespace Oqtane.Shared.Models
 {
     public class ChatHubCam : ChatHubBaseModel
     {
+        public int ChatHubConnectionId { get; set; }
 
         public string Status { get; set; }
 
-        public int ChatHubUserId { get; set; }
-        [NotMapped]
-        public virtual ChatHubUser User { get; set; }
+        [NotMapped] public virtual ChatHubConnection Connection { get; set; }
 
     }
 }

@@ -12,14 +12,10 @@ namespace Oqtane.Shared.Models
         public string Type { get; set; }
 
 
-        [NotMapped]
-        public virtual ChatHubRoom Room { get; set; }
-        [NotMapped]
-        public virtual ChatHubUser User { get; set; }
-        [NotMapped]
-        public virtual IList<ChatHubPhoto> Photos { get; set; }
-        [NotMapped]
-        public virtual IList<ChatHubCommandMetaData> CommandMetaDatas { get; set; }
+        [NotMapped] public virtual ChatHubRoom Room { get; set; }
+        [NotMapped] public virtual ChatHubUser User { get; set; }
+        [NotMapped] public virtual IList<ChatHubPhoto> Photos { get; set; }
+        [NotMapped] public virtual IList<ChatHubCommandMetaData> CommandMetaDatas { get; set; }
 
     }
 }

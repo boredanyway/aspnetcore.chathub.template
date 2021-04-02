@@ -10,8 +10,7 @@ namespace Oqtane.Shared.Models
 
 
         public int ChatHubUserId { get; set; }
-        [NotMapped]
-        public virtual ChatHubUser User { get; set; }
+        [NotMapped] public virtual ChatHubUser User { get; set; }
 
     }
 }

@@ -9,10 +9,8 @@ namespace Oqtane.Shared.Models
         public int ChatHubModeratorId { get; set; }
 
 
-        [NotMapped]
-        public virtual ChatHubRoom Room { get; set; }
-        [NotMapped]
-        public virtual ChatHubModerator Moderator { get; set; }
+        [NotMapped] public virtual ChatHubRoom Room { get; set; }
+        [NotMapped] public virtual ChatHubModerator Moderator { get; set; }
 
     }
 }

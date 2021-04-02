@@ -89,11 +89,11 @@ namespace Oqtane.ChatHubs.Repository
 
             // Relation
             // One-to-one
-            // ChatHubCam / ChatHubUser
+            // ChatHubCam / ChatHubConnection
             modelBuilder.Entity<ChatHubCam>()
-                .HasOne(c => c.User)
-                .WithOne(u => u.Cam)
-                .HasForeignKey<ChatHubCam>(c => c.ChatHubUserId);
+                .HasOne(c => c.Connection)
+                .WithOne(c => c.Cam)
+                .HasForeignKey<ChatHubCam>(c => c.ChatHubConnectionId);
 
             // Relations
             // Many-to-many

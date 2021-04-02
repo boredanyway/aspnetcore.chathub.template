@@ -350,7 +350,7 @@ namespace Oqtane.ChatHubs.Repository
                     .Where(item => item.ChatHubBlacklistUserId == chatHubBlacklistUserId)
                     .FirstOrDefault();
         }
-        public ChatHubCam GetChatHubRoomChatHubCam(int ChatHubConnectionId)
+        public ChatHubCam GetChatHubCam(int ChatHubConnectionId)
         {
             try
             {
@@ -361,7 +361,7 @@ namespace Oqtane.ChatHubs.Repository
                 throw;
             }
         }
-        public IQueryable<ChatHubCam> GetChatHubRoomChatHubCams(ChatHubRoom ChatHubRoom)
+        public IQueryable<ChatHubCam> GetChatHubCams(ChatHubRoom ChatHubRoom)
         {
             try
             {
@@ -609,6 +609,48 @@ namespace Oqtane.ChatHubs.Repository
                     db.ChatHubRoomChatHubBlacklistUser.Add(ChatHubRoomChatHubBlacklistUser);
                     db.SaveChanges();
                     return ChatHubRoomChatHubBlacklistUser;
+                }
+
+                return item;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public ChatHubCam AddChatHubCam(ChatHubConnection targetConnection, ChatHubCamStatus status)
+        {
+            try
+            {
+                ChatHubCam ChatHubCam = this.GetChatHubCam(targetConnection.Id);
+                if (ChatHubCam == null)
+                {
+                    ChatHubCam = new ChatHubCam()
+                    {
+                        ChatHubConnectionId = targetConnection.Id,
+                        Status = status.ToString(),
+                    };
+
+                    db.ChatHubCam.Add(ChatHubCam);
+                    db.SaveChanges();
+                }
+                return ChatHubCam;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public ChatHubRoomChatHubCam AddChatHubRoomChatHubCam(ChatHubRoomChatHubCam ChatHubRoomChatHubCam)
+        {
+            try
+            {
+                var item = this.GetChatHubRoomChatHubCam(ChatHubRoomChatHubCam.ChatHubRoomId, ChatHubRoomChatHubCam.ChatHubCamId);
+                if (item == null)
+                {
+                    db.ChatHubRoomChatHubCam.Add(ChatHubRoomChatHubCam);
+                    db.SaveChanges();
+                    return ChatHubRoomChatHubCam;
                 }
 
                 return item;

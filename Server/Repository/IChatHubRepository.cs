@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Oqtane.Models;
+using Oqtane.Shared.Enums;
 using Oqtane.Shared.Models;
 
 namespace Oqtane.ChatHubs.Repository
@@ -44,8 +45,8 @@ namespace Oqtane.ChatHubs.Repository
         ChatHubBlacklistUser GetChatHubBlacklistUser(int ChatHubUserId);
         IQueryable<ChatHubBlacklistUser> GetChatHubBlacklistUsers(ChatHubRoom ChatHubRoom);
         ChatHubRoomChatHubBlacklistUser GetChatHubRoomChatHubBlacklistUser(int chatHubRoomId, int chatHubBlacklistUserId);
-        ChatHubCam GetChatHubRoomChatHubCam(int ChatHubConnectionId);
-        IQueryable<ChatHubCam> GetChatHubRoomChatHubCams(ChatHubRoom ChatHubRoom);
+        ChatHubCam GetChatHubCam(int ChatHubConnectionId);
+        IQueryable<ChatHubCam> GetChatHubCams(ChatHubRoom ChatHubRoom);
         ChatHubRoomChatHubCam GetChatHubRoomChatHubCam(int chatHubRoomId, int chatHubCamId);
 
         #endregion
@@ -66,6 +67,8 @@ namespace Oqtane.ChatHubs.Repository
         ChatHubRoomChatHubWhitelistUser AddChatHubRoomChatHubWhitelistUser(ChatHubRoomChatHubWhitelistUser ChatHubRoomChatHubWhitelistUser);
         ChatHubBlacklistUser AddChatHubBlacklistUser(ChatHubUser targetUser);
         ChatHubRoomChatHubBlacklistUser AddChatHubRoomChatHubBlacklistUser(ChatHubRoomChatHubBlacklistUser ChatHubRoomChatHubBlacklistUser);
+        ChatHubCam AddChatHubCam(ChatHubConnection targetConnection, ChatHubCamStatus status);
+        ChatHubRoomChatHubCam AddChatHubRoomChatHubCam(ChatHubRoomChatHubCam ChatHubRoomChatHubCam);
 
         #endregion
 

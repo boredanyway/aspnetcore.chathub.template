@@ -18,6 +18,8 @@ namespace BlazorVideo
         public DotNetObjectReference<BlazorVideoServiceExtension> DotNetObjectRef;
         public BlazorVideoServiceExtension BlazorVideoServiceExtension;
 
+        public event Action<string, string, BlazorVideoType> StartVideoEvent;
+        public event Action<string, string, BlazorVideoType> StopVideoEvent;
         public event Action RunUpdateUI;
 
         public Dictionary<Guid, dynamic> LocalStreamTasks { get; set; } = new Dictionary<Guid, dynamic>();
@@ -139,13 +141,16 @@ namespace BlazorVideo
                     Task task = new Task(async () => await this.StreamTaskImplementation(roomId, connectionId, token), token);
                     this.AddLocalStreamTask(keyvaluepair.Value.Id, connectionId, task, tokenSource);
                     task.Start();
+
+                    this.StartVideoEvent?.Invoke(roomId, connectionId, keyvaluepair.Value.Type);
                 }
                 else if(keyvaluepair.Value.Type == BlazorVideoType.RemoteLivestream)
                 {
                     await this.InitRemoteLivestream(keyvaluepair.Value.Id, connectionId);
                     this.AddRemoteStreamTask(roomId, connectionId);
-
                     this.BlazorVideoMaps[keyvaluepair.Key] = new BlazorVideoModel() { Id = keyvaluepair.Value.Id, ConnectionId = keyvaluepair.Value.ConnectionId, JsObjRef = keyvaluepair.Value.JsObjRef, Type = keyvaluepair.Value.Type, VideoOverlay = false };
+
+                    this.StartVideoEvent?.Invoke(roomId, connectionId, keyvaluepair.Value.Type);
                 }
             }
             catch (Exception ex)
@@ -165,6 +170,8 @@ namespace BlazorVideo
 
                 this.RemoveLocalStreamTask(roomId, connectionId);
                 await this.CloseLocalLivestream(roomId, connectionId);
+
+                this.StopVideoEvent?.Invoke(roomId, connectionId, keyvaluepair.Value.Type);
             }
             else if (keyvaluepair.Value.Type == BlazorVideoType.RemoteLivestream)
             {
@@ -173,6 +180,8 @@ namespace BlazorVideo
 
                 this.RemoveRemoteStreamTask(roomId, connectionId);
                 await this.CloseRemoteLivestream(roomId, connectionId);
+
+                this.StopVideoEvent?.Invoke(roomId, connectionId, keyvaluepair.Value.Type);
             }
 
             this.RunUpdateUI.Invoke();

@@ -89,6 +89,8 @@ namespace Oqtane.ChatHubs.Repository
         void DeleteChatHubRoomChatHubWhitelistUser(int ChatHubRoomId, int ChatHubWhitelistUserId);
         void DeleteChatHubBlacklistUser(int BlacklistUserId);
         void DeleteChatHubRoomChatHubBlacklistUser(int ChatHubRoomId, int ChatHubBlacklistUserId);
+        void DeleteChatHubCam(int ChatHubCamId);
+        void DeleteChatHubRoomChatHubCam(int ChatHubRoomId, int ChatHubCamId);
 
         #endregion
 
@@ -100,6 +102,7 @@ namespace Oqtane.ChatHubs.Repository
         ChatHubConnection UpdateChatHubConnection(ChatHubConnection ChatHubConnection);
         ChatHubIgnore UpdateChatHubIgnore(ChatHubIgnore chatHubIgnore);
         ChatHubSettings UpdateChatHubSetting(ChatHubSettings ChatHubSetting);
+        ChatHubCam UpdateChatHubCam(ChatHubCam ChatHubCam);
 
         #endregion
 

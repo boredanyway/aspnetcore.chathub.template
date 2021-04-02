@@ -880,6 +880,35 @@ namespace Oqtane.ChatHubs.Repository
                 throw;
             }
         }
+        public void DeleteChatHubCam(int ChatHubCamId)
+        {
+            try
+            {
+                ChatHubCam ChatHubCam = db.ChatHubCam.Where(item => item.Id == ChatHubCamId).FirstOrDefault();
+                db.ChatHubCam.Remove(ChatHubCam);
+                db.SaveChanges();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public void DeleteChatHubRoomChatHubCam(int ChatHubRoomId, int ChatHubCamId)
+        {
+            try
+            {
+                ChatHubRoomChatHubCam item = this.GetChatHubRoomChatHubCam(ChatHubRoomId, ChatHubCamId);
+                if (item != null)
+                {
+                    db.ChatHubRoomChatHubCam.Remove(item);
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
         #endregion
 
@@ -956,6 +985,19 @@ namespace Oqtane.ChatHubs.Repository
                 db.Entry(ChatHubSetting).State = EntityState.Modified;
                 db.SaveChanges();
                 return ChatHubSetting;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public ChatHubCam UpdateChatHubCam(ChatHubCam ChatHubCam)
+        {
+            try
+            {
+                db.Entry(ChatHubCam).State = EntityState.Modified;
+                db.SaveChanges();
+                return ChatHubCam;
             }
             catch
             {

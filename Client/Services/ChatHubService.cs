@@ -258,7 +258,7 @@ namespace Oqtane.ChatHubs.Services
                 var room = this.Rooms.FirstOrDefault(item => item.Id.ToString() == id);
                 if(room != null)
                 {
-                    room.RemoteCreator = creator;
+                    room.Creator = creator;
                     this.RunUpdateUI();
                 }
 

@@ -146,9 +146,9 @@ namespace Oqtane.ChatHubs
                         }
                         else
                         {
-                            if (room.RemoteCreator != null)
+                            if (room.Creator != null)
                             {
-                                foreach (var connection in room.RemoteCreator?.Connections)
+                                foreach (var connection in room.Creator?.Connections)
                                 {
                                     await this.BlazorVideoService.RestartStreamTaskIfExists(room.Id.ToString(), connection.ConnectionId);
                                 }
@@ -443,9 +443,9 @@ namespace Oqtane.ChatHubs
                 }
                 else
                 {
-                    if (room.RemoteCreator != null)
+                    if (room.Creator != null)
                     {
-                        foreach (var connection in room.RemoteCreator?.Connections)
+                        foreach (var connection in room.Creator?.Connections)
                         {
                             await this.BlazorVideoService.RestartStreamTaskIfExists(room.Id.ToString(), connection.ConnectionId);
                         }

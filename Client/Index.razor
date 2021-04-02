@@ -79,32 +79,6 @@
             transition: all 0.2s linear;
         }
 
-            /*
-        .blazor-tabs > ul.nav-tabs li:nth-of-type(4n+1) a:before,
-        .blazor-tabs > ul.nav-tabs li:nth-of-type(4n+1) a:after {
-            background-color: slateblue;
-            border-color: slateblue;
-        }
-
-        .blazor-tabs > ul.nav-tabs li:nth-of-type(4n+2) a:before,
-        .blazor-tabs > ul.nav-tabs li:nth-of-type(4n+2) a:after {
-            background-color: gold;
-            border-color: gold;
-        }
-
-        .blazor-tabs > ul.nav-tabs li:nth-of-type(4n+3) a:before,
-        .blazor-tabs > ul.nav-tabs li:nth-of-type(4n+3) a:after {
-            background-color: indianred;
-            border-color: indianred;
-        }
-
-        .blazor-tabs > ul.nav-tabs li:nth-of-type(4n+4) a:before,
-        .blazor-tabs > ul.nav-tabs li:nth-of-type(4n+4) a:after {
-            background-color: seagreen;
-            border-color: seagreen;
-        }
-        */
-
             .blazor-tabs > ul.nav-tabs li a:hover,
             .blazor-tabs > ul.nav-tabs li.active a {
                 border: none;
@@ -198,7 +172,7 @@
                             <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
 
                                 <div class="p-0 pr-sm-3">
-                                    
+
                                     <img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" class="img-fluid" alt="preview" style="max-width: 256px;" />
 
                                 </div>
@@ -212,7 +186,7 @@
                                 </div>
 
                             </div>
-                            
+
                         </div>
                     </div>
 
@@ -229,8 +203,8 @@
 
                                 <div class="px-1 py-2">
                                     <a href="@NavigateUrl(PageState.Page.Path, "moduleid=" + context.ModuleId.ToString() + "&" + "roomid=" + context.Id.ToString())">
-                                        <h5>                                           
-                                            @context.Title                                        
+                                        <h5>
+                                            @context.Title
                                         </h5>
                                     </a>
                                     <div>
@@ -240,9 +214,10 @@
                                             <span class="badge badge-secondary">@context.Users.Count() Users Online</span>
                                             <span class="badge badge-secondary">@context.Status</span>
                                         </div>
-                                        <div>                                            
+                                        <div>
                                             <small class="text-muted">
-                                                @if(context.Creator.Connections.Any()) {
+                                                @if (context.Creator.Connections.Any())
+                                                {
 
                                                     <span class="oi oi-media-record text-danger "></span><span> connected | </span>
                                                 }
@@ -354,14 +329,15 @@
                                         }
                                         else
                                         {
-                                            if(room.RemoteCreator != null) {
+                                            if (room.Creator != null)
+                                            {
 
-                                                foreach (var connection in room.RemoteCreator?.Connections)
+                                                foreach (var connection in room.Creator?.Connections)
                                                 {
                                                     <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@connection.ConnectionId" Type="@BlazorVideoType.RemoteLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title"></BlazorVideoComponent>
                                                 }
 
-                                            }                                                                                      
+                                            }
                                         }
 
                                     </WindowLivestream>
@@ -704,9 +680,10 @@
                                                                     }
                                                                     else
                                                                     {
-                                                                        if(room.RemoteCreator != null) {
+                                                                        if (room.Creator != null)
+                                                                        {
 
-                                                                            foreach (var connection in room.RemoteCreator?.Connections)
+                                                                            foreach (var connection in room.Creator?.Connections)
                                                                             {
                                                                                 <button type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(room.Id.ToString(), connection.ConnectionId)">Start Streaming</button>
                                                                                 <button type="button" @onclick="async () => await BlazorVideoService.StopVideoChat(room.Id.ToString(), connection.ConnectionId)">Stop Streaming</button>
@@ -874,7 +851,7 @@
                         </WindowContainer>
 
                     }
-                        }
+                }
 
             </TabContent>
         </TabItem>

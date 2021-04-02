@@ -118,12 +118,16 @@ namespace Oqtane.ChatHubs.Services
 
         public ChatHubConnection CreateChatHubConnectionClientModel(ChatHubConnection connection)
         {
+            ChatHubCam cam = this.chatHubRepository.GetChatHubCam(connection.Id);
+            ChatHubCam camClientModel = cam != null ? this.CreateChatHubCamClientModel(cam) : null;
+
             return new ChatHubConnection()
             {
                 ChatHubUserId = connection.ChatHubUserId,
                 ConnectionId = this.MakeStringAnonymous(connection.ConnectionId, 7, '*'),
                 Status = connection.Status,
                 User = connection.User,
+                Cam = camClientModel,
                 CreatedOn = connection.CreatedOn,
                 CreatedBy = connection.CreatedBy,
                 ModifiedOn = connection.ModifiedOn,
@@ -146,6 +150,20 @@ namespace Oqtane.ChatHubs.Services
                 CreatedBy = photo.CreatedBy,
                 ModifiedOn = photo.ModifiedOn,
                 ModifiedBy = photo.ModifiedBy
+            };
+        }
+
+        public ChatHubCam CreateChatHubCamClientModel(ChatHubCam cam)
+        {
+            return new ChatHubCam()
+            {
+                Id = cam.Id,
+                ChatHubConnectionId = cam.ChatHubConnectionId,
+                Status = cam.Status,
+                CreatedOn = cam.CreatedOn,
+                CreatedBy = cam.CreatedBy,
+                ModifiedOn = cam.ModifiedOn,
+                ModifiedBy = cam.ModifiedBy
             };
         }
 

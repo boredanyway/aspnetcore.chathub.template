@@ -536,22 +536,7 @@ namespace Oqtane.ChatHubs.Hubs
                 dataURIresult += enumerators.Current;
             }
 
-            IEnumerable<ChatHubConnection> connectionClientModels = user.Connections.Select(item => new ChatHubConnection()
-            {
-                Id = item.Id,
-                ChatHubUserId = item.ChatHubUserId,
-                ConnectionId = item.ConnectionId,
-                Status = item.Status,
-            });
-
-            ChatHubUser creatorClientModel = new ChatHubUser()
-            {
-                UserId = user.UserId,
-                Username = user.Username,
-                DisplayName = user.DisplayName,
-                Connections = connectionClientModels.ToList(),
-            };
-
+            ChatHubUser creatorClientModel = this.chatHubService.CreateChatHubUserClientModel(user);
             await Clients.GroupExcept(roomId, connectionsIds).SendAsync("DownloadBytes", dataURIresult, roomId, Context.ConnectionId, creatorClientModel);
         }
 

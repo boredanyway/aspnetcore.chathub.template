@@ -201,25 +201,6 @@ namespace Oqtane.ChatHubs.Services
             };
         }
 
-        public async Task<ChatHubRoomChatHubCam> AddChatHubRoomChatHubCam(int roomId, string connectionId)
-        {
-            var connection = await this.chatHubRepository.GetConnectionByConnectionId(connectionId);
-            var cam = this.chatHubRepository.GetChatHubCamByConnectionId(connection.Id);
-
-            if (cam == null)
-            {
-                cam = this.chatHubRepository.AddChatHubCam(connection, ChatHubCamStatus.Inactive);
-            }
-
-            ChatHubRoomChatHubCam room_cam = new ChatHubRoomChatHubCam()
-            {
-                ChatHubRoomId = roomId,
-                ChatHubCamId = cam.Id,
-            };
-
-            return this.chatHubRepository.AddChatHubRoomChatHubCam(room_cam);
-        }
-
         public void IgnoreUser(ChatHubUser callerUser, ChatHubUser targetUser)
         {
             ChatHubIgnore chatHubIgnore = this.chatHubRepository.GetChatHubIgnore(callerUser.UserId, targetUser.UserId);

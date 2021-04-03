@@ -361,11 +361,11 @@ namespace Oqtane.ChatHubs.Repository
                 throw;
             }
         }
-        public ChatHubCam GetChatHubCamByConnectionId(int ChatHubConnectionId)
+        public ChatHubCam GetChatHubCam(int roomId, int ChatHubConnectionId)
         {
             try
             {
-                return db.ChatHubCam.FirstOrDefault(item => item.ChatHubConnectionId == ChatHubConnectionId);
+                return db.ChatHubCam.FirstOrDefault(item => item.ChatHubRoomId == roomId && item.ChatHubConnectionId == ChatHubConnectionId);
             }
             catch
             {
@@ -376,21 +376,12 @@ namespace Oqtane.ChatHubs.Repository
         {
             try
             {
-                return db.Entry(ChatHubRoom)
-                      .Collection(item => item.RoomCams)
-                      .Query().Select(item => item.ChatHubCam);
+                return db.ChatHubCam.Where(item => item.ChatHubRoomId == ChatHubRoom.Id);
             }
             catch
             {
                 throw;
             }
-        }
-        public ChatHubRoomChatHubCam GetChatHubRoomChatHubCam(int chatHubRoomId, int chatHubCamId)
-        {
-            return db.ChatHubRoomChatHubCam
-                    .Where(item => item.ChatHubRoomId == chatHubRoomId)
-                    .Where(item => item.ChatHubCamId == chatHubCamId)
-                    .FirstOrDefault();
         }
 
         #endregion
@@ -629,42 +620,13 @@ namespace Oqtane.ChatHubs.Repository
                 throw;
             }
         }
-        public ChatHubCam AddChatHubCam(ChatHubConnection targetConnection, ChatHubCamStatus status)
+        public ChatHubCam AddChatHubCam(ChatHubCam ChatHubCam)
         {
             try
             {
-                ChatHubCam ChatHubCam = this.GetChatHubCamByConnectionId(targetConnection.Id);
-                if (ChatHubCam == null)
-                {
-                    ChatHubCam = new ChatHubCam()
-                    {
-                        ChatHubConnectionId = targetConnection.Id,
-                        Status = status.ToString(),
-                    };
-
-                    db.ChatHubCam.Add(ChatHubCam);
-                    db.SaveChanges();
-                }
+                db.ChatHubCam.Add(ChatHubCam);
+                db.SaveChanges();
                 return ChatHubCam;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public ChatHubRoomChatHubCam AddChatHubRoomChatHubCam(ChatHubRoomChatHubCam ChatHubRoomChatHubCam)
-        {
-            try
-            {
-                var item = this.GetChatHubRoomChatHubCam(ChatHubRoomChatHubCam.ChatHubRoomId, ChatHubRoomChatHubCam.ChatHubCamId);
-                if (item == null)
-                {
-                    db.ChatHubRoomChatHubCam.Add(ChatHubRoomChatHubCam);
-                    db.SaveChanges();
-                    return ChatHubRoomChatHubCam;
-                }
-
-                return item;
             }
             catch
             {
@@ -898,22 +860,6 @@ namespace Oqtane.ChatHubs.Repository
                 ChatHubCam ChatHubCam = db.ChatHubCam.Where(item => item.Id == ChatHubCamId).FirstOrDefault();
                 db.ChatHubCam.Remove(ChatHubCam);
                 db.SaveChanges();
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public void DeleteChatHubRoomChatHubCam(int ChatHubRoomId, int ChatHubCamId)
-        {
-            try
-            {
-                ChatHubRoomChatHubCam item = this.GetChatHubRoomChatHubCam(ChatHubRoomId, ChatHubCamId);
-                if (item != null)
-                {
-                    db.ChatHubRoomChatHubCam.Remove(item);
-                    db.SaveChanges();
-                }
             }
             catch
             {

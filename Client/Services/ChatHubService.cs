@@ -300,7 +300,7 @@ namespace Oqtane.ChatHubs.Services
         }
         public async Task StartCam(BlazorVideoModel model)
         {
-            await this.Connection.InvokeAsync("StartCam", model.Id).ContinueWith((task) =>
+            await this.Connection.InvokeAsync("StartCam", Convert.ToInt32(model.Id)).ContinueWith((task) =>
             {
                 if (task.IsCompleted)
                 {
@@ -310,7 +310,7 @@ namespace Oqtane.ChatHubs.Services
         }
         public async Task StopCam(BlazorVideoModel model)
         {
-            await this.Connection.InvokeAsync("StopCam").ContinueWith((task) =>
+            await this.Connection.InvokeAsync("StopCam", Convert.ToInt32(model.Id)).ContinueWith((task) =>
             {
                 if (task.IsCompleted)
                 {

@@ -25,7 +25,6 @@ namespace Oqtane.ChatHubs.Repository
         public virtual DbSet<ChatHubRoomChatHubWhitelistUser> ChatHubRoomChatHubWhitelistUser { get; set; }
         public virtual DbSet<ChatHubBlacklistUser> ChatHubBlacklistUser { get; set; }
         public virtual DbSet<ChatHubRoomChatHubBlacklistUser> ChatHubRoomChatHubBlacklistUser { get; set; }
-        public virtual DbSet<ChatHubRoomChatHubCam> ChatHubRoomChatHubCam { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -88,21 +87,21 @@ namespace Oqtane.ChatHubs.Repository
                 .WithOne(u => u.Settings)
                 .HasForeignKey<ChatHubSettings>(s => s.ChatHubUserId);
 
-            // Relations
-            // Many-to-many
+            // Relation
+            // One-to-many
             // ChatHubRoom / ChatHubCam
-            modelBuilder.Entity<ChatHubRoomChatHubCam>()
-                .HasKey(item => new { item.ChatHubRoomId, item.ChatHubCamId });
+            modelBuilder.Entity<ChatHubCam>()
+                .HasOne(c => c.Room)
+                .WithMany(r => r.Cams)
+                .HasForeignKey(c => c.ChatHubRoomId);
 
-            modelBuilder.Entity<ChatHubRoomChatHubCam>()
-                .HasOne(room_cam => room_cam.ChatHubRoom)
-                .WithMany(room => room.RoomCams)
-                .HasForeignKey(room_cam => room_cam.ChatHubRoomId);
-
-            modelBuilder.Entity<ChatHubRoomChatHubCam>()
-                .HasOne(room_cam => room_cam.ChatHubCam)
-                .WithMany(cam => cam.CamRooms)
-                .HasForeignKey(room_cam => room_cam.ChatHubCamId);
+            // Relation
+            // One-to-one
+            // ChatHubCam / ChatHubConnection
+            modelBuilder.Entity<ChatHubCam>()
+                .HasOne(c => c.Connection)
+                .WithOne(c => c.Cam)
+                .HasForeignKey<ChatHubCam>(c => c.ChatHubConnectionId);
 
             // Relations
             // Many-to-many

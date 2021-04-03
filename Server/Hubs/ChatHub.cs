@@ -493,28 +493,36 @@ namespace Oqtane.ChatHubs.Hubs
         }
 
         [AllowAnonymous]
-        public async Task StartCam(string roomId)
+        public async Task StartCam(int roomId)
         {
-            ChatHubRoomChatHubCam room_cam = await this.chatHubService.AddChatHubRoomChatHubCam(Convert.ToInt32(roomId), Context.ConnectionId);
-            if(room_cam != null)
+            ChatHubConnection connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
+            ChatHubCam cam = this.chatHubRepository.GetChatHubCam(roomId, connection.Id);
+            if(cam == null)
             {
-                ChatHubCam cam = this.chatHubRepository.GetChatHubCamById(room_cam.ChatHubCamId);
-                cam.Status = ChatHubCamStatus.Broadcasting.ToString();
-                cam = this.chatHubRepository.UpdateChatHubCam(cam);
+                cam = new ChatHubCam()
+                {
+                    ChatHubRoomId = roomId,
+                    ChatHubConnectionId = connection.Id,
+                    Status = ChatHubCamStatus.Inactive.ToString(),
+                };
+
+                cam = this.chatHubRepository.AddChatHubCam(cam);
             }
+
+            cam.Status = ChatHubCamStatus.Broadcasting.ToString();
+            this.chatHubRepository.UpdateChatHubCam(cam);
         }
 
         [AllowAnonymous]
-        public async Task StopCam()
+        public async Task StopCam(int roomId)
         {
             ChatHubConnection connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
-            ChatHubCam cam = this.chatHubRepository.GetChatHubCamByConnectionId(connection.Id);
+            ChatHubCam cam = this.chatHubRepository.GetChatHubCam(roomId, connection.Id);
             if(cam != null)
             {
                 cam.Status = ChatHubCamStatus.Inactive.ToString();
                 this.chatHubRepository.UpdateChatHubCam(cam);
-            }
-            
+            }            
         }
 
         [AllowAnonymous]

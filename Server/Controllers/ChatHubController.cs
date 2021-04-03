@@ -28,12 +28,12 @@ namespace Oqtane.ChatHubs.Controllers
         IWebHostEnvironment webHostEnvironment;
         private readonly IHubContext<ChatHub> chatHubContext;
         private readonly ChatHub chatHub;
-        private readonly IChatHubRepository chatHubRepository;
-        private readonly IChatHubService chatHubService;
+        private readonly ChatHubRepository chatHubRepository;
+        private readonly ChatHubService chatHubService;
         private readonly ILogManager logger;
         private int EntityId = -1; // passed as a querystring parameter for authorization and used for validation
 
-        public ChatHubController(IWebHostEnvironment webHostEnvironment, IHubContext<ChatHub> chatHubContext, ChatHub chatHub, IChatHubRepository chatHubRepository, IChatHubService chatHubService, IHttpContextAccessor httpContextAccessor, ILogManager logger)
+        public ChatHubController(IWebHostEnvironment webHostEnvironment, IHubContext<ChatHub> chatHubContext, ChatHub chatHub, ChatHubRepository chatHubRepository, ChatHubService chatHubService, IHttpContextAccessor httpContextAccessor, ILogManager logger)
         {
             this.webHostEnvironment = webHostEnvironment;
             this.chatHubContext = chatHubContext;

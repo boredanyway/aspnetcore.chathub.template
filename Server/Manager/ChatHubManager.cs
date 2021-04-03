@@ -12,10 +12,10 @@ namespace Oqtane.ChatHubs.Manager
 {
     public class ChatHubManager : IInstallable, IPortable
     {
-        private IChatHubRepository _chatHubRepository;
+        private ChatHubRepository _chatHubRepository;
         private ISqlRepository _sql;
 
-        public ChatHubManager(IChatHubRepository chatHubRepository, ISqlRepository sql)
+        public ChatHubManager(ChatHubRepository chatHubRepository, ISqlRepository sql)
         {
             _chatHubRepository = chatHubRepository;
             _sql = sql;

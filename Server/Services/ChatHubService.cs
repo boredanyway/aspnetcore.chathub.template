@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Oqtane.ChatHubs.Services
 {
-    public class ChatHubService : IChatHubService, IService
+    public class ChatHubService : IService
     {
 
-        private readonly IChatHubRepository chatHubRepository;
+        private readonly ChatHubRepository chatHubRepository;
 
         public ChatHubService(
-            IChatHubRepository chatHubRepository
+            ChatHubRepository chatHubRepository
             )
         {
             this.chatHubRepository = chatHubRepository;

@@ -22,8 +22,8 @@ namespace Oqtane.ChatHubs.Commands
         private readonly int _roomId;
         private readonly ChatHubUser _caller;
         private readonly ChatHub _chatHub;
-        private readonly IChatHubService _chatService;
-        private readonly IChatHubRepository _repository;
+        private readonly ChatHubService _chatService;
+        private readonly ChatHubRepository _repository;
         private readonly UserManager<IdentityUser> _userManager;
 
         private static Dictionary<string, dynamic> _commandCache = new Dictionary<string, dynamic>();
@@ -34,8 +34,8 @@ namespace Oqtane.ChatHubs.Commands
                             int roomId,
                             ChatHubUser user,
                             ChatHub chatHub,
-                            IChatHubService service,
-                            IChatHubRepository repository,
+                            ChatHubService service,
+                            ChatHubRepository repository,
                             UserManager<IdentityUser> userManager)
         {
             _connectionId = connectionId;

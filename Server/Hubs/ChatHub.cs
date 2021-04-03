@@ -26,8 +26,8 @@ namespace Oqtane.ChatHubs.Hubs
     {
 
         private readonly IUserRepository userRepository;
-        private readonly IChatHubRepository chatHubRepository;
-        private readonly IChatHubService chatHubService;
+        private readonly ChatHubRepository chatHubRepository;
+        private readonly ChatHubService chatHubService;
         private readonly UserManager<IdentityUser> userManager;
         private readonly IRoleRepository roles;
         private readonly IUserRoleRepository userRoles;
@@ -36,8 +36,8 @@ namespace Oqtane.ChatHubs.Hubs
 
         public ChatHub(
             IUserRepository userRepository,
-            IChatHubRepository chatHubRepository,
-            IChatHubService chatHubService,
+            ChatHubRepository chatHubRepository,
+            ChatHubService chatHubService,
             UserManager<IdentityUser> identityUserManager,
             IRoleRepository roles,
             IUserRoleRepository userRoles

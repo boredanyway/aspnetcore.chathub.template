@@ -10,7 +10,7 @@ using Oqtane.Models;
 
 namespace Oqtane.ChatHubs.Repository
 {
-    public class ChatHubRepository : IChatHubRepository, IService
+    public class ChatHubRepository : IService
     {
 
         private readonly ChatHubContext db;

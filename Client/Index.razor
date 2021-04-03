@@ -219,9 +219,10 @@
 
                                                 @if (context.Creator.Connections.Any(connection => context.Cams.Any(cam => cam.ChatHubConnectionId == connection.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())))
                                                 {
-                                                    <span class="oi oi-media-record text-danger "></span><span> connected | </span>
+                                                    <span class="oi oi-media-record text-danger "></span><span> broadcasting | </span>
                                                 }
                                                 @context.Creator.DisplayName <span class="oi oi-check"></span>
+
                                             </small><br />
                                             <small class="text-muted">Posted on @context.CreatedOn.ToShortDateString() <span class="oi oi-clock"></span></small>
                                         </div>

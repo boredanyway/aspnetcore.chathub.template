@@ -12,7 +12,6 @@ namespace Oqtane.Shared.Models
         public string Status { get; set; }
 
         [NotMapped] public virtual ChatHubUser User { get; set; }
-        [NotMapped] public virtual ChatHubCam Cam { get; set; }
 
     }
 }

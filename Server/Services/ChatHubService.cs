@@ -43,6 +43,9 @@ namespace Oqtane.ChatHubs.Services
             IQueryable<ChatHubBlacklistUser> blacklistUsersQuery = this.chatHubRepository.GetChatHubBlacklistUsers(room);
             IList<ChatHubBlacklistUser> blacklistUsersList = await blacklistUsersQuery.ToListAsync();
 
+            IQueryable<ChatHubCam> camsQuery = this.chatHubRepository.GetChatHubCams(room);
+            IList<ChatHubCam> camsList = await camsQuery.ToListAsync();
+
             ChatHubUser creator = await this.chatHubRepository.GetUserByIdAsync(room.CreatorId);
             ChatHubUser creatorClientModel = this.CreateChatHubUserClientModel(creator);
 
@@ -64,6 +67,7 @@ namespace Oqtane.ChatHubs.Services
                 Moderators = moderatorsList,
                 WhitelistUsers = whitelistUsersList,
                 BlacklistUsers = blacklistUsersList,
+                Cams = camsList,
                 CreatedOn = room.CreatedOn,
                 CreatedBy = room.CreatedBy,
                 ModifiedBy = room.ModifiedBy,
@@ -115,16 +119,12 @@ namespace Oqtane.ChatHubs.Services
         }
         public ChatHubConnection CreateChatHubConnectionClientModel(ChatHubConnection connection)
         {
-            ChatHubCam cam = this.chatHubRepository.GetChatHubCamByConnectionId(connection.Id);
-            ChatHubCam camClientModel = cam != null ? this.CreateChatHubCamClientModel(cam) : null;
-
             return new ChatHubConnection()
             {
                 ChatHubUserId = connection.ChatHubUserId,
                 ConnectionId = this.MakeStringAnonymous(connection.ConnectionId, 7, '*'),
                 Status = connection.Status,
                 User = connection.User,
-                Cam = camClientModel,
                 CreatedOn = connection.CreatedOn,
                 CreatedBy = connection.CreatedBy,
                 ModifiedOn = connection.ModifiedOn,
@@ -209,15 +209,15 @@ namespace Oqtane.ChatHubs.Services
             if (cam == null)
             {
                 cam = this.chatHubRepository.AddChatHubCam(connection, ChatHubCamStatus.Inactive);
-                ChatHubRoomChatHubCam room_cam = new ChatHubRoomChatHubCam()
-                {
-                    ChatHubRoomId = roomId,
-                    ChatHubCamId = cam.Id,
-                };
-                return this.chatHubRepository.AddChatHubRoomChatHubCam(room_cam);
             }
 
-            return null;
+            ChatHubRoomChatHubCam room_cam = new ChatHubRoomChatHubCam()
+            {
+                ChatHubRoomId = roomId,
+                ChatHubCamId = cam.Id,
+            };
+
+            return this.chatHubRepository.AddChatHubRoomChatHubCam(room_cam);
         }
 
         public void IgnoreUser(ChatHubUser callerUser, ChatHubUser targetUser)

@@ -15,6 +15,8 @@ namespace Oqtane.ChatHubs.Services
 
         ChatHubPhoto CreateChatHubPhotoClientModel(ChatHubPhoto photo);
 
+        ChatHubCam CreateChatHubCamClientModel(ChatHubCam cam);
+
         ChatHubModerator CreateChatHubModeratorClientModel(ChatHubModerator moderator);
 
         ChatHubWhitelistUser CreateChatHubWhitelistUserClientModel(ChatHubWhitelistUser whitelistUser);

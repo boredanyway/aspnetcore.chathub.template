@@ -76,6 +76,8 @@ namespace Oqtane.ChatHubs.Services
         public event Action<ChatHubWhitelistUser, int> OnRemoveWhitelistUserEvent;
         public event Action<ChatHubBlacklistUser, int> OnAddBlacklistUserEvent;
         public event Action<ChatHubBlacklistUser, int> OnRemoveBlacklistUserEvent;
+        public event Action<ChatHubCam, int> OnAddChatHubCamEvent;
+        public event Action<ChatHubCam, int> OnRemoveChatHubCamEvent;
         public event Action<string, string, string, ChatHubUser> OnDownloadBytesEvent;
         public event EventHandler<int> OnClearHistoryEvent;
         public event EventHandler<ChatHubUser> OnDisconnectEvent;
@@ -117,6 +119,8 @@ namespace Oqtane.ChatHubs.Services
             this.OnRemoveWhitelistUserEvent += OnRemoveWhitelistUserExecute;
             this.OnAddBlacklistUserEvent += OnAddBlacklistUserExecute;
             this.OnRemoveBlacklistUserEvent += OnRemoveBlacklistUserExecute;
+            this.OnAddChatHubCamEvent += OnAddChatHubCamExecute;
+            this.OnRemoveChatHubCamEvent += OnRemoveChatHubCamExecute;
             this.OnDownloadBytesEvent += async (string dataURI, string id, string connectionId, ChatHubUser creator) => await OnDownloadBytesExecuteAsync(dataURI, id, connectionId, creator);
             this.OnRemoveIgnoredByUserEvent += OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent += OnClearHistoryExecute;
@@ -202,6 +206,8 @@ namespace Oqtane.ChatHubs.Services
             this.Connection.On("RemoveWhitelistUser", (ChatHubWhitelistUser whitelistUser, int roomId) => OnRemoveWhitelistUserEvent(whitelistUser, roomId));
             this.Connection.On("AddBlacklistUser", (ChatHubBlacklistUser blacklistUser, int roomId) => OnAddBlacklistUserEvent(blacklistUser, roomId));
             this.Connection.On("RemoveBlacklistUser", (ChatHubBlacklistUser blacklistUser, int roomId) => OnRemoveBlacklistUserEvent(blacklistUser, roomId));
+            this.Connection.On("AddCam", (ChatHubCam cam, int roomId) => OnAddChatHubCamEvent(cam, roomId));
+            this.Connection.On("RemoveCam", (ChatHubCam cam, int roomId) => OnRemoveChatHubCamEvent(cam, roomId));
             this.Connection.On("ClearHistory", (int roomId) => OnClearHistoryEvent(this, roomId));
             this.Connection.On("Disconnect", (ChatHubUser user) => OnDisconnectEvent(this, user));
         }
@@ -588,6 +594,16 @@ namespace Oqtane.ChatHubs.Services
             this.Rooms.RemoveBlacklistUser(blacklistUser, roomId);
             this.RunUpdateUI();
         }
+        private void OnAddChatHubCamExecute(ChatHubCam cam, int roomId)
+        {
+            this.Rooms.AddCam(cam, roomId);
+            this.RunUpdateUI();
+        }
+        private void OnRemoveChatHubCamExecute(ChatHubCam cam, int roomId)
+        {
+            this.Rooms.RemoveCam(cam, roomId);
+            this.RunUpdateUI();
+        }
         private void OnClearHistoryExecute(object sender, int roomId)
         {
             this.ClearHistory(roomId);
@@ -703,6 +719,8 @@ namespace Oqtane.ChatHubs.Services
             this.OnRemoveWhitelistUserEvent -= OnRemoveWhitelistUserExecute;
             this.OnAddBlacklistUserEvent -= OnAddBlacklistUserExecute;
             this.OnRemoveBlacklistUserEvent -= OnRemoveBlacklistUserExecute;
+            this.OnAddChatHubCamEvent += OnAddChatHubCamExecute;
+            this.OnRemoveChatHubCamEvent += OnRemoveChatHubCamExecute;
             this.OnDownloadBytesEvent -= async (string dataURI, string id, string connectionId, ChatHubUser creator) => await OnDownloadBytesExecuteAsync(dataURI, id, connectionId, creator);
             this.OnRemoveIgnoredByUserEvent -= OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent -= OnClearHistoryExecute;

@@ -500,7 +500,7 @@ namespace Oqtane.ChatHubs.Hubs
             {
                 ChatHubCam cam = this.chatHubRepository.GetChatHubCamById(room_cam.ChatHubCamId);
                 cam.Status = ChatHubCamStatus.Broadcasting.ToString();
-                this.chatHubRepository.UpdateChatHubCam(cam);
+                cam = this.chatHubRepository.UpdateChatHubCam(cam);
             }
         }
 

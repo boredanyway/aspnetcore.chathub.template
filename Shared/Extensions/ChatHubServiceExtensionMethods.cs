@@ -170,6 +170,26 @@ namespace Oqtane.Shared.Extensions
                 }
             }
         }
+        public static void AddCam(this List<ChatHubRoom> rooms, ChatHubCam cam, int roomId)
+        {
+            var room = rooms.FirstOrDefault(item => item.Id == roomId);
+            if (room != null && !room.Cams.Any(item => item.Id == cam.Id))
+            {
+                room.Cams.Add(cam);
+            }
+        }
+        public static void RemoveCam(this List<ChatHubRoom> rooms, ChatHubCam cam, int roomId)
+        {
+            var room = rooms.FirstOrDefault(item => item.Id == roomId);
+            if (room != null)
+            {
+                var user = room.Cams.FirstOrDefault(item => item.Id == cam.Id);
+                if (user != null)
+                {
+                    room.Cams.Remove(user);
+                }
+            }
+        }
 
     }
 }

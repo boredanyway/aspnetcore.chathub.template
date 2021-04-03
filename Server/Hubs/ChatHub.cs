@@ -175,7 +175,7 @@ namespace Oqtane.ChatHubs.Hubs
                 UserAgent = Context.GetHttpContext().Request.Headers["User-Agent"].ToString(),
                 Status = Enum.GetName(typeof(ChatHubConnectionStatus), ChatHubConnectionStatus.Active)
             };
-            ChatHubConnection = this.chatHubRepository.AddChatHubConnection(ChatHubConnection);
+            ChatHubConnection = this.chatHubRepository.AddChatHubConnection(ChatHubConnection);            
 
             ChatHubSettings ChatHubSetting = this.chatHubRepository.GetChatHubSettingByUser(chatHubUser);
             if(ChatHubSetting == null)
@@ -322,6 +322,21 @@ namespace Oqtane.ChatHubs.Hubs
 
             if (room.Public() || room.Protected() || room.Private() || room.OneVsOne())
             {
+
+                ChatHubConnection connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
+                ChatHubCam cam = this.chatHubRepository.GetChatHubCam(roomId, connection.Id);
+                if (cam == null)
+                {
+                    cam = new ChatHubCam()
+                    {
+                        ChatHubRoomId = roomId,
+                        ChatHubConnectionId = connection.Id,
+                        Status = ChatHubCamStatus.Inactive.ToString(),
+                    };
+
+                    cam = this.chatHubRepository.AddChatHubCam(cam);
+                }
+
                 ChatHubRoomChatHubUser room_user = new ChatHubRoomChatHubUser()
                 {
                     ChatHubRoomId = room.Id,
@@ -331,10 +346,10 @@ namespace Oqtane.ChatHubs.Hubs
 
                 ChatHubRoom chatHubRoomClientModel = await this.chatHubService.CreateChatHubRoomClientModelAsync(room);
 
-                foreach (var connection in user.Connections.Active())
+                foreach (var activeConnection in user.Connections.Active())
                 {
-                    await Groups.AddToGroupAsync(connection.ConnectionId, room.Id.ToString());
-                    await Clients.Client(connection.ConnectionId).SendAsync("AddRoom", chatHubRoomClientModel);
+                    await Groups.AddToGroupAsync(activeConnection.ConnectionId, room.Id.ToString());
+                    await Clients.Client(activeConnection.ConnectionId).SendAsync("AddRoom", chatHubRoomClientModel);
                 }
 
                 ChatHubUser chatHubUserClientModel = this.chatHubService.CreateChatHubUserClientModel(user);
@@ -495,22 +510,16 @@ namespace Oqtane.ChatHubs.Hubs
         [AllowAnonymous]
         public async Task StartCam(int roomId)
         {
+            ChatHubUser user = await this.GetChatHubUserAsync();
+            ChatHubRoom room = chatHubRepository.GetChatHubRoom(roomId);
+
             ChatHubConnection connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
             ChatHubCam cam = this.chatHubRepository.GetChatHubCam(roomId, connection.Id);
-            if(cam == null)
+            if(cam != null)
             {
-                cam = new ChatHubCam()
-                {
-                    ChatHubRoomId = roomId,
-                    ChatHubConnectionId = connection.Id,
-                    Status = ChatHubCamStatus.Inactive.ToString(),
-                };
-
-                cam = this.chatHubRepository.AddChatHubCam(cam);
+                cam.Status = user.UserId == room.CreatorId ? ChatHubCamStatus.Broadcasting.ToString() : ChatHubCamStatus.Streaming.ToString();
+                this.chatHubRepository.UpdateChatHubCam(cam);
             }
-
-            cam.Status = ChatHubCamStatus.Broadcasting.ToString();
-            this.chatHubRepository.UpdateChatHubCam(cam);
         }
 
         [AllowAnonymous]

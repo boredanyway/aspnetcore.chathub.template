@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Oqtane.Shared.Models
 {
@@ -12,7 +14,7 @@ namespace Oqtane.Shared.Models
         public string Status { get; set; }
 
         [NotMapped] public virtual ChatHubUser User { get; set; }
-        [NotMapped] public virtual ChatHubCam Cam { get; set; }
+        [NotMapped] public virtual ICollection<ChatHubCam> Cams { get; set; }
 
     }
 }

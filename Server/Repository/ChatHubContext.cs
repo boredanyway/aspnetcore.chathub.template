@@ -96,12 +96,12 @@ namespace Oqtane.ChatHubs.Repository
                 .HasForeignKey(c => c.ChatHubRoomId);
 
             // Relation
-            // One-to-one
+            // One-to-many
             // ChatHubCam / ChatHubConnection
             modelBuilder.Entity<ChatHubCam>()
                 .HasOne(c => c.Connection)
-                .WithOne(c => c.Cam)
-                .HasForeignKey<ChatHubCam>(c => c.ChatHubConnectionId);
+                .WithMany(c => c.Cams)
+                .HasForeignKey(c => c.ChatHubConnectionId);
 
             // Relations
             // Many-to-many

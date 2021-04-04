@@ -40,12 +40,13 @@ namespace Oqtane.ChatHubs.Services
         public BlazorBrowserResizeService BrowserResizeService { get; set; }
         public BlazorVideoService BlazorVideoService { get; set; }
 
+        public int ModuleId { get; set; }
         public HubConnection Connection { get; set; }
         public ChatHubUser ConnectedUser { get; set; }
         
         public Cookie IdentityCookie { get; set; }
         public string ContextRoomId { get; set; }
-        public int ModuleId { get; set; }
+        
 
         public List<ChatHubRoom> Lobbies { get; set; } = new List<ChatHubRoom>();
         public List<ChatHubRoom> Rooms { get; set; } = new List<ChatHubRoom>();

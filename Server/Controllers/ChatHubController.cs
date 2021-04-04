@@ -95,7 +95,7 @@ namespace Oqtane.ChatHubs.Controllers
 
                 if (HttpContext.User.Identity.IsAuthenticated)
                 {
-                    rooms.AddRange(this.chatHubRepository.GetChatHubRooms().Protected().ToList());
+                    rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByModuleId(this.EntityId).Protected().ToList());
                 }
 
                 if (rooms != null && rooms.Any())

@@ -219,7 +219,7 @@
 
                                                 @if (context.Creator.Connections.Any(connection => context.Cams.Any(cam => cam.ChatHubConnectionId == connection.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())))
                                                 {
-                                                    <span class="oi oi-media-record text-danger "></span><span> broadcasting | </span>
+                                                    <span class="oi oi-media-record text-danger "></span><span> Broadcasting | </span>
                                                 }
                                                 @context.Creator.DisplayName <span class="oi oi-check"></span>
 

@@ -27,7 +27,7 @@ using BlazorBrowserResize;
 namespace Oqtane.ChatHubs.Services
 {
 
-    public class ChatHubService : ServiceBase, IChatHubService, IService, IDisposable
+    public class ChatHubService : ServiceBase, IService, IDisposable
     {
 
         public HttpClient HttpClient { get; set; }

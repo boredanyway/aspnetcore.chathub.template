@@ -22,7 +22,7 @@ namespace Oqtane.ChatHubs
         [Inject] public NavigationManager NavigationManager { get; set; }
         [Inject] public HttpClient HttpClient { get; set; }
         [Inject] public SiteState SiteState { get; set; }
-        [Inject] public IChatHubService ChatHubService { get; set; }
+        [Inject] public ChatHubService ChatHubService { get; set; }
         [Inject] public BlazorAlertsService BlazorAlertsService { get; set; }
         [Inject] public BlazorColorPickerService BlazorColorPickerService { get; set; }
 

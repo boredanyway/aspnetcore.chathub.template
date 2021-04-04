@@ -74,5 +74,10 @@ namespace Oqtane.ChatHubs.Repository
             return room.Type == ChatHubRoomType.OneVsOne.ToString();
         }
 
+        public static IQueryable<ChatHubRoom> MatchModuleId(this IQueryable<ChatHubRoom> rooms, int moduleId)
+        {
+            return rooms.Where(room => room.ModuleId == moduleId);
+        }
+
     }
 }

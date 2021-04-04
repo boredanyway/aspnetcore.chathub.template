@@ -20,6 +20,7 @@ namespace Oqtane.ChatHubs.Commands
     {
         private readonly string _connectionId;
         private readonly int _roomId;
+        private readonly int _moduleId;
         private readonly ChatHubUser _caller;
         private readonly ChatHub _chatHub;
         private readonly ChatHubService _chatService;
@@ -32,6 +33,7 @@ namespace Oqtane.ChatHubs.Commands
         public CommandManager(
                             string connectionId,
                             int roomId,
+                            int moduleId,
                             ChatHubUser user,
                             ChatHub chatHub,
                             ChatHubService service,
@@ -40,6 +42,7 @@ namespace Oqtane.ChatHubs.Commands
         {
             _connectionId = connectionId;
             _roomId = roomId;
+            _moduleId = moduleId;
             _caller = user;
             _chatHub = chatHub;
             _chatService = service;
@@ -103,7 +106,8 @@ namespace Oqtane.ChatHubs.Commands
             {
                 ConnectionId = _connectionId,
                 UserId = _caller.UserId,
-                RoomId = _roomId
+                RoomId = _roomId,
+                ModuleId = _moduleId,
             };
 
             ICommand command;

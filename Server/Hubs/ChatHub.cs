@@ -216,9 +216,10 @@ namespace Oqtane.ChatHubs.Hubs
         [AllowAnonymous]
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
 
-            var rooms = chatHubRepository.GetChatHubRoomsByUser(user).Enabled();
+            var rooms = chatHubRepository.GetChatHubRoomsByUser(user).MatchModuleId(Convert.ToInt32(moduleId)).Enabled();
             foreach (var room in await rooms.ToListAsync())
             {
                 if (user.Connections.Active().Count() == 1)
@@ -254,14 +255,15 @@ namespace Oqtane.ChatHubs.Hubs
         [AllowAnonymous]
         public async Task Init()
         {
+            string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
 
-            var rooms = this.chatHubRepository.GetChatHubRoomsByUser(user).Public().Enabled().ToList();
-            rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).Private().Enabled().ToList());
+            var rooms = this.chatHubRepository.GetChatHubRoomsByUser(user).MatchModuleId(Convert.ToInt32(moduleId)).Public().Enabled().ToList();
+            rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).MatchModuleId(Convert.ToInt32(moduleId)).Private().Enabled().ToList());
 
             if (Context.User.Identity.IsAuthenticated)
             {
-                rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).Protected().Enabled().ToList());
+                rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).MatchModuleId(Convert.ToInt32(moduleId)).Protected().Enabled().ToList());
             }
             
             foreach (var room in rooms)
@@ -419,11 +421,12 @@ namespace Oqtane.ChatHubs.Hubs
         }
 
         [AllowAnonymous]
-        public async Task SendMessage(string message, int roomId, int moduleId)
+        public async Task SendMessage(string message, int roomId)
         {
+            string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
 
-            if (await ExecuteCommandManager(user, message, roomId))
+            if (await ExecuteCommandManager(user, message, roomId, Convert.ToInt32(moduleId)))
             {
                 return;
             }
@@ -442,9 +445,9 @@ namespace Oqtane.ChatHubs.Hubs
             var connectionsIds = this.chatHubService.GetAllExceptConnectionIds(user);
             await Clients.GroupExcept(roomId.ToString(), connectionsIds).SendAsync("AddMessage", chatHubMessageClientModel);
         }
-        private async Task<bool> ExecuteCommandManager(ChatHubUser chatHubUser, string message, int roomId)
+        private async Task<bool> ExecuteCommandManager(ChatHubUser chatHubUser, string message, int roomId, int moduleId)
         {
-            var commandManager = new CommandManager(Context.ConnectionId, roomId, chatHubUser, this, chatHubService, chatHubRepository, userManager);
+            var commandManager = new CommandManager(Context.ConnectionId, roomId, moduleId, chatHubUser, this, chatHubService, chatHubRepository, userManager);
             return await commandManager.TryHandleCommand(message);
         }
         [AllowAnonymous]

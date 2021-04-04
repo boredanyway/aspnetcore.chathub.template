@@ -295,7 +295,7 @@ namespace Oqtane.ChatHubs
 
         public async Task SendMessage_Clicked(string messageInput, ChatHubRoom room)
         {
-            await this.ChatHubService.SendMessage(messageInput, room.Id, ModuleState.ModuleId);
+            await this.ChatHubService.SendMessage(messageInput, room.Id);
             room.MessageInput = string.Empty;
             this.StateHasChanged();
         }

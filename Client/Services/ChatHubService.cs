@@ -380,9 +380,9 @@ namespace Oqtane.ChatHubs.Services
             }
         }
 
-        public async Task SendMessage(string content, int roomId, int moduleId)
+        public async Task SendMessage(string content, int roomId)
         {
-            await this.Connection.InvokeAsync("SendMessage", content, roomId, moduleId).ContinueWith((task) =>
+            await this.Connection.InvokeAsync("SendMessage", content, roomId).ContinueWith((task) =>
             {
                 if (task.IsCompleted)
                 {

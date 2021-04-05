@@ -90,12 +90,12 @@ namespace Oqtane.ChatHubs.Controllers
             try
             {
                 IList<ChatHubRoom> chatHubRooms = new List<ChatHubRoom>();
-                var rooms = this.chatHubRepository.GetChatHubRoomsByModuleId(this.EntityId).Public().ToList();
-                rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByModuleId(this.EntityId).Private().ToList());
+                var rooms = this.chatHubRepository.GetChatHubRooms().FilterByModuleId(this.EntityId).Public().ToList();
+                rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(this.EntityId).Private().ToList());
 
                 if (HttpContext.User.Identity.IsAuthenticated)
                 {
-                    rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByModuleId(this.EntityId).Protected().ToList());
+                    rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(this.EntityId).Protected().ToList());
                 }
 
                 if (rooms != null && rooms.Any())

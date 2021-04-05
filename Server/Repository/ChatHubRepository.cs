@@ -33,17 +33,6 @@ namespace Oqtane.ChatHubs.Repository
                 throw;
             }
         }
-        public IQueryable<ChatHubRoom> GetChatHubRoomsByModuleId(int ModuleId)
-        {
-            try
-            {
-                return db.ChatHubRoom.Where(item => item.ModuleId == ModuleId);
-            }
-            catch
-            {
-                throw;
-            }
-        }
         public IQueryable<ChatHubRoom> GetChatHubRoomsByUser(ChatHubUser user)
         {
             return db.Entry(user)

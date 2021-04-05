@@ -12,6 +12,7 @@ namespace Oqtane.ChatHubs.Manager
 {
     public class ChatHubManager : IInstallable, IPortable
     {
+
         private ChatHubRepository _chatHubRepository;
         private ISqlRepository _sql;
 
@@ -34,7 +35,7 @@ namespace Oqtane.ChatHubs.Manager
         public string ExportModule(Module module)
         {
             string content = "";
-            List<ChatHubRoom> chatHubRooms = _chatHubRepository.GetChatHubRoomsByModuleId(module.ModuleId).ToList();
+            List<ChatHubRoom> chatHubRooms = _chatHubRepository.GetChatHubRooms().FilterByModuleId(module.ModuleId).ToList();
             if (chatHubRooms != null)
             {
                 content = JsonSerializer.Serialize(chatHubRooms);
@@ -66,5 +67,6 @@ namespace Oqtane.ChatHubs.Manager
                 }
             }
         }
+
     }
 }

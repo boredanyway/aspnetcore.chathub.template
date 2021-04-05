@@ -196,7 +196,7 @@ namespace Oqtane.ChatHubs.Hubs
         {
             string platform = Context.GetHttpContext().Request.Headers["platform"];
             string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
-            List<ChatHubRoom> list = this.chatHubRepository.GetChatHubRoomsByModuleId(int.Parse(moduleId)).ToList();
+            List<ChatHubRoom> list = this.chatHubRepository.GetChatHubRooms().FilterByModuleId(int.Parse(moduleId)).ToList();
 
             ChatHubUser user = await this.IdentifyUser();
             if (user != null)
@@ -219,7 +219,7 @@ namespace Oqtane.ChatHubs.Hubs
             string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
 
-            var rooms = chatHubRepository.GetChatHubRoomsByUser(user).FilterByModuleId(Convert.ToInt32(moduleId)).Enabled();
+            var rooms = chatHubRepository.GetChatHubRoomsByUser(user).Enabled();
             foreach (var room in await rooms.ToListAsync())
             {
                 if (user.Connections.Active().Count() == 1)
@@ -258,12 +258,12 @@ namespace Oqtane.ChatHubs.Hubs
             string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
 
-            var rooms = this.chatHubRepository.GetChatHubRoomsByUser(user).FilterByModuleId(Convert.ToInt32(moduleId)).Public().Enabled().ToList();
-            rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).FilterByModuleId(Convert.ToInt32(moduleId)).Private().Enabled().ToList());
+            var rooms = this.chatHubRepository.GetChatHubRoomsByUser(user).Public().Enabled().ToList();
+            rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).Private().Enabled().ToList());
 
             if (Context.User.Identity.IsAuthenticated)
             {
-                rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).FilterByModuleId(Convert.ToInt32(moduleId)).Protected().Enabled().ToList());
+                rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).Protected().Enabled().ToList());
             }
             
             foreach (var room in rooms)

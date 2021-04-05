@@ -197,8 +197,8 @@
                             <div class="d-flex flex-wrap flex-sm-nowrap align-items-center w-100 py-2" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff; border-top: 1px solid red;" : "background-color: #fff; border-top: 1px solid #bb99ff")">
 
                                 <div class="px-1">
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1 B6C1;" : "#f1f1ff;"); max-width: 100px;" />
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "background-color: #f1f1ff;"); max-width: 100px;" />
+                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
+                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
                                 </div>
 
                                 <div class="px-1 py-2">

@@ -219,7 +219,7 @@ namespace Oqtane.ChatHubs.Hubs
             string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
 
-            var rooms = chatHubRepository.GetChatHubRoomsByUser(user).MatchModuleId(Convert.ToInt32(moduleId)).Enabled();
+            var rooms = chatHubRepository.GetChatHubRoomsByUser(user).FilterByModuleId(Convert.ToInt32(moduleId)).Enabled();
             foreach (var room in await rooms.ToListAsync())
             {
                 if (user.Connections.Active().Count() == 1)
@@ -258,12 +258,12 @@ namespace Oqtane.ChatHubs.Hubs
             string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
 
-            var rooms = this.chatHubRepository.GetChatHubRoomsByUser(user).MatchModuleId(Convert.ToInt32(moduleId)).Public().Enabled().ToList();
-            rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).MatchModuleId(Convert.ToInt32(moduleId)).Private().Enabled().ToList());
+            var rooms = this.chatHubRepository.GetChatHubRoomsByUser(user).FilterByModuleId(Convert.ToInt32(moduleId)).Public().Enabled().ToList();
+            rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).FilterByModuleId(Convert.ToInt32(moduleId)).Private().Enabled().ToList());
 
             if (Context.User.Identity.IsAuthenticated)
             {
-                rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).MatchModuleId(Convert.ToInt32(moduleId)).Protected().Enabled().ToList());
+                rooms.AddRange(this.chatHubRepository.GetChatHubRoomsByUser(user).FilterByModuleId(Convert.ToInt32(moduleId)).Protected().Enabled().ToList());
             }
             
             foreach (var room in rooms)

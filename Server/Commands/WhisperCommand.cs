@@ -69,7 +69,7 @@ namespace Oqtane.ChatHubs.Commands
 
             foreach (var item in users)
             {
-                var rooms = context.ChatHubRepository.GetChatHubRoomsByUser(item).MatchModuleId(callerContext.ModuleId).Public().Enabled().ToList();
+                var rooms = context.ChatHubRepository.GetChatHubRoomsByUser(item).FilterByModuleId(callerContext.ModuleId).Public().Enabled().ToList();
                 var connections = item.Connections.Active();
 
                 foreach (var room in rooms)

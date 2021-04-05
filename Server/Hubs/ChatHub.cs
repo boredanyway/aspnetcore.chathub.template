@@ -119,7 +119,7 @@ namespace Oqtane.ChatHubs.Hubs
             }
 
             string email = "noreply@anyways.tv";
-            string password = "§PasswordPolicy42";
+            //string password = "§PasswordPolicy42";
 
             ChatHubUser chatHubUser = new ChatHubUser()
             {
@@ -165,7 +165,7 @@ namespace Oqtane.ChatHubs.Hubs
 
             return chatHubUser;
         }
-        private async Task<ChatHubUser> OnConnectedUser(ChatHubUser chatHubUser)
+        private ChatHubUser OnConnectedUser(ChatHubUser chatHubUser)
         {
             ChatHubConnection ChatHubConnection = new ChatHubConnection()
             {
@@ -201,7 +201,7 @@ namespace Oqtane.ChatHubs.Hubs
             ChatHubUser user = await this.IdentifyUser();
             if (user != null)
             {
-                user = await this.OnConnectedUser(user);
+                user = this.OnConnectedUser(user);
             }
             else
             {

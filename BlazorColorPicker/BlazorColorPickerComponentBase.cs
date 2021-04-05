@@ -54,10 +54,10 @@ namespace BlazorColorPicker
             return base.OnInitializedAsync();
         }
 
-        public async Task ContextColor_OnChangeAsync(string color)
+        public void ContextColor_OnChangeAsync(string color)
         {
             this.ContextColor = color;
-            await this.BlazorColorPickerService.InvokeColorPickerEvent(color);
+            this.BlazorColorPickerService.InvokeColorPickerEvent(color);
         }
 
         public void ColorSetItem_OnClicked(KeyValuePair<string, dynamic> clickedkvpair)

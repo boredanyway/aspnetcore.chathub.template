@@ -38,7 +38,7 @@
                     <small>@item</small>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-link" @onclick="@(async() => await RemoveRegularExpression_ClickedAsync(item))">Remove</button>
+                    <button type="button" class="btn btn-link" @onclick="@(() => RemoveRegularExpression_ClickedAsync(item))">Remove</button>
                 </td>
             </tr>
         }
@@ -50,7 +50,7 @@
                 </div>
             </td>
             <td>
-                <button type="button" class="btn btn-link" @onclick="@(async() => await AddRegularExpression_ClickedAsync())">Add</button>
+                <button type="button" class="btn btn-link" @onclick="@(() => AddRegularExpression_ClickedAsync())">Add</button>
             </td>
         </tr>
     </tbody>
@@ -95,7 +95,7 @@
         }
     }
 
-    public async Task AddRegularExpression_ClickedAsync()
+    public void AddRegularExpression_ClickedAsync()
     {
         try
         {
@@ -108,7 +108,7 @@
         }
     }
 
-    public async Task RemoveRegularExpression_ClickedAsync(string item)
+    public void RemoveRegularExpression_ClickedAsync(string item)
     {
         try
         {

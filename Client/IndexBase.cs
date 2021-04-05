@@ -28,7 +28,7 @@ namespace Oqtane.ChatHubs
     public class IndexBase : ModuleBase, IDisposable
     {
         
-        [Inject] protected IJSRuntime JSRuntime { get; set; }
+        [Inject] protected IJSRuntime JsRuntime { get; set; }
         [Inject] protected NavigationManager NavigationManager { get; set; }
         [Inject] protected HttpClient HttpClient { get; set; }
         [Inject] protected SiteState SiteState { get; set; }
@@ -116,7 +116,7 @@ namespace Oqtane.ChatHubs
                 string hostname = new Uri(NavigationManager.BaseUri).Host;
                 this.ChatHubService.IdentityCookie = new Cookie(".AspNetCore.Identity.Application", await this.CookieService.GetCookieAsync(".AspNetCore.Identity.Application"), "/", hostname);
 
-                await this.JSRuntime.InvokeVoidAsync("showchathubscontainer");
+                await this.JsRuntime.InvokeVoidAsync("showchathubscontainer");
 
                 await this.BrowserResizeService.RegisterWindowResizeCallback();
                 await BrowserHasResized();

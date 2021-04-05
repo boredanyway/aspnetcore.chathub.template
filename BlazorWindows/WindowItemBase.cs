@@ -38,7 +38,7 @@ namespace BlazorWindows
 
         public string TitleCssClass => this.WindowContainer.ActiveWindow == this ? "active" : null;
 
-        public async void ActivateWindow()
+        public void ActivateWindow()
         {
             this.WindowContainer.ActiveWindow = this;
         }

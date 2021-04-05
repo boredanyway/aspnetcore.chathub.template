@@ -8,7 +8,7 @@ namespace BlazorColorPicker
 
         public event Action<BlazorColorPickerEvent> OnBlazorColorPickerContextColorChangedEvent;
 
-        public async Task InvokeColorPickerEvent(string color)
+        public void InvokeColorPickerEvent(string color)
         {
             this.OnBlazorColorPickerContextColorChangedEvent.Invoke(new BlazorColorPickerEvent() { ContextColor = color });
         }

@@ -197,8 +197,8 @@
                             <div class="d-flex flex-wrap flex-sm-nowrap align-items-center w-100 py-2" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff; border-top: 1px solid red;" : "background-color: #fff; border-top: 1px solid #bb99ff")">
 
                                 <div class="px-1">
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff1f1 B6C1; border-top: 1px solid red;" : "background-color: #f1f1ff; border-top: 1px solid #bb99ff"); max-width: 100px;" />
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff1f1; border-top: 1px solid red;" : "background-color: #f1f1ff; border-top: 1px solid #bb99ff"); max-width: 100px;" />
+                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1 B6C1;" : "#f1f1ff;"); max-width: 100px;" />
+                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "background-color: #f1f1ff;"); max-width: 100px;" />
                                 </div>
 
                                 <div class="px-1 py-2">
@@ -527,7 +527,7 @@
                                                             <input type="text" class="form-control" @bind-value="@room.MessageInput" @onkeyup="async (e) => await KeyDown(e, room)" placeholder="Type your message here" />
 
                                                             <div class="input-group-append">
-                                                                <button type="button" class="btn btn-primary input-group-button mr-0 mr-sm-4" @onclick="async () => SendMessage_Clicked(room.MessageInput, room)"><span class="oi oi-envelope-open"></span></button>
+                                                                <button type="button" class="btn btn-primary input-group-button mr-0 mr-sm-4" @onclick="async () => await SendMessage_Clicked(room.MessageInput, room)"><span class="oi oi-envelope-open"></span></button>
                                                                 <button type="button" class="btn btn-info input-group-button d-none d-sm-inline-block" @onclick="() => ChatHubService.ClearHistory(room.Id)"><span class="oi oi-trash"></span></button>
                                                                 <button type="button" class="btn btn-dark input-group-button d-inline-block d-xl-none" @onclick="() => ChatHubService.ToggleUserlist(room)"><span class="oi oi-list"></span></button>
                                                                 <button type="button" class="btn btn-danger input-group-button d-none d-sm-inline-block" @onclick="async () => await ChatHubService.DisconnectAsync()"><span class="oi oi-power-standby"></span></button>

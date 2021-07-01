@@ -111,4 +111,4 @@ else if (segments[0] == "chathub")
 
 #### Demo Site
 
-Demo Website [Link](https://sub.anyways.tv/).
+Demo Website [Link](https://www.wasmchat.com/).

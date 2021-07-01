@@ -107,7 +107,6 @@ else if (segments[0] == "chathub")
 
 <div class="float-left">
 	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" height="133">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyways_black.png" height="133">
 </div>
 
 #### Demo Site

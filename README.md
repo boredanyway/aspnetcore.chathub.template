@@ -108,18 +108,8 @@ else if (segments[0] == "chathub")
 <div class="float-left">
 	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" height="133">
 	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyways_black.png" height="133">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway_white.png" height="133">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway_black.png" height="133">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway__white.png" height="133">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/anyway__black.png" height="133">
 </div>
 
 #### Demo Site
 
 Demo Website [Link](https://sub.anyways.tv/).
-
-#### Support our office
-Anyways Corporation
-South Beach, San Francisco, California, USA
-
-<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/sanfranciscooffice.png" height="100">

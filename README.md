@@ -1,4 +1,4 @@
-﻿![Module](https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/Modules/Oqtane.ChatHubs/images/anyways-logo.png "anyways logo")
+﻿![Module](https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/Modules/Oqtane.ChatHubs/images/wasmchatlogo.png "wasm chat logo")
 
 ## asp .net core blazor signalR entity framework chat hub template
 

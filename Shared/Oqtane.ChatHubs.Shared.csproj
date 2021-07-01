@@ -8,10 +8,10 @@
     <OutputType>Library</OutputType>  
     <Version>1.0.0</Version>
     <Product>Oqtane.ChatHubs</Product>
-    <Authors>Benjamin Strohmann</Authors>
-    <Company>Benjamin Strohmann</Company>
+    <Authors>ben core</Authors>
+    <Company>ben core</Company>
     <Description>Just another ChatHub Module for the Oqtane Framework</Description>
-    <Copyright>Benjamin Strohmann</Copyright>    
+    <Copyright>ben core</Copyright>    
   </PropertyGroup>
 
   <ItemGroup>

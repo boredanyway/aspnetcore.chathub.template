@@ -3,11 +3,11 @@
   <metadata>
     <id>Oqtane.ChatHubs</id>
     <version>1.0.0</version>
-    <authors>Benjamin Strohmann</authors>
-    <owners>Benjamin Strohmann</owners>
+    <authors>ben core</authors>
+    <owners>ben core</owners>
     <title>ChatHubs</title>
     <description>ChatHubs</description>
-    <copyright>Benjamin Strohmann</copyright>
+    <copyright>ben core</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/oqtane/oqtane.framework</projectUrl>

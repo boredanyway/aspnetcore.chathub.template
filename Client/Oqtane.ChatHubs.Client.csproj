@@ -5,11 +5,11 @@
     <LangVersion>8.0</LangVersion>
     <RazorLangVersion>3.0</RazorLangVersion>
     <Version>1.0.0</Version>
-    <Authors>Benjamin Strohmann</Authors>
-    <Company>Benjamin Strohmann</Company>
+    <Authors>ben core</Authors>
+    <Company>ben core</Company>
     <Description>Just another ChatHub Module for the Oqtane Framework</Description>
     <Product>Oqtane.ChatHubs</Product>
-    <Copyright>Benjamin Strohmann</Copyright>
+    <Copyright>ben core</Copyright>
     <AssemblyName>Oqtane.ChatHubs.Client.Oqtane</AssemblyName>
   </PropertyGroup>
 

@@ -6,12 +6,12 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <AssemblyName>Oqtane.ChatHubs.Shared.Oqtane</AssemblyName>
     <OutputType>Library</OutputType>  
-    <Version>1.0.0</Version>
+    <Version>2.1.0</Version>
     <Product>Oqtane.ChatHubs</Product>
-    <Authors>ben core</Authors>
-    <Company>ben core</Company>
+    <Authors>ben wasm</Authors>
+    <Company>ben wasm</Company>
     <Description>Just another ChatHub Module for the Oqtane Framework</Description>
-    <Copyright>ben core</Copyright>    
+    <Copyright>ben wasm</Copyright>    
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Oqtane.Shared" Version="2.0.0" />
+    <PackageReference Include="Oqtane.Shared" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

@@ -2,12 +2,12 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Oqtane.ChatHubs</id>
-    <version>1.0.0</version>
-    <authors>ben core</authors>
-    <owners>ben core</owners>
+    <version>2.1.0</version>
+    <authors>ben wasm</authors>
+    <owners>ben wasm</owners>
     <title>ChatHubs</title>
     <description>ChatHubs</description>
-    <copyright>ben core</copyright>
+    <copyright>ben wasm</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/oqtane/oqtane.framework</projectUrl>
@@ -18,14 +18,14 @@
     <dependencies>
 		
         <dependency id="Oqtane.Framework" version="2.0.0" />      
-		    <dependency id="System.Drawing.Common" version="5.0.0" />
-		    <dependency id="MatBlazor" version="2.3.0" />
-		    <dependency id="Microsoft.CSharp" version="4.7.0" />
-		    <dependency id="BlazorStrap" version="1.3.3" />
-		    <dependency id="Microsoft.AspNetCore.SignalR.Client" version="5.0.0" />
+        <dependency id="System.Drawing.Common" version="5.0.0" />
+        <dependency id="MatBlazor" version="2.3.0" />
+        <dependency id="Microsoft.CSharp" version="4.7.0" />
+        <dependency id="BlazorStrap" version="1.3.3" />
+        <dependency id="Microsoft.AspNetCore.SignalR.Client" version="5.0.0" />
         <dependency id="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" version="5.0.0" />
         <dependency id="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" version="5.0.0" />
-		    <dependency id="Microsoft.Composition" version="1.0.31" />
+        <dependency id="Microsoft.Composition" version="1.0.31" />
       
     </dependencies>
   </metadata>

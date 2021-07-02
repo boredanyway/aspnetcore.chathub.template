@@ -8,9 +8,9 @@
     <OutputType>Library</OutputType>
     <Version>1.0.0</Version>
     <Product>BlazorAccordion</Product>
-    <Authors>ben core</Authors>
-    <Company>ben core</Company>
-    <Copyright>ben core</Copyright>
+    <Authors>ben wasm</Authors>
+    <Company>ben wasm</Company>
+    <Copyright>ben wasm</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Http;
 using Oqtane.Repository;
 using Oqtane.Models;
 using Oqtane.Shared.Models;
+using Oqtane.Repository.Databases.Interfaces;
+using Oqtane.Infrastructure;
 
 namespace Oqtane.ChatHubs.Repository
 {
-    public class ChatHubContext : DBContextBase, IService
+    public class ChatHubContext : DBContextBase, IService, IMultiDatabase
     {
 
         public virtual DbSet<ChatHubRoom> ChatHubRoom { get; set; }
@@ -156,7 +158,7 @@ namespace Oqtane.ChatHubs.Repository
             base.OnModelCreating(modelBuilder);
         }
 
-        public ChatHubContext(ITenantResolver tenantResolver, IHttpContextAccessor accessor) : base(tenantResolver, accessor)
+        public ChatHubContext(ITenantManager tenantManager, IHttpContextAccessor accessor) : base(tenantManager, accessor)
         {
             // ContextBase handles multi-tenant database connections
         }

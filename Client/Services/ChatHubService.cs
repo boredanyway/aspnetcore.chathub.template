@@ -139,13 +139,15 @@ namespace Oqtane.ChatHubs.Services
 
             urlBuilder.Append(chatHubConnection);
             urlBuilder.Append("?guestname=" + username);
+            urlBuilder.Append("&moduleid=" + moduleId.ToString());
+            urlBuilder.Append("&platform=" + "Oqtane");
 
             var url = urlBuilder.ToString();
             Connection = new HubConnectionBuilder().WithUrl(url, options =>
             {
                 options.Cookies.Add(this.IdentityCookie);
-                options.Headers["moduleid"] = moduleId.ToString();
-                options.Headers["platform"] = "Oqtane";
+                options.Headers.Add("moduleid", moduleId.ToString());
+                options.Headers.Add("platform", "Oqtane");
                 options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
             })
             .AddMessagePackProtocol()
@@ -324,13 +326,15 @@ namespace Oqtane.ChatHubs.Services
             try
             {
                 this.Lobbies = await this.GetChatHubRoomsByModuleIdAsync(moduleId);
-                this.SortLobbyRooms();
-                this.RunUpdateUI();
+                if(this.Lobbies != null && this.Lobbies.Any())
+                {
+                    this.SortLobbyRooms();
+                    this.RunUpdateUI();
+                }
             }
             catch (Exception ex)
             {
-                // !!!Important | This Try Catch Block Is Necessary
-                this.HandleException(ex);
+                //this.HandleException(ex);
             }
         }
         public async Task GetIgnoredUsers()

@@ -31,6 +31,7 @@ namespace Oqtane.ChatHubs.Migrations.EntityBuilders
             ImageUrl = AddStringColumn(table, "ImageUrl", 256, false, true);
             Type = AddStringColumn(table, "Type", 256, false, true);
             Status = AddStringColumn(table, "Status", 256, false, true);
+            OneVsOneId = AddStringColumn(table, "OneVsOneId", 256, false, true);
 
             AddAuditableColumns(table);
 

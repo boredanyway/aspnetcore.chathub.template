@@ -914,5 +914,4 @@ namespace Oqtane.ChatHubs.Hubs
         }
 
     }
-
 }

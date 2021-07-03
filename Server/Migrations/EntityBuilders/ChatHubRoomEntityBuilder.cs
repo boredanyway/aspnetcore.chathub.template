@@ -32,6 +32,7 @@ namespace Oqtane.ChatHubs.Migrations.EntityBuilders
             Type = AddStringColumn(table, "Type", 256, false, true);
             Status = AddStringColumn(table, "Status", 256, false, true);
             OneVsOneId = AddStringColumn(table, "OneVsOneId", 256, false, true);
+            CreatorId = AddIntegerColumn(table, "CreatorId");
 
             AddAuditableColumns(table);
 
@@ -55,6 +56,8 @@ namespace Oqtane.ChatHubs.Migrations.EntityBuilders
         public OperationBuilder<AddColumnOperation> Status { get; set; }
 
         public OperationBuilder<AddColumnOperation> OneVsOneId { get; set; }
+
+        public OperationBuilder<AddColumnOperation> CreatorId { get; set; }
 
     }
 }

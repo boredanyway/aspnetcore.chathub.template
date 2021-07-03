@@ -25,8 +25,6 @@ namespace Oqtane.ChatHubs.Migrations.EntityBuilders
         {
             Id = AddAutoIncrementColumn(table, "Id");
             ChatHubUserId = AddIntegerColumn(table, "ChatHubUserId");
-            Title = AddStringColumn(table, "Title", 256, false, true);
-            Content = AddMaxStringColumn(table, "Content");
             ConnectionId = AddStringColumn(table, "ConnectionId", 256, false, true);
             IpAddress = AddStringColumn(table, "IpAddress", 256, false, true);
             UserAgent = AddStringColumn(table, "UserAgent", 512, false, true);
@@ -40,10 +38,6 @@ namespace Oqtane.ChatHubs.Migrations.EntityBuilders
         public OperationBuilder<AddColumnOperation> Id { get; set; }
 
         public OperationBuilder<AddColumnOperation> ChatHubUserId { get; set; }
-
-        public OperationBuilder<AddColumnOperation> Title { get; set; }
-
-        public OperationBuilder<AddColumnOperation> Content { get; set; }
 
         public OperationBuilder<AddColumnOperation> ConnectionId { get; set; }
 

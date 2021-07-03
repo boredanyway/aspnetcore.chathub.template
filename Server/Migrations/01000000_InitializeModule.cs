@@ -48,6 +48,12 @@ namespace Oqtane.ChatHubs.Migrations
             var entityBuilderChatHubRoomChatHubModerator = new ChatHubRoomChatHubModeratorEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderChatHubRoomChatHubModerator.Create();
 
+            var entityBuilderChatHubWhitelistUser = new ChatHubWhitelistUserEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderChatHubWhitelistUser.Create();
+
+            var entityBuilderChatHubRoomChatHubWhitelistUser = new ChatHubRoomChatHubWhitelistUserEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderChatHubRoomChatHubWhitelistUser.Create();
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

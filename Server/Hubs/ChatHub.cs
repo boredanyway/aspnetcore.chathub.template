@@ -201,6 +201,7 @@ namespace Oqtane.ChatHubs.Hubs
 
             List<ChatHubRoom> list = this.chatHubRepository.GetChatHubRooms().FilterByModuleId(int.Parse(moduleId)).ToList();
 
+            await this.chatHubRepository.UpdateUserColumnAsync();
             ChatHubUser user = await this.IdentifyUser();
             if (user != null)
             {

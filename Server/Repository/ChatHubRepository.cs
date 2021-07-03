@@ -858,13 +858,24 @@ namespace Oqtane.ChatHubs.Repository
 
         #endregion
 
-        #region UPDATE
+        #region TODO: remove oqtane framework workarrounds with discriminators
+
+        public async Task UpdateUserColumnAsync()
+        {
+            try
+            {
+                await db.Database.ExecuteSqlRawAsync($"IF COL_LENGTH('dbo.User', 'UserType') IS NULL BEGIN ALTER TABLE [dbo].[User] ADD [UserType] [nvarchar](256) NULL END");
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
         public async Task UpdateUserAsync(User user)
         {
             try
             {
-                // TODO: remove oqtane framework weird workarrounds with discriminators
                 await db.Database.ExecuteSqlRawAsync($"UPDATE [dbo].[User] SET UserType='ChatHubUser' WHERE UserId={user.UserId}");
             }
             catch
@@ -872,6 +883,11 @@ namespace Oqtane.ChatHubs.Repository
                 throw;
             }
         }
+
+        #endregion
+
+        #region UPDATE
+
         public ChatHubRoom UpdateChatHubRoom(ChatHubRoom ChatHubRoom)
         {
             try

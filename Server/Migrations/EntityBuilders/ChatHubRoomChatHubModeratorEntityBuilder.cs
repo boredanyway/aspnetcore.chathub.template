@@ -26,8 +26,8 @@ namespace Oqtane.ChatHubs.Migrations.EntityBuilders
         protected override ChatHubRoomChatHubModeratorEntityBuilder BuildTable(ColumnsBuilder table)
         {
             Id = AddAutoIncrementColumn(table, "Id");
-            ChatHubRoomId = AddIntegerColumn(table, "ModuleId");
-            ChatHubModeratorId = AddIntegerColumn(table, "ModuleId");
+            ChatHubRoomId = AddIntegerColumn(table, "ChatHubRoomId");
+            ChatHubModeratorId = AddIntegerColumn(table, "ChatHubModeratorId");
 
             AddAuditableColumns(table);
 

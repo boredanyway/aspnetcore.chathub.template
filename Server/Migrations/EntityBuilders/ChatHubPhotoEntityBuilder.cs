@@ -10,7 +10,7 @@ namespace Oqtane.ChatHubs.Migrations.EntityBuilders
     public class ChatHubPhotoEntityBuilder : AuditableBaseEntityBuilder<ChatHubPhotoEntityBuilder>
     {
 
-        private const string _entityTableName = "ChatHubRoom";
+        private const string _entityTableName = "ChatHubPhoto";
         private readonly PrimaryKey<ChatHubPhotoEntityBuilder> _primaryKey = new("PK_ChatHubPhoto", x => x.Id);
         private readonly ForeignKey<ChatHubPhotoEntityBuilder> _photoForeignKey = new("FK_ChatHubPhoto_ChatHubMessage", x => x.ChatHubMessageId, "ChatHubMessage", "Id", ReferentialAction.Cascade);
 

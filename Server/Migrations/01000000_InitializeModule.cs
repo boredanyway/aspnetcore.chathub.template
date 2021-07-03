@@ -45,6 +45,9 @@ namespace Oqtane.ChatHubs.Migrations
             var entityBuilderModerator = new ChatHubModeratorEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderModerator.Create();
 
+            var entityBuilderChatHubRoomChatHubModerator = new ChatHubRoomChatHubModeratorEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderChatHubRoomChatHubModerator.Create();
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

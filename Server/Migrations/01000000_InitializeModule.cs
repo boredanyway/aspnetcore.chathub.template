@@ -36,6 +36,9 @@ namespace Oqtane.ChatHubs.Migrations
             var entityBuilderSetting = new ChatHubSettingEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderSetting.Create();
 
+            var entityBuilderCam = new ChatHubCamEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderCam.Create();
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

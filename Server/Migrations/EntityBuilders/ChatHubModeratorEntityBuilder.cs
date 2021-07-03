@@ -11,7 +11,7 @@ namespace Oqtane.ChatHubs.Migrations.EntityBuilders
     {
 
         private const string _entityTableName = "ChatHubModerator";
-        private readonly PrimaryKey<ChatHubModeratorEntityBuilder> _primaryKey = new("PK_ChatHubRoom", x => x.Id);
+        private readonly PrimaryKey<ChatHubModeratorEntityBuilder> _primaryKey = new("PK_ChatHubModerator", x => x.Id);
         private readonly ForeignKey<ChatHubModeratorEntityBuilder> _userForeignKey = new("FK_ChatHubModerator_User", x => x.ChatHubUserId, "User", "UserId", ReferentialAction.Cascade);
 
         public ChatHubModeratorEntityBuilder(MigrationBuilder migrationBuilder, IDatabase database) : base(migrationBuilder, database)

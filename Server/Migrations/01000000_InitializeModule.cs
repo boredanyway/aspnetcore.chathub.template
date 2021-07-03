@@ -57,6 +57,9 @@ namespace Oqtane.ChatHubs.Migrations
             var entityBuilderChatHubBlacklistUser = new ChatHubBlacklistUserEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderChatHubBlacklistUser.Create();
 
+            var entityBuilderChatHubRoomChatHubBlacklistUser = new ChatHubRoomChatHubBlacklistUserEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderChatHubRoomChatHubBlacklistUser.Create();
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

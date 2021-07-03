@@ -12,13 +12,15 @@ namespace Oqtane.ChatHubs.Migrations.EntityBuilders
 
         private const string _entityTableName = "ChatHubRoomChatHubUser";
         private readonly PrimaryKey<ChatHubRoomChatHubUserEntityBuilder> _primaryKey = new("PK_ChatHubRoomChatHubUser", x => x.Id);
-        private readonly ForeignKey<ChatHubRoomChatHubUserEntityBuilder> _moduleForeignKey = new("FK_ChatHubRoomChatHubUser_ChatHubUser", x => x.ChatHubUserId, "User", "UserId", ReferentialAction.Cascade);
+        private readonly ForeignKey<ChatHubRoomChatHubUserEntityBuilder> _userForeignKey = new("FK_ChatHubRoomChatHubUser_ChatHubUser", x => x.ChatHubUserId, "User", "UserId", ReferentialAction.Cascade);
+        private readonly ForeignKey<ChatHubRoomChatHubUserEntityBuilder> _roomForeignKey = new("FK_ChatHubRoomChatHubUser_ChatHubRoom", x => x.ChatHubRoomId, "ChatHubRoom", "Id", ReferentialAction.Cascade);
 
         public ChatHubRoomChatHubUserEntityBuilder(MigrationBuilder migrationBuilder, IDatabase database) : base(migrationBuilder, database)
         {
             EntityTableName = _entityTableName;
             PrimaryKey = _primaryKey;
-            ForeignKeys.Add(_moduleForeignKey);
+            ForeignKeys.Add(_userForeignKey);
+            ForeignKeys.Add(_roomForeignKey);
         }
 
         protected override ChatHubRoomChatHubUserEntityBuilder BuildTable(ColumnsBuilder table)

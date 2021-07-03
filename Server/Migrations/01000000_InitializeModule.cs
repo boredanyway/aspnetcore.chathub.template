@@ -24,6 +24,12 @@ namespace Oqtane.ChatHubs.Migrations
             var entityBuilderRoomUser = new ChatHubRoomChatHubUserEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderRoomUser.Create();
 
+            var entityBuilderMessage = new ChatHubMessageEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderMessage.Create();
+
+            var entityBuilderConnection = new ChatHubConnectionEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderConnection.Create();
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

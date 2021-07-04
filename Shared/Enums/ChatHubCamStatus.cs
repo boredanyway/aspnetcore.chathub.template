@@ -1,4 +1,4 @@
-﻿namespace Oqtane.Shared.Enums
+﻿namespace Oqtane.ChatHubs.Shared.Enums
 {
     public enum ChatHubCamStatus
     {

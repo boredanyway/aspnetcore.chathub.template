@@ -3,9 +3,9 @@ using Oqtane.Modules;
 using Microsoft.AspNetCore.Http;
 using Oqtane.Repository;
 using Oqtane.Models;
-using Oqtane.Shared.Models;
 using Oqtane.Repository.Databases.Interfaces;
 using Oqtane.Infrastructure;
+using Oqtane.ChatHubs.Shared.Models;
 
 namespace Oqtane.ChatHubs.Repository
 {

@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http.Connections;
 using Oqtane.Services;
 using System.Linq;
 using System.Timers;
-using Oqtane.Shared.Models;
 using Microsoft.JSInterop;
 using Microsoft.Extensions.DependencyInjection;
 using Oqtane.Modules;
@@ -19,10 +18,12 @@ using Microsoft.AspNetCore.SignalR;
 using BlazorAlerts;
 using System.Net;
 using BlazorDraggableList;
-using Oqtane.Shared.Enums;
-using Oqtane.Shared.Extensions;
 using BlazorVideo;
 using BlazorBrowserResize;
+using System.Net.Http.Json;
+using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Shared.Extensions;
+using Oqtane.ChatHubs.Shared.Enums;
 
 namespace Oqtane.ChatHubs.Services
 {
@@ -139,8 +140,6 @@ namespace Oqtane.ChatHubs.Services
 
             urlBuilder.Append(chatHubConnection);
             urlBuilder.Append("?guestname=" + username);
-            urlBuilder.Append("&moduleid=" + moduleId.ToString());
-            urlBuilder.Append("&platform=" + "Oqtane");
 
             var url = urlBuilder.ToString();
             Connection = new HubConnectionBuilder().WithUrl(url, options =>
@@ -748,19 +747,20 @@ namespace Oqtane.ChatHubs.Services
         }
         public async Task<List<ChatHubRoom>> GetChatHubRoomsByModuleIdAsync(int ModuleId)
         {
-            return await HttpClient.GetJsonAsync<List<ChatHubRoom>>(apiurl + "/getchathubroomsbymoduleid?entityid=" + ModuleId);
+            return await HttpClient.GetFromJsonAsync<List<ChatHubRoom>>(apiurl + "/getchathubroomsbymoduleid?entityid=" + ModuleId);
         }
         public async Task<ChatHubRoom> GetChatHubRoomAsync(int ChatHubRoomId, int ModuleId)
         {
-            return await HttpClient.GetJsonAsync<ChatHubRoom>(apiurl + "/getchathubroom/" + ChatHubRoomId + "?entityid=" + ModuleId);
+            return await HttpClient.GetFromJsonAsync<ChatHubRoom>(apiurl + "/getchathubroom/" + ChatHubRoomId + "?entityid=" + ModuleId);
         }
         public async Task<ChatHubRoom> AddChatHubRoomAsync(ChatHubRoom ChatHubRoom)
         {
-            return await HttpClient.PostJsonAsync<ChatHubRoom>(apiurl + "/addchathubroom" + "?entityid=" + ChatHubRoom.ModuleId, ChatHubRoom);
+            var response = await HttpClient.PostAsJsonAsync(apiurl + "/addchathubroom" + "?entityid=" + ChatHubRoom.ModuleId, ChatHubRoom);
+            return await response.Content.ReadFromJsonAsync<ChatHubRoom>();
         }
         public async Task UpdateChatHubRoomAsync(ChatHubRoom ChatHubRoom)
         {
-            await HttpClient.PutJsonAsync(apiurl + "/updatechathubroom/" + ChatHubRoom.Id + "?entityid=" + ChatHubRoom.ModuleId, ChatHubRoom);
+            await HttpClient.PutAsJsonAsync(apiurl + "/updatechathubroom/" + ChatHubRoom.Id + "?entityid=" + ChatHubRoom.ModuleId, ChatHubRoom);
         }
         public async Task DeleteChatHubRoomAsync(int ChatHubRoomId, int ModuleId)
         {

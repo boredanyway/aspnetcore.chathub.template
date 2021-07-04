@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Oqtane.Shared.Models
+namespace Oqtane.ChatHubs.Shared.Models
 {
     public class ChatHubIgnore : ChatHubBaseModel
     {

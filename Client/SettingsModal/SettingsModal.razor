@@ -4,52 +4,49 @@
 
 @using Microsoft.AspNetCore.Components.Web
 @using BlazorDraggableList
-@using Oqtane.Shared.Models
+@using BlazorModal
 
-<MatDialog @ref="SettingsDialog" @bind-IsOpen="DialogIsOpen">
+@if (DialogIsOpen)
+{
 
-    <MatDialogTitle>Account/Settings</MatDialogTitle>
+    <BlazorModalComponent>
 
-    <MatDialogContent>
+        <BlazorModalHeader>
+            <h1>Account/Settings</h1>
+        </BlazorModalHeader>
 
-        <MatTabGroup>
+        <BlazorModalBody>
+            <div class="p-sm-3">
 
-            <MatTab>
-                <LabelContent>Account Info</LabelContent>
-                <ChildContent>
+                <p class="lead">Here a little overview of all current related userdata activities for guests and registered users.</p>
 
-                    <div class="p-sm-3">
+                <div class="form-group">
+                    <label for="displayname">Username</label>
+                    <input class="form-control" type="text" id="displayname" placeholder="@ChatHubService.ConnectedUser?.DisplayName" readonly>
+                </div>
 
-                        <p class="lead">Here a little overview of all current related userdata activities for guests and registered users.</p>
+                @if (ChatHubService.ConnectedUser != null && ChatHubService.ConnectedUser.Connections != null)
+                {
 
-                        <div class="form-group">
-                            <label for="displayname">Username</label>
-                            <input class="form-control" type="text" id="displayname" placeholder="@ChatHubService.ConnectedUser?.DisplayName" readonly>
-                        </div>
+                    <BlazorDraggableListComponent Items="ChatHubService.ConnectedUser.Connections" Id="DraggableConnectionsElementId" Class="d-flex flex-column form-group">
+                        <BlazorDraggableListItem>
+                            <div class="form-group">
+                                <label for="displayname">Connected since @context.CreatedOn.ToLongDateString() @context.CreatedOn.ToLongTimeString()</label>
+                                <input class="form-control" type="text" placeholder="@context.ConnectionId" readonly>
+                            </div>
+                        </BlazorDraggableListItem>
+                    </BlazorDraggableListComponent>
 
-                        @if(ChatHubService.ConnectedUser != null && ChatHubService.ConnectedUser.Connections != null) {
+                }
+            </div>
+        </BlazorModalBody>
 
-                            <BlazorDraggableListComponent Items="ChatHubService.ConnectedUser.Connections" Id="DraggableConnectionsElementId" Class="d-flex flex-column form-group">
-                                <BlazorDraggableListItem>
-                                    <div class="form-group">
-                                        <label for="displayname">Connected since @context.CreatedOn.ToLongDateString() @context.CreatedOn.ToLongTimeString()</label>
-                                        <input class="form-control" type="text" placeholder="@context.ConnectionId" readonly>
-                                    </div>
-                                </BlazorDraggableListItem>
-                            </BlazorDraggableListComponent>
-                        }
+        <BlazorModalFooter>
+            <div class="my-3">
+                <button type="button" class="btn btn-sm btn-primary" @onclick="() => CloseDialog()">Close</button>
+            </div>
+        </BlazorModalFooter>
 
-                    </div>
+    </BlazorModalComponent>
 
-                </ChildContent>
-            </MatTab>
-
-        </MatTabGroup>
-
-        <div class="my-3">
-            <button type="button" class="btn btn-sm btn-primary" @onclick="() => CloseDialog()">Close</button>
-        </div>
-
-    </MatDialogContent>
-
-</MatDialog>
+}

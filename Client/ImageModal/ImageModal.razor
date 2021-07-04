@@ -2,31 +2,45 @@
 
 @inherits ImageModalBase
 
-<MatDialog @bind-IsOpen="@DialogIsOpen">
+@using BlazorModal
 
-    @if (Message != null && Message.Photos != null)
-    {
-        <MatDialogTitle>
-            <b>Posted by</b> @Message.User?.DisplayName <b>on</b> @Message.CreatedOn.ToShortTimeString()
-        </MatDialogTitle>
-        <MatDialogContent>
+@if (DialogIsOpen)
+{
 
-            <div>
-                @foreach (var photo in Message.Photos)
-                {
-                    <img class="img-fluid" src="@string.Format("{0}/modules/oqtane.chathubs/images/selfies/{1}", NavigationManager.BaseUri, photo.Source)" />
-                }
+    <BlazorModalComponent>
+
+        <BlazorModalHeader>
+
+        </BlazorModalHeader>
+
+        <BlazorModalBody>
+            @if (Message != null && Message.Photos != null)
+            {
+
+                <div class="dialog-title">
+                    <b>Posted by</b> @Message.User?.DisplayName <b>on</b> @Message.CreatedOn.ToShortTimeString()
+                </div>
+
+                <div>
+                    @foreach (var photo in Message.Photos)
+                    {
+                        <img class="img-fluid" src="@string.Format("{0}/modules/oqtane.chathubs/images/selfies/{1}", NavigationManager.BaseUri, photo.Source)" />
+                    }
+                </div>
+
+                <div class="px-1 py-3">
+                    <h6>Posted by @Message.User.Username</h6>
+                </div>
+
+            }
+        </BlazorModalBody>
+
+        <BlazorModalFooter>
+            <div class="dialog-button">
+                <button type="button" class="btn btn-link" @onclick="() => CloseDialogClicked()">Dialog schließen</button>
             </div>
+        </BlazorModalFooter>
 
-            <div class="px-1 py-3">
-                <h6>Posted by @Message.User.Username</h6>
-            </div>
+    </BlazorModalComponent>
 
-        </MatDialogContent>
-    }
-
-    <MatDialogActions>
-        <button type="button" class="btn btn-link" @onclick="() => CloseDialogClicked()">Dialog schließen</button>
-    </MatDialogActions>
-
-</MatDialog>
+}

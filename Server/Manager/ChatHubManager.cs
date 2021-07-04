@@ -10,7 +10,7 @@ using Oqtane.Migrations.Framework;
 using Oqtane.Enums;
 using Microsoft.AspNetCore.Http;
 using Oqtane.ChatHubs.Repository;
-using Oqtane.Shared.Models;
+using Oqtane.ChatHubs.Shared.Models;
 
 namespace Oqtane.ChatHubs.Manager
 {

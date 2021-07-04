@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Oqtane.Shared.Models
+namespace Oqtane.ChatHubs.Shared.Models
 {
     public class ChatHubMessage : ChatHubBaseModel
     {
@@ -10,7 +10,6 @@ namespace Oqtane.Shared.Models
         public int ChatHubUserId { get; set; }
         public string Content { get; set; }
         public string Type { get; set; }
-
 
         [NotMapped] public virtual ChatHubRoom Room { get; set; }
         [NotMapped] public virtual ChatHubUser User { get; set; }

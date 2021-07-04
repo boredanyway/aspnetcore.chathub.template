@@ -12,16 +12,17 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using Oqtane.Shared.Models;
-using Oqtane.Shared.Enums;
 using BlazorAlerts;
 using BlazorWindows;
 using System.Net;
 using BlazorDraggableList;
 using BlazorFileUpload;
-using Oqtane.Shared.Extensions;
 using BlazorBrowserResize;
 using BlazorVideo;
+using Oqtane.ChatHubs;
+using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Shared.Enums;
+using Oqtane.ChatHubs.Shared.Extensions;
 
 namespace Oqtane.ChatHubs
 {
@@ -57,8 +58,8 @@ namespace Oqtane.ChatHubs
 
         public Dictionary<string, string> settings { get; set; }
 
-        protected ImageModal ImageModalRef;
-        protected SettingsModal SettingsModalRef;
+        public ImageModal ImageModalRef;
+        public SettingsModal SettingsModalRef;
 
         protected readonly string DraggableLivestreamsContainerElementId = "DraggableLivestreamsContainer";
         protected readonly string FileUploadDropzoneContainerElementId = "FileUploadDropzoneContainer";

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Oqtane.ChatHubs.Shared.Models;
 using Oqtane.Modules;
-using Oqtane.Shared.Models;
 
 namespace Oqtane.ChatHubs
 {

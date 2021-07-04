@@ -1,9 +1,9 @@
-﻿using Oqtane.Shared.Models;
+﻿using Oqtane.ChatHubs.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Oqtane.Shared.Extensions
+namespace Oqtane.ChatHubs.Shared.Extensions
 {
     public static class ChatHubServiceExtensionMethods
     {

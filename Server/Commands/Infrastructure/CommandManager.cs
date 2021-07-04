@@ -11,8 +11,8 @@ using Oqtane.ChatHubs.Repository;
 using System.Resources;
 using Oqtane.ChatHubs.Server.Resources;
 using System.Globalization;
-using Oqtane.Shared.Models;
 using Microsoft.AspNetCore.SignalR;
+using Oqtane.ChatHubs.Shared.Models;
 
 namespace Oqtane.ChatHubs.Commands
 {

@@ -1,5 +1,5 @@
-﻿using MatBlazor;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using Oqtane.ChatHubs.Shared.Models;
 using Oqtane.ChatHubs.Services;
 using Oqtane.Modules;
 
@@ -10,9 +10,7 @@ namespace Oqtane.ChatHubs
 
         [Inject] public ChatHubService ChatHubService { get; set; }
 
-        public MatDialog SettingsDialog;
-
-        public bool DialogIsOpen { get; set; } = false;
+        public bool DialogIsOpen { get; set; }
 
         public void OpenDialog()
         {

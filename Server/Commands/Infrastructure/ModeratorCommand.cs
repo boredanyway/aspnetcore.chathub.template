@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Oqtane.Shared.Models;
+using Oqtane.ChatHubs.Shared.Models;
 
 namespace Oqtane.ChatHubs.Commands
 {
@@ -13,7 +13,7 @@ namespace Oqtane.ChatHubs.Commands
             var moderator = commandServicesContext.ChatHubRepository.GetChatHubModerator(caller.UserId);
             var chatHubRoomChatHubModerator = commandServicesContext.ChatHubRepository.GetChatHubRoomChatHubModerator(commandCallerContext.RoomId, moderator.Id);
 
-            if(room.CreatorId != caller.UserId && chatHubRoomChatHubModerator == null && !commandServicesContext.ChatHub.Context.User.HasClaim(ClaimTypes.Role, Shared.RoleNames.Admin))
+            if(room.CreatorId != caller.UserId && chatHubRoomChatHubModerator == null && !commandServicesContext.ChatHub.Context.User.HasClaim(ClaimTypes.Role, Oqtane.Shared.RoleNames.Admin))
             {
                 throw new HubException("You do not have any permissions to run this command.");
             }

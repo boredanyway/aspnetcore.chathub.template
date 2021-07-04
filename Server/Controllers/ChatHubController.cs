@@ -7,16 +7,16 @@ using Oqtane.Shared;
 using Oqtane.Enums;
 using System.Threading.Tasks;
 using System.Linq;
-using Oqtane.Shared.Enums;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
-using Oqtane.Shared.Models;
 using Oqtane.ChatHubs.Repository;
 using Oqtane.Infrastructure;
 using System.Drawing;
 using Oqtane.ChatHubs.Services;
 using Oqtane.ChatHubs.Hubs;
+using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Shared.Enums;
 
 namespace Oqtane.ChatHubs.Controllers
 {

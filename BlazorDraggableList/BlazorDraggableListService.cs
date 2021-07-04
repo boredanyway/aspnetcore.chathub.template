@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using Oqtane.Shared.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -11,8 +10,6 @@ namespace BlazorDraggableList
         private readonly IJSRuntime JSRuntime;
         public IJSObjectReference Module;
         public IJSObjectReference DraggableListMap;
-
-        public JsRuntimeObjectRef __jsRuntimeObjectRef { get; set; }
 
         public BlazorDraggableListServiceExtension BlazorDraggableListServiceExtension;
 

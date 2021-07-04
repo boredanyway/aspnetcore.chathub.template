@@ -9,9 +9,9 @@ namespace Oqtane.ChatHubs
         {
             Name = "ChatHub",
             Description = "ChatHub",
-            Version = "1.0.0",
+            Version = "2.1.0",
             ServerManagerType = "Oqtane.ChatHubs.Manager.ChatHubManager, Oqtane.ChatHubs.Server.Oqtane",
-            ReleaseVersions = "1.0.0",
+            ReleaseVersions = "2.1.0",
             Dependencies = "Oqtane.ChatHubs.Shared.Oqtane"
         };
     }

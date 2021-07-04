@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Oqtane.Repository;
 using System.Text.RegularExpressions;
-using Oqtane.Shared.Enums;
 using System.Linq;
 using Oqtane.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using Oqtane.Shared;
 using Microsoft.EntityFrameworkCore;
-using Oqtane.Shared.Models;
 using Oqtane.ChatHubs.Services;
 using Oqtane.ChatHubs.Repository;
 using Oqtane.ChatHubs.Commands;
 using Oqtane.Modules;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Oqtane.ChatHubs.Shared.Enums;
+using Oqtane.ChatHubs.Shared.Models;
 
 namespace Oqtane.ChatHubs.Hubs
 {
@@ -196,8 +196,8 @@ namespace Oqtane.ChatHubs.Hubs
         public override async Task OnConnectedAsync()
         {
             HttpContext httpContext = Context.GetHttpContext();
-            string platform = httpContext.Request.Query["platform"];
-            string moduleId = httpContext.Request.Query["moduleid"];
+            string moduleId = httpContext.Request.Headers["moduleid"];
+            string platform = httpContext.Request.Headers["platform"];
 
             List<ChatHubRoom> list = this.chatHubRepository.GetChatHubRooms().FilterByModuleId(int.Parse(moduleId)).ToList();
 

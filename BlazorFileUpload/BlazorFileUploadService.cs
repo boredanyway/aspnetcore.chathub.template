@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using Oqtane.Shared.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -11,8 +10,6 @@ namespace BlazorFileUpload
         public IJSRuntime JSRuntime;
         public IJSObjectReference Module;
         public IJSObjectReference FileUploadMap;
-
-        public JsRuntimeObjectRef __jsRuntimeObjectRef { get; set; }
 
         public BlazorFileUploadServiceExtension BlazorFileUploadServiceExtension;
 

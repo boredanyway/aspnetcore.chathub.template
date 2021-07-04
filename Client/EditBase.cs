@@ -5,13 +5,13 @@ using Oqtane.Modules;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Oqtane.Shared.Enums;
-using Oqtane.Shared.Models;
 using Oqtane.Shared;
 using BlazorAlerts;
 using System.Collections.Generic;
 using BlazorSelect;
 using BlazorColorPicker;
+using Oqtane.ChatHubs.Shared.Enums;
+using Oqtane.ChatHubs.Shared.Models;
 
 namespace Oqtane.ChatHubs
 {

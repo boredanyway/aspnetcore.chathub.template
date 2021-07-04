@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Oqtane.Shared.Models;
+using Oqtane.ChatHubs.Shared.Models;
 
 namespace Oqtane.ChatHubs.Commands
 {
@@ -9,7 +9,7 @@ namespace Oqtane.ChatHubs.Commands
     {
         public override async Task Execute(CommandServicesContext commandServicesContext, CommandCallerContext commandCallerContext, string[] args, ChatHubUser caller)
         {
-            if(!commandServicesContext.ChatHub.Context.User.HasClaim(ClaimTypes.Role, Shared.RoleNames.Admin))
+            if(!commandServicesContext.ChatHub.Context.User.HasClaim(ClaimTypes.Role, Oqtane.Shared.RoleNames.Admin))
             {
                 throw new HubException("You do not have any permissions to run this command");
             }

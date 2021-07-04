@@ -1,5 +1,5 @@
-﻿using Oqtane.Shared.Enums;
-using Oqtane.Shared.Models;
+﻿using Oqtane.ChatHubs.Shared.Enums;
+using Oqtane.ChatHubs.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

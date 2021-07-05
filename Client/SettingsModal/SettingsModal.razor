@@ -9,7 +9,7 @@
 @if (DialogIsOpen)
 {
 
-    <BlazorModalComponent>
+    <BlazorModalComponent ElementId="@SettingsModalElementId">
 
         <BlazorModalHeader>
             <h1>Account/Settings</h1>
@@ -43,7 +43,7 @@
 
         <BlazorModalFooter>
             <div class="my-3">
-                <button type="button" class="btn btn-sm btn-primary" @onclick="() => CloseDialog()">Close</button>
+                <button type="button" class="btn btn-sm btn-primary" @onclick="async () => await CloseDialogAsync()">Close</button>
             </div>
         </BlazorModalFooter>
 

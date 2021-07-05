@@ -2,6 +2,8 @@
 using Oqtane.ChatHubs.Shared.Models;
 using Oqtane.ChatHubs.Services;
 using Oqtane.Modules;
+using BlazorModal;
+using System.Threading.Tasks;
 
 namespace Oqtane.ChatHubs
 {
@@ -9,18 +11,23 @@ namespace Oqtane.ChatHubs
     {
 
         [Inject] public ChatHubService ChatHubService { get; set; }
+        [Inject] public BlazorModalService BlazorModalService { get; set; }
+
+        public const string SettingsModalElementId = "SettingsModalElementId";
 
         public bool DialogIsOpen { get; set; }
 
-        public void OpenDialog()
+        public async Task OpenDialogAsync()
         {
             this.DialogIsOpen = true;
+            await this.BlazorModalService.ShowModal(SettingsModalElementId);
             StateHasChanged();
         }
 
-        public void CloseDialog()
+        public async Task CloseDialogAsync()
         {
             this.DialogIsOpen = false;
+            await this.BlazorModalService.HideModal(SettingsModalElementId);
             StateHasChanged();
         }
 

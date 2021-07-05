@@ -36,3 +36,4 @@ XCOPY "..\BlazorVideo\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_
 XCOPY "..\BlazorBrowserResize\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\BlazorBrowserResize\" /Y /S /I
 XCOPY "..\BlazorFileUpload\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\BlazorFileUpload\" /Y /S /I
 XCOPY "..\BlazorDraggableList\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\BlazorDraggableList\" /Y /S /I
+XCOPY "..\BlazorModal\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\BlazorModal\" /Y /S /I

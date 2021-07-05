@@ -13,14 +13,16 @@ The oqtane chathubs module allows developers to code and run realtime chat. Post
 
 #### Edit _Host.cshtml end of head tag
 ```HTML
-<script src="_content/MatBlazor/dist/matBlazor.js"></script>
-<link href="_content/MatBlazor/dist/matBlazor.css" rel="stylesheet" />
 <link href="_content/BlazorAlerts/css/blazoralerts.min.css" rel="stylesheet" />
 <link href="modules/oqtane.chathubs/chat-hub-stylesheets.css" rel="stylesheet" />
 ```
 
 #### Edit _Host.cshtml end of body tag
 ```HTML
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <script src="_content/BlazorStrap/blazorStrap.js"></script>
 <script src="_content/BlazorVideo/blazorvideojsinterop.js" type="module"></script>
@@ -28,20 +30,19 @@ The oqtane chathubs module allows developers to code and run realtime chat. Post
 <script src="_content/BlazorBrowserResize/browserresizemap.js" type="module"></script>
 <script src="_content/BlazorFileUpload/blazorfileuploadjsinterop.js" type="module"></script>
 <script src="_content/BlazorDraggableList/blazordraggablelistjsinterop.js" type="module"></script>
+<script src="_content/BlazorModal/blazormodaljsinterop.js" type="module"></script>
 <script src="modules/oqtane.chathubs/chat-hub-js-interop.js"></script>
 ```
 
 #### Edit startup.cs configure services methode
 ```C#
- services.AddMvc().AddNewtonsoftJson(
-    options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-
 services.AddScoped<BlazorAlertsService, BlazorAlertsService>();
 services.AddScoped<BlazorDraggableListService, BlazorDraggableListService>();
 services.AddScoped<BlazorFileUploadService, BlazorFileUploadService>();
 services.AddScoped<BlazorColorPickerService, BlazorColorPickerService>();
 services.AddScoped<BlazorVideoService, BlazorVideoService>();
 services.AddScoped<BlazorBrowserResizeService, BlazorBrowserResizeService>();
+services.AddScoped<BlazorModalService, BlazorModalService>();
 
 services.AddServerSideBlazor()
     .AddHubOptions(options => options.MaximumReceiveMessageSize = 512 * 1024);
@@ -92,9 +93,8 @@ else if (segments[0] == "chathub")
 
 #### Module Dependencies so far
 ```C#
-<dependency id="Oqtane.Framework" version="1.0.0" />      
+<dependency id="Oqtane.Framework" version="2.0.0" />      
 <dependency id="System.Drawing.Common" version="5.0.0" />
-<dependency id="MatBlazor" version="2.3.0" />
 <dependency id="Microsoft.CSharp" version="4.7.0" />
 <dependency id="BlazorStrap" version="1.3.3" />
 <dependency id="Microsoft.AspNetCore.SignalR.Client" version="5.0.0" />

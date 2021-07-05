@@ -7,10 +7,10 @@
 @if (DialogIsOpen)
 {
 
-    <BlazorModalComponent>
+    <BlazorModalComponent ElementId="@ImageModalElementId">
 
         <BlazorModalHeader>
-
+            Image Uploads
         </BlazorModalHeader>
 
         <BlazorModalBody>
@@ -37,7 +37,7 @@
 
         <BlazorModalFooter>
             <div class="dialog-button">
-                <button type="button" class="btn btn-link" @onclick="() => CloseDialogClicked()">Dialog schließen</button>
+                <button type="button" class="btn btn-link" @onclick="() => CloseDialogClickedAsync()">Dialog schließen</button>
             </div>
         </BlazorModalFooter>
 

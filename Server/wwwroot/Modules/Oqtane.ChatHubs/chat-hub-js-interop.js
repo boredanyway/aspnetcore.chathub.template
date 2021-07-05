@@ -4,22 +4,29 @@
 
         scrollToBottom: function (elementId) {
 
-            var messagewindow = document.querySelector(elementId);
-            if (messagewindow !== null) {
+            try {
 
-                var lastchild = messagewindow.lastElementChild;
-                var lastchildheight = lastchild.offsetHeight;
-                var tolerance = 100;
+                var messagewindow = document.querySelector(elementId);
+                if (messagewindow !== null) {
 
-                if (messagewindow.scrollTop + messagewindow.offsetHeight + lastchildheight + tolerance >= messagewindow.scrollHeight) {
+                    var lastchild = messagewindow.lastElementChild;
+                    var lastchildheight = lastchild.offsetHeight;
+                    var tolerance = 100;
 
-                    messagewindow.scrollTo({
-                        top: messagewindow.scrollHeight,
-                        left: 0,
-                        behavior: 'smooth'
-                    });
+                    if (messagewindow.scrollTop + messagewindow.offsetHeight + lastchildheight + tolerance >= messagewindow.scrollHeight) {
+
+                        messagewindow.scrollTo({
+                            top: messagewindow.scrollHeight,
+                            left: 0,
+                            behavior: 'smooth'
+                        });
+                    }
                 }
             }
+            catch (err) {
+
+                console.warn(err);
+            }            
         }
     };
 

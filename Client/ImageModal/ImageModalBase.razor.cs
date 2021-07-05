@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BlazorModal;
+using Microsoft.AspNetCore.Components;
 using Oqtane.ChatHubs.Shared.Models;
 using Oqtane.Modules;
+using System;
+using System.Threading.Tasks;
 
 namespace Oqtane.ChatHubs
 {
     public class ImageModalBase : ModuleBase
     {
 
-        [Inject]
-        protected NavigationManager NavigationManager { get; set; }
+        [Inject] protected NavigationManager NavigationManager { get; set; }
+        [Inject] protected BlazorModalService BlazorModalService { get; set; }
+
+        public const string ImageModalElementId = "ImageModalElementId";
 
         public bool DialogIsOpen { get; set; }
 
@@ -16,16 +21,18 @@ namespace Oqtane.ChatHubs
 
         public ImageModalBase() { }
 
-        public void OpenDialog(ChatHubMessage item)
+        public async Task OpenDialogAsync(ChatHubMessage item)
         {
             this.Message = item;
             this.DialogIsOpen = true;
+            await this.BlazorModalService.ShowModal(ImageModalElementId);
             StateHasChanged();
         }
 
-        public void CloseDialogClicked()
+        public async Task CloseDialogClickedAsync()
         {
             this.DialogIsOpen = false;
+            await this.BlazorModalService.HideModal(ImageModalElementId);
         }
 
     }

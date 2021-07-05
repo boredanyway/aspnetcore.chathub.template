@@ -344,9 +344,9 @@ namespace Oqtane.ChatHubs
             });
         }
 
-        public void OpenProfile_Clicked(int userId, int roomId)
+        public async Task OpenProfile_Clicked(int userId, int roomId)
         {
-            this.SettingsModalRef.OpenDialog();
+            await this.SettingsModalRef.OpenDialogAsync();
         }
 
         public async Task FixCorruptConnections_ClickedAsync()

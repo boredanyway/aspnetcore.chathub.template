@@ -171,13 +171,13 @@
 
                             <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
 
-                                <div class="p-0 pr-sm-3">
+                                <div class="p-0 pe-sm-3">
 
                                     <img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" class="img-fluid" alt="preview" style="max-width: 256px;" />
 
                                 </div>
 
-                                <div class="p-0 pl-sm-3">
+                                <div class="p-0 ps-sm-3">
 
                                     <h1 class="display-4">Video chat app</h1>
 
@@ -210,9 +210,9 @@
                                     <div>
                                         <div>@context.Content</div>
                                         <div>
-                                            <span class="badge badge-secondary">@context.Type</span>
-                                            <span class="badge badge-secondary">@context.Users.Count() Users Online</span>
-                                            <span class="badge badge-secondary">@context.Status</span>
+                                            <span class="badge bg-secondary">@context.Type</span>
+                                            <span class="badge bg-secondary">@context.Users.Count() Users Online</span>
+                                            <span class="badge bg-secondary">@context.Status</span>
                                         </div>
                                         <div>
                                             <small class="text-muted">
@@ -229,7 +229,7 @@
                                     </div>
                                 </div>
 
-                                <div class="ml-none ml-sm-auto px-1">
+                                <div class="ms-none ms-sm-auto px-1">
                                     <button type="button" class="btn btn-sm btn-link bg-light" @onclick="@(async () => await EnterRoom_Clicked(context.Id, context.ModuleId))">Enter</button>
                                     <ActionLink Action="Edit" Security="SecurityAccessLevel.Edit" Parameters="@($"moduleid=" + context.ModuleId.ToString() + "&" + "roomid=" + context.Id.ToString())" Class="btn btn-sm btn-primary" />
                                     <ActionDialog Header="Enable/Archive" Message="@("Are you sure you want to archive this room?")" Action="Enable/Archive" Security="SecurityAccessLevel.Edit" Class="btn btn-sm btn-warning" OnClick="@(async () => await EnableArchiveRoom(context))" />
@@ -650,7 +650,7 @@
 
                                                                 <div class="px-sm-1 py-3">
 
-                                                                    <h5>Share your pics <span class="badge badge-success">FREE</span></h5>
+                                                                    <h5>Share your pics <span class="badge bg-success">FREE</span></h5>
 
                                                                     @{
                                                                         var url = string.Concat(NavigationManager.BaseUri.Substring(0, NavigationManager.BaseUri.LastIndexOf('/')), this.ChatHubService.apiurl, "/PostImageUpload");
@@ -674,7 +674,7 @@
 
                                                                 <div class="px-sm-1 py-3">
 
-                                                                    <h5>Webcam Live Streams <span class="badge badge-success">NEW</span></h5>
+                                                                    <h5>Webcam Live Streams <span class="badge bg-success">NEW</span></h5>
 
                                                                     @if (ChatHubService.ConnectedUser.UserId == room.CreatorId)
                                                                     {
@@ -705,7 +705,7 @@
 
                                                                 <div class="px-sm-1 py-3">
 
-                                                                    <h5>Moderators <span class="badge badge-success">NEW</span></h5>
+                                                                    <h5>Moderators <span class="badge bg-success">NEW</span></h5>
 
                                                                     <table class="table table-sm">
                                                                         <tbody>
@@ -740,7 +740,7 @@
 
                                                                 <div class="px-sm-1 py-3">
 
-                                                                    <h5>Whitelist Users <span class="badge badge-success">NEW</span></h5>
+                                                                    <h5>Whitelist Users <span class="badge bg-success">NEW</span></h5>
 
                                                                     <table class="table table-sm">
                                                                         <tbody>
@@ -775,7 +775,7 @@
 
                                                                 <div class="px-sm-1 py-3">
 
-                                                                    <h5>Blacklist Users <span class="badge badge-success">NEW</span></h5>
+                                                                    <h5>Blacklist Users <span class="badge bg-success">NEW</span></h5>
 
                                                                     <table class="table table-sm">
                                                                         <tbody>
@@ -810,7 +810,7 @@
 
                                                                 <div class="px-sm-1 py-3">
 
-                                                                    <h5>Users waiting to become whitelisted <span class="badge badge-success">NEW</span></h5>
+                                                                    <h5>Users waiting to become whitelisted <span class="badge bg-success">NEW</span></h5>
 
                                                                     <table class="table table-sm">
                                                                         <tbody>
@@ -882,7 +882,7 @@
 
                         <div>
 
-                            <h5><span class="oi oi-shield"></span> (@ChatHubService.IgnoredUsers?.Count()) Ignoliste <span class="badge badge-success">RECOMMENDED</span></h5>
+                            <h5><span class="oi oi-shield"></span> (@ChatHubService.IgnoredUsers?.Count()) Ignoliste <span class="badge bg-success">RECOMMENDED</span></h5>
 
                             @if (ChatHubService.IgnoredUsers == null || !ChatHubService.IgnoredUsers.Any())
                             {
@@ -915,7 +915,7 @@
 
                         <div>
 
-                            <h5><span class="oi oi-bug"></span> (@ChatHubService.IgnoredByUsers?.Count()) Ignored by users list <span class="badge badge-success">RECOMMENDED</span></h5>
+                            <h5><span class="oi oi-bug"></span> (@ChatHubService.IgnoredByUsers?.Count()) Ignored by users list <span class="badge bg-success">RECOMMENDED</span></h5>
 
                             @if (ChatHubService.IgnoredByUsers == null || !ChatHubService.IgnoredByUsers.Any())
                             {
@@ -938,7 +938,7 @@
 
                         <div>
 
-                            <h5><span class="oi oi-list"></span> (@ChatHubService.Invitations.Count()) All Invitations <span class="badge badge-success">NEW</span></h5>
+                            <h5><span class="oi oi-list"></span> (@ChatHubService.Invitations.Count()) All Invitations <span class="badge bg-success">NEW</span></h5>
 
                             <div>
                                 @foreach (var item in ChatHubService.Invitations)
@@ -998,7 +998,7 @@
 
     <div class="d-flex flex-column my-2 px-2">
 
-        <div class="ml-auto bg-yellow">
+        <div class="ms-auto bg-yellow">
             <small>
                 <a href="https://github.com/boredanyway/aspnetcore.chathub.template" target="_blank" title="oqtane chathub module dev">Github Project</a>
             </small>

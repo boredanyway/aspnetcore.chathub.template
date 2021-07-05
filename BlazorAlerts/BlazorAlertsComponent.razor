@@ -16,7 +16,7 @@
                 <span>@headline</span>
             </RenderHeadline>
             <RenderCloseButton Context="item">
-                <button type="button" @onclick="@(() => CloseAlert_OnClicked(item.Id))" class="btn btn-sm btn-danger float-right" aria-label="Close" style="line-height: 0.75; padding: 2px;">
+                <button type="button" @onclick="@(() => CloseAlert_OnClicked(item.Id))" class="btn btn-sm btn-danger float-end" aria-label="Close" style="line-height: 0.75; padding: 2px;">
                     <span aria-hidden="true" style="position: relative; vertical-align: top; font-size: 28px;">&times;</span>
                 </button>
             </RenderCloseButton>

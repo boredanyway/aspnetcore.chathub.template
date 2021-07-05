@@ -61,7 +61,7 @@ services.AddSignalR()
     {
         options.EnableDetailedErrors = true;
         options.KeepAliveInterval = TimeSpan.FromSeconds(15);
-        options.ClientTimeoutInterval = TimeSpan.FromMinutes(60);
+        options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
         options.MaximumReceiveMessageSize = Int64.MaxValue;
         options.StreamBufferCapacity = Int32.MaxValue;
     })

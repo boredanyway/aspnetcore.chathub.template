@@ -122,7 +122,7 @@ namespace Oqtane.ChatHubs.Services
             return new ChatHubConnection()
             {
                 ChatHubUserId = connection.ChatHubUserId,
-                ConnectionId = this.MakeStringAnonymous(connection.ConnectionId, 7, '*'),
+                ConnectionId = connection.ConnectionId,
                 Status = connection.Status,
                 User = connection.User,
                 CreatedOn = connection.CreatedOn,
@@ -315,21 +315,6 @@ namespace Oqtane.ChatHubs.Services
             }
 
             return false;
-        }
-        public string MakeStringAnonymous(string value, int tolerance, char symbol = '*')
-        {
-            if (tolerance >= value.Length)
-            {
-                return string.Empty;
-            }
-
-            var newValue = value.Substring(0, value.Length - tolerance);
-            for (var i = 0; i <= tolerance; i++)
-            {
-                newValue += symbol;
-            }
-
-            return newValue;
         }
 
     }

@@ -232,22 +232,13 @@ namespace Oqtane.ChatHubs.Services
             });
         }
         
-        public async Task OnDataAvailableEventHandlerExecute(string dataURI, string roomId)
+        public async Task OnDataAvailableEventHandlerExecute(string dataUri, string roomId)
         {
             try
             {
                 if (this.Connection?.State == HubConnectionState.Connected)
                 {
-                    int maxLength = 4200;
-                    IEnumerable<string> broadcastData()
-                    {
-                        for (var i = 0; i < dataURI.Length; i += maxLength)
-                        {
-                            yield return dataURI.Substring(i, Math.Min(maxLength, dataURI.Length - i));
-                        }
-                    }
-
-                    await this.Connection.SendAsync("UploadBytes", broadcastData(), roomId).ContinueWith((task) =>
+                    await this.Connection.SendAsync("UploadDataUri", dataUri, roomId).ContinueWith((task) =>
                     {
                         if (task.IsCompleted)
                         {

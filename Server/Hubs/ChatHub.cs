@@ -232,7 +232,7 @@ namespace Oqtane.ChatHubs.Hubs
                     await Clients.Group(room.Id.ToString()).SendAsync("RemoveUser", clientModel, room.Id.ToString());
                 }
 
-                await this.SendGroupNotification(string.Format("{0} disconnected from chat with client device {1}.", user.DisplayName, this.chatHubService.MakeStringAnonymous(Context.ConnectionId, 7, '*')), room.Id, Context.ConnectionId, user, ChatHubMessageType.Connect_Disconnect);
+                await this.SendGroupNotification(string.Format("{0} disconnected from chat with client device {1}.", user.DisplayName, Context.ConnectionId), room.Id, Context.ConnectionId, user, ChatHubMessageType.Connect_Disconnect);
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, room.Id.ToString());
             }
 
@@ -361,7 +361,7 @@ namespace Oqtane.ChatHubs.Hubs
                 ChatHubUser chatHubUserClientModel = this.chatHubService.CreateChatHubUserClientModel(user);
                 await Clients.Group(room.Id.ToString()).SendAsync("AddUser", chatHubUserClientModel, room.Id.ToString());
 
-                await this.SendGroupNotification(string.Format("{0} entered chat room with client device {1}.", user.DisplayName, this.chatHubService.MakeStringAnonymous(Context.ConnectionId, 7, '*')), room.Id, Context.ConnectionId, user, ChatHubMessageType.Enter_Leave);
+                await this.SendGroupNotification(string.Format("{0} entered chat room with client device {1}.", user.DisplayName, Context.ConnectionId), room.Id, Context.ConnectionId, user, ChatHubMessageType.Enter_Leave);
             }
         }
         [AllowAnonymous]
@@ -420,7 +420,7 @@ namespace Oqtane.ChatHubs.Hubs
 
                 ChatHubUser chatHubUserClientModel = this.chatHubService.CreateChatHubUserClientModel(user);
                 await Clients.Group(room.Id.ToString()).SendAsync("RemoveUser", chatHubUserClientModel, room.Id.ToString());
-                await this.SendGroupNotification(string.Format("{0} left chat room with client device {1}.", user.DisplayName, this.chatHubService.MakeStringAnonymous(Context.ConnectionId, 7, '*')), room.Id, Context.ConnectionId, user, ChatHubMessageType.Enter_Leave);
+                await this.SendGroupNotification(string.Format("{0} left chat room with client device {1}.", user.DisplayName, Context.ConnectionId), room.Id, Context.ConnectionId, user, ChatHubMessageType.Enter_Leave);
             }
         }
 
@@ -542,7 +542,7 @@ namespace Oqtane.ChatHubs.Hubs
         }
 
         [AllowAnonymous]
-        public async Task UploadBytes(IAsyncEnumerable<string> dataURI, string roomId)
+        public async Task UploadDataUri(string dataUri, string roomId)
         {
             ChatHubUser user = await this.GetChatHubUserAsync();
             var connectionsIds = this.chatHubService.GetAllExceptConnectionIds(user);
@@ -552,16 +552,8 @@ namespace Oqtane.ChatHubs.Hubs
                 connectionsIds.Add(connection.ConnectionId);
             }
 
-            string dataURIresult = string.Empty;
-            IAsyncEnumerator<string> enumerators = dataURI.GetAsyncEnumerator();
-
-            while (await enumerators.MoveNextAsync())
-            {
-                dataURIresult += enumerators.Current;
-            }
-
             ChatHubUser creatorClientModel = this.chatHubService.CreateChatHubUserClientModel(user);
-            await Clients.GroupExcept(roomId, connectionsIds).SendAsync("DownloadBytes", dataURIresult, roomId, Context.ConnectionId, creatorClientModel);
+            await Clients.GroupExcept(roomId, connectionsIds).SendAsync("DownloadBytes", dataUri, roomId, Context.ConnectionId, creatorClientModel);
         }
 
         [AllowAnonymous]

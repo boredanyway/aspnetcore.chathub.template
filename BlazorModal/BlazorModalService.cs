@@ -32,7 +32,10 @@ namespace BlazorModal
         }
         public async Task InitBlazorModalMap()
         {
-            this.jsobjref = await this.Module.InvokeAsync<IJSObjectReference>("initmodal", this.DotNetObjectRef);
+            if(this.jsobjref == null)
+            {
+                this.jsobjref = await this.Module.InvokeAsync<IJSObjectReference>("initmodal", this.DotNetObjectRef);
+            }
         }
 
         public async Task ShowModal(string id)

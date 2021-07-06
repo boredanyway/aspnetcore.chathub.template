@@ -22,7 +22,7 @@ The oqtane chathubs module allows developers to code and run realtime chat. Post
 new Resource { ResourceType = ResourceType.Stylesheet, Url = "https://wasmchat.com/modules/oqtane.chathubs/chat-hub-generated-bootstrap.min.css", CrossOrigin = "anonymous" },
 ```
 
-#### Edit _Host.cshtml end of body tag
+#### Edit _Host.cshtml and paste before the blazor.server.js
 ```HTML
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

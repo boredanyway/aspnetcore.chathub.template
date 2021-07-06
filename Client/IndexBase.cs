@@ -23,6 +23,7 @@ using Oqtane.ChatHubs;
 using Oqtane.ChatHubs.Shared.Models;
 using Oqtane.ChatHubs.Shared.Enums;
 using Oqtane.ChatHubs.Shared.Extensions;
+using BlazorModal;
 
 namespace Oqtane.ChatHubs
 {
@@ -42,6 +43,7 @@ namespace Oqtane.ChatHubs
         [Inject] protected BlazorDraggableListService BlazorDraggableListService { get; set; }
         [Inject] protected BlazorFileUploadService BlazorFileUploadService { get; set; }
         [Inject] protected BlazorVideoService BlazorVideoService { get; set; }
+        [Inject] protected BlazorModalService BlazorModalService { get; set; }
 
         public int MessageWindowHeight { get; set; }
         public int UserlistWindowHeight { get; set; }
@@ -121,6 +123,9 @@ namespace Oqtane.ChatHubs
 
                 await this.BrowserResizeService.RegisterWindowResizeCallback();
                 await BrowserHasResized();
+
+                await this.BlazorModalService.InitBlazorModal();
+                await this.BlazorModalService.InitBlazorModalMap();
             }
 
             await base.OnAfterRenderAsync(firstRender);
@@ -346,7 +351,7 @@ namespace Oqtane.ChatHubs
 
         public async void OpenProfile_Clicked(int userId, int roomId)
         {
-            await this.SettingsModalRef.OpenDialogAsync();
+            this.SettingsModalRef.OpenDialogAsync();
         }
 
         public async Task FixCorruptConnections_ClickedAsync()

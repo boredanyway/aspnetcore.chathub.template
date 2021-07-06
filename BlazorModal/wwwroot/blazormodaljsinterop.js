@@ -6,11 +6,11 @@
 
             this.showmodal = function(id) {
 
-                $("#"+id).modal("show");
+                $("#" + id).show(200);
             };
             this.hidemodal = function(id) {
 
-                $("#"+id).modal("hide");
+                $("#" + id).hide(200);
             };
         },
     };

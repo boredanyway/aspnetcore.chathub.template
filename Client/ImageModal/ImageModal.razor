@@ -10,7 +10,9 @@
     <BlazorModalComponent ElementId="@ImageModalElementId">
 
         <BlazorModalHeader>
-            Image Uploads
+            <div class="p-2 bg-primary text-light">
+                <strong>Image Uploads</strong>
+            </div>
         </BlazorModalHeader>
 
         <BlazorModalBody>
@@ -36,7 +38,7 @@
         </BlazorModalBody>
 
         <BlazorModalFooter>
-            <div class="dialog-button">
+            <div class="my-3 p-2 float-end">
                 <button type="button" class="btn btn-link" @onclick="() => CloseDialogClickedAsync()">Dialog schließen</button>
             </div>
         </BlazorModalFooter>

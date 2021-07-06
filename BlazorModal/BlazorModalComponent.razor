@@ -2,18 +2,39 @@
 @inherits BlazorModalBase
 @using Microsoft.AspNetCore.Components;
 
-<div id="@ElementId" class="modal fade">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                @BlazorModalHeader
-            </div>
-            <div class="modal-body">
-                @BlazorModalBody
-            </div>
-            <div class="modal-footer">
-                @BlazorModalFooter
-            </div>
+<style type="text/css">
+
+    #@ElementId {
+        position: fixed;
+        z-index: 1000;
+        background-color: white;
+        width: 100%;
+        max-width: 420px;
+        min-width: 320px;
+        height: 100%;
+        min-height: 250px;
+        max-height: 420px;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        border: 1px solid rgba(49,94,182,1);
+        overflow: auto;
+    }
+
+</style>
+
+<div id="@ElementId" style="display: none;">
+    <div>
+        <div>
+            @BlazorModalHeader
+        </div>
+        <div>
+            @BlazorModalBody
+        </div>
+        <div>
+            @BlazorModalFooter
         </div>
     </div>
 </div>

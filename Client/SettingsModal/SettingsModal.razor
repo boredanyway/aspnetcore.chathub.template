@@ -12,7 +12,9 @@
     <BlazorModalComponent ElementId="@SettingsModalElementId">
 
         <BlazorModalHeader>
-            <h5>Account/Settings</h5>
+            <div class="p-2 bg-primary text-light">
+                <strong>Account Data</strong>
+            </div>           
         </BlazorModalHeader>
 
         <BlazorModalBody>
@@ -42,8 +44,8 @@
         </BlazorModalBody>
 
         <BlazorModalFooter>
-            <div class="my-3">
-                <button type="button" class="btn btn-sm btn-primary" @onclick="async () => await CloseDialogAsync()">Close</button>
+            <div class="p-2 my-3 float-end">
+                <button type="button" class="btn btn-sm btn-primary" @onclick="() => CloseDialogAsync()">Close</button>
             </div>
         </BlazorModalFooter>
 

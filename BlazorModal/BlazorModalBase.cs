@@ -14,13 +14,5 @@ namespace BlazorModal
 
         [Parameter] public string ElementId { get; set; }
 
-        protected override async Task OnInitializedAsync()
-        {
-            await this.BlazorModalService.InitBlazorModal();
-            await this.BlazorModalService.InitBlazorModalMap();
-
-            await base.OnInitializedAsync();
-        }
-
     }
 }

@@ -16,14 +16,14 @@ namespace Oqtane.ChatHubs
 
         public bool DialogIsOpen { get; set; }
 
-        public async Task OpenDialogAsync()
+        public async void OpenDialogAsync()
         {
             this.DialogIsOpen = true;
             await this.BlazorModalService.ShowModal(SettingsModalElementId);
             StateHasChanged();
         }
 
-        public async Task CloseDialogAsync()
+        public async void CloseDialogAsync()
         {
             this.DialogIsOpen = false;
             await this.BlazorModalService.HideModal(SettingsModalElementId);

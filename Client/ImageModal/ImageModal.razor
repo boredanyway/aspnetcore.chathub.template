@@ -4,45 +4,41 @@
 
 @using BlazorModal
 
-@if (DialogIsOpen)
-{
 
-    <BlazorModalComponent ElementId="@ImageModalElementId">
+<BlazorModalComponent ElementId="@ImageModalElementId">
 
-        <BlazorModalHeader>
-            <div class="p-2 bg-primary text-light">
-                <strong>Image Uploads</strong>
+    <BlazorModalHeader>
+        <div class="p-2 bg-primary text-light">
+            <strong>Image Uploads</strong>
+        </div>
+    </BlazorModalHeader>
+
+    <BlazorModalBody>
+        @if (Message != null && Message.Photos != null)
+        {
+
+            <div class="dialog-title">
+                <b>Posted by</b> @Message.User?.DisplayName <b>on</b> @Message.CreatedOn.ToShortTimeString()
             </div>
-        </BlazorModalHeader>
 
-        <BlazorModalBody>
-            @if (Message != null && Message.Photos != null)
-            {
-
-                <div class="dialog-title">
-                    <b>Posted by</b> @Message.User?.DisplayName <b>on</b> @Message.CreatedOn.ToShortTimeString()
-                </div>
-
-                <div>
-                    @foreach (var photo in Message.Photos)
-                    {
-                        <img class="img-fluid" src="@string.Format("{0}/modules/oqtane.chathubs/images/selfies/{1}", NavigationManager.BaseUri, photo.Source)" />
-                    }
-                </div>
-
-                <div class="px-1 py-3">
-                    <h6>Posted by @Message.User.Username</h6>
-                </div>
-
-            }
-        </BlazorModalBody>
-
-        <BlazorModalFooter>
-            <div class="my-3 p-2 float-end">
-                <button type="button" class="btn btn-link" @onclick="() => CloseDialogClickedAsync()">Dialog schließen</button>
+            <div>
+                @foreach (var photo in Message.Photos)
+                {
+                    <img class="img-fluid" src="@string.Format("{0}/modules/oqtane.chathubs/images/selfies/{1}", NavigationManager.BaseUri, photo.Source)" />
+                }
             </div>
-        </BlazorModalFooter>
 
-    </BlazorModalComponent>
+            <div class="px-1 py-3">
+                <h6>Posted by @Message.User.Username</h6>
+            </div>
 
-}
+        }
+    </BlazorModalBody>
+
+    <BlazorModalFooter>
+        <div class="my-3 p-2 float-end">
+            <button type="button" class="btn btn-link" @onclick="() => CloseDialogClickedAsync()">Dialog schließen</button>
+        </div>
+    </BlazorModalFooter>
+
+</BlazorModalComponent>

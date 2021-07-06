@@ -6,49 +6,47 @@
 @using BlazorDraggableList
 @using BlazorModal
 
-@if (DialogIsOpen)
-{
 
-    <BlazorModalComponent ElementId="@SettingsModalElementId">
+<BlazorModalComponent ElementId="@SettingsModalElementId">
 
-        <BlazorModalHeader>
-            <div class="p-2 bg-primary text-light">
-                <strong>Account Data</strong>
-            </div>           
-        </BlazorModalHeader>
+    <BlazorModalHeader>
+        <div class="p-2 bg-primary text-light">
+            <strong>Account Data</strong>
+        </div>           
+    </BlazorModalHeader>
 
-        <BlazorModalBody>
-            <div class="p-sm-3">
+    <BlazorModalBody>
+        <div class="p-sm-3">
 
-                <p class="lead">Here a little overview of all current related userdata activities for guests and registered users.</p>
+            <p class="lead">Here a little overview of all current related userdata activities for guests and registered users.</p>
 
-                <div class="form-group">
-                    <label for="displayname">Username</label>
-                    <input class="form-control" type="text" id="displayname" placeholder="@ChatHubService.ConnectedUser?.DisplayName" readonly>
-                </div>
-
-                @if (ChatHubService.ConnectedUser != null && ChatHubService.ConnectedUser.Connections != null)
-                {
-
-                    <BlazorDraggableListComponent Items="ChatHubService.ConnectedUser.Connections" Id="DraggableConnectionsElementId" Class="d-flex flex-column form-group">
-                        <BlazorDraggableListItem>
-                            <div class="form-group">
-                                <label for="displayname">Connected since @context.CreatedOn.ToLongDateString() @context.CreatedOn.ToLongTimeString()</label>
-                                <input class="form-control" type="text" placeholder="@context.ConnectionId" readonly>
-                            </div>
-                        </BlazorDraggableListItem>
-                    </BlazorDraggableListComponent>
-
-                }
+            <div class="form-group">
+                <label for="displayname">Username</label>
+                <input class="form-control" type="text" id="displayname" placeholder="@ChatHubService.ConnectedUser?.DisplayName" readonly>
             </div>
-        </BlazorModalBody>
 
-        <BlazorModalFooter>
-            <div class="p-2 my-3 float-end">
-                <button type="button" class="btn btn-sm btn-primary" @onclick="() => CloseDialogAsync()">Close</button>
-            </div>
-        </BlazorModalFooter>
+            @if (ChatHubService.ConnectedUser != null && ChatHubService.ConnectedUser.Connections != null)
+            {
 
-    </BlazorModalComponent>
+                <BlazorDraggableListComponent Items="ChatHubService.ConnectedUser.Connections" Id="DraggableConnectionsElementId" Class="d-flex flex-column form-group">
+                    <BlazorDraggableListItem>
+                        <div class="form-group">
+                            <label for="displayname">Connected since @context.CreatedOn.ToLongDateString() @context.CreatedOn.ToLongTimeString()</label>
+                            <input class="form-control" type="text" placeholder="@context.ConnectionId" readonly>
+                        </div>
+                    </BlazorDraggableListItem>
+                </BlazorDraggableListComponent>
 
-}
+            }
+        </div>
+    </BlazorModalBody>
+
+    <BlazorModalFooter>
+        <div class="p-2 my-3 float-end">
+            <button type="button" class="btn btn-sm btn-primary" @onclick="() => CloseDialogAsync()">Close</button>
+        </div>
+    </BlazorModalFooter>
+
+</BlazorModalComponent>
+
+

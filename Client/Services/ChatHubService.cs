@@ -721,9 +721,7 @@ namespace Oqtane.ChatHubs.Services
             this.OnClearHistoryEvent -= OnClearHistoryExecute;
             this.OnDisconnectEvent -= OnDisconnectExecute;
 
-            GetLobbyRoomsTimer.Elapsed -= new ElapsedEventHandler(OnGetLobbyRoomsTimerElapsed);
-
-            this.Connection.StopAsync();
+            GetLobbyRoomsTimer.Elapsed -= new ElapsedEventHandler(OnGetLobbyRoomsTimerElapsed);            
         }
 
         public void RunUpdateUI()

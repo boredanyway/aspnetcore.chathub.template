@@ -241,7 +241,7 @@ namespace BlazorVideo
                     await this.StopSequenceLocalLivestream(roomId, connectionId);
                     await this.StartSequenceLocalLivestream(roomId, connectionId);
 
-                    await Task.Delay(1000);
+                    await Task.Delay(420);
                 }
                 catch (Exception ex)
                 {

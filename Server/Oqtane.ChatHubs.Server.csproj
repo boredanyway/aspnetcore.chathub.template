@@ -36,7 +36,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlazorAlerts\BlazorAlerts.csproj" />
+    <ProjectReference Include="..\BlazorBrowserResize\BlazorBrowserResize.csproj" />
+    <ProjectReference Include="..\BlazorColorPicker\BlazorColorPicker.csproj" />
     <ProjectReference Include="..\BlazorDraggableList\BlazorDraggableList.csproj" />
+    <ProjectReference Include="..\BlazorFileUpload\BlazorFileUpload.csproj" />
     <ProjectReference Include="..\BlazorModal\BlazorModal.csproj" />
     <ProjectReference Include="..\BlazorPager\BlazorPager.csproj" />
     <ProjectReference Include="..\BlazorTabs\BlazorTabs.csproj" />

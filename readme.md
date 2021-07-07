@@ -36,73 +36,24 @@ new Resource { ResourceType = ResourceType.Stylesheet, Url = "https://wasmchat.c
 <script src="modules/oqtane.chathubs/chat-hub-js-interop.js"></script>
 ```
 
-#### Edit startup.cs configure services methode
-```C#
-services.AddScoped<BlazorAlertsService, BlazorAlertsService>();
-services.AddScoped<BlazorDraggableListService, BlazorDraggableListService>();
-services.AddScoped<BlazorFileUploadService, BlazorFileUploadService>();
-services.AddScoped<BlazorColorPickerService, BlazorColorPickerService>();
-services.AddScoped<BlazorVideoService, BlazorVideoService>();
-services.AddScoped<BlazorBrowserResizeService, BlazorBrowserResizeService>();
-services.AddScoped<BlazorModalService, BlazorModalService>();
-
-services.AddServerSideBlazor()
-    .AddHubOptions(options => options.MaximumReceiveMessageSize = 512 * 1024);
-
-services.AddMvc()
-    .AddNewtonsoftJson(options => 
-        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-
-services.AddSignalR()
-    .AddHubOptions<ChatHub>(options =>
-    {
-        options.EnableDetailedErrors = true;
-        options.KeepAliveInterval = TimeSpan.FromSeconds(15);
-        options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
-        options.MaximumReceiveMessageSize = Int64.MaxValue;
-        options.StreamBufferCapacity = Int32.MaxValue;
-    })
-    .AddMessagePackProtocol()
-    .AddNewtonsoftJsonProtocol(options =>
-    {
-        options.PayloadSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-    });
+#### Add to oqtane.server.csproj
+```C#  
+<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.0" />
+<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.0" />
+<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.0" />
+<PackageReference Include="BlazorStrap" Version="1.3.3" />
+<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+<PackageReference Include="Microsoft.Composition" Version="1.0.31" />
 ```
 
-#### Edit startup.cs configure runtime pipeline
-```C#	
-endpoints.MapHub<ChatHub>("/chathub", options =>
-{
-    options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
-    options.ApplicationMaxBufferSize = Int64.MaxValue;
-    options.TransportMaxBufferSize = Int64.MaxValue;
-    options.WebSockets.CloseTimeout = TimeSpan.FromSeconds(10);
-    options.LongPolling.PollTimeout = TimeSpan.FromSeconds(10);
-});
-```
-
-#### Edit TenantResolver.cs
-```C#
-if (segments.Length > 1 && (segments[1] == "api" || segments[1] == "pages") && segments[0] != "~")
-{
-	aliasId = int.Parse(segments[0]);
-}
-else if (segments[0] == "chathub")
-{
-	aliasId = 1;
-}
-```
-
-#### Module Dependencies so far
-```C#
-<dependency id="Oqtane.Framework" version="2.0.0" />      
-<dependency id="System.Drawing.Common" version="5.0.0" />
-<dependency id="Microsoft.CSharp" version="4.7.0" />
-<dependency id="BlazorStrap" version="1.3.3" />
-<dependency id="Microsoft.AspNetCore.SignalR.Client" version="5.0.0" />
-<dependency id="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" version="5.0.0" />
-<dependency id="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" version="5.0.0" />
-<dependency id="Microsoft.Composition" version="1.0.31" />
+#### Add to oqtane.client.csproj
+```C#  
+<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.0" />
+<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.0" />
+<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.0" />
+<PackageReference Include="BlazorStrap" Version="1.3.3" />
+<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+<PackageReference Include="Microsoft.Composition" Version="1.0.31" />
 ```
 
 #### Example Screenshots

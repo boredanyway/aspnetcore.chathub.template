@@ -466,10 +466,11 @@ namespace Oqtane.ChatHubs
             this.BrowserResizeService.BrowserResizeServiceExtension.OnResize -= BrowserHasResized;
             this.ChatHubService.OnUpdateUI -= (object sender, EventArgs e) => UpdateUIStateHasChanged();
 
-            this.ChatHubService.Connection.StopAsync();
-            this.ChatHubService.Connection.DisposeAsync();
-
-            //this.ChatHubService.DisposeStreamTasks();
+            if(ChatHubService.Connection != null)
+            {
+                this.ChatHubService.Connection.StopAsync();
+                this.ChatHubService.Connection.DisposeAsync();
+            }            
         }
 
     }

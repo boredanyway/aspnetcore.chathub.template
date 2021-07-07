@@ -221,6 +221,20 @@
                         </div>
                     </div>
 
+                    @if (ChatHubService.Connection?.State == HubConnectionState.Connected)
+                    {
+                        <div class="d-flex justify-content-between bd-highlight my-3">
+                            <div class="flex-fill bd-highlight bg-yellow p-md-3 px-2 py-1 px-md-5 py-md-3">
+                                <small style="font-family: Consolas, monospace;">
+                                    Connected as @ChatHubService.ConnectedUser?.DisplayName
+                                </small>
+                            </div>
+                            <div class="flex-fill bd-highlight bg-light p-1 p-md-3">
+                                <ActionLink Action="Add" Security="SecurityAccessLevel.Anonymous" Text="Add new post" class="btn btn-sm btn-link w-100 bg-transparent" />
+                            </div>
+                        </div>
+                    }
+
                     <BlazorPagerComponent Items="@ChatHubService.Lobbies" ItemsPerPage="14" Class="bg-white py-sm-3">
 
                         <BlazorPagerItem>
@@ -285,21 +299,7 @@
                 <TabTitle>
                     @ModuleState.ModuleDefinition.Name
                 </TabTitle>
-                <TabContent>
-
-                    @if (ChatHubService.Connection?.State == HubConnectionState.Connected)
-                    {
-                        <div class="d-flex justify-content-between bd-highlight my-3">
-                            <div class="flex-fill bd-highlight bg-yellow p-md-3 px-2 py-1 px-md-5 py-md-3">
-                                <small style="font-family: Consolas, monospace;">
-                                    Connected as @ChatHubService.ConnectedUser?.DisplayName
-                                </small>
-                            </div>
-                            <div class="flex-fill bd-highlight bg-light p-1 p-md-3">
-                                <ActionLink Action="Add" Security="SecurityAccessLevel.Anonymous" Text="Add new post" class="btn btn-sm btn-link w-100 bg-transparent" />
-                            </div>
-                        </div>
-                    }
+                <TabContent>                    
 
                     @if (ChatHubService.Lobbies.Any())
                     {

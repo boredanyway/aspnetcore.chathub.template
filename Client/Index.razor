@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using System.Collections.Generic
 @using System.Linq
+@using Oqtane.ChatHubs.Client
 @using BlazorStrap
 @using System.Web
 @using BlazorAlerts
@@ -230,7 +231,7 @@
                                 </small>
                             </div>
                             <div class="flex-fill bd-highlight bg-light p-1 p-md-3">
-                                <ActionLink Action="Add" Security="SecurityAccessLevel.Anonymous" Text="Add new post" class="btn btn-sm btn-link w-100 bg-transparent" />
+                                <button type="button" @onclick="@(() => EditRoomModalRef.OpenCreateRoomModal())" class="btn btn-sm btn-link w-100 bg-transparent">Add new post</button>
                             </div>
                         </div>
                     }
@@ -276,9 +277,12 @@
 
                                 <div class="ms-none ms-sm-auto px-1">
                                     <button type="button" class="btn btn-sm btn-link bg-light" @onclick="@(async () => await EnterRoom_Clicked(context.Id, context.ModuleId))">Enter</button>
-                                    <ActionLink Action="Edit" Security="SecurityAccessLevel.Edit" Parameters="@($"moduleid=" + context.ModuleId.ToString() + "&" + "roomid=" + context.Id.ToString())" Class="btn btn-sm btn-primary" />
-                                    <ActionDialog Header="Enable/Archive" Message="@("Are you sure you want to archive this room?")" Action="Enable/Archive" Security="SecurityAccessLevel.Edit" Class="btn btn-sm btn-warning" OnClick="@(async () => await EnableArchiveRoom(context))" />
-                                    <ActionDialog Header="Delete" Message="@("Are your sure you want to delete this room?")" Action="Delete" Security="SecurityAccessLevel.Edit" Class="btn btn-sm btn-danger" OnClick="@(async () => await DeleteRoom(context.Id))" />
+                                    @if (ChatHubService.ConnectedUser?.UserId == context.CreatorId || ChatHubService.ConnectedUser?.Username == "host")
+                                    {
+                                        <button type="button" class="btn btn-sm btn-primary" @onclick="@(() => EditRoomModalRef.OpenEditRoomModal(context.Id))">Edit</button>
+                                        <ActionDialog Header="Enable/Archive" Message="@("Are you sure you want to archive this room?")" Action="Enable/Archive" Security="SecurityAccessLevel.Edit" Class="btn btn-sm btn-warning" OnClick="@(async () => await EnableArchiveRoom(context))" />
+                                        <ActionDialog Header="Delete" Message="@("Are your sure you want to delete this room?")" Action="Delete" Security="SecurityAccessLevel.Edit" Class="btn btn-sm btn-danger" OnClick="@(async () => await DeleteRoom(context.Id))" />
+                                    }
                                 </div>
 
                             </div>
@@ -1017,5 +1021,6 @@
 
 </div>
 
+<EditRoomModal @ref="EditRoomModalRef"></EditRoomModal>
 <SettingsModal @ref="SettingsModalRef"></SettingsModal>
 <ImageModal @ref="ImageModalRef"></ImageModal>

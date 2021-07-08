@@ -160,7 +160,6 @@ namespace Oqtane.ChatHubs.Controllers
 
         [HttpPut("{id}")]
         [ActionName("UpdateChatHubRoom")]
-        [Authorize(Policy = "EditModule")]
         public async Task<ChatHubRoom> PutAsync(int id, [FromBody] ChatHubRoom ChatHubRoom)
         {
             try
@@ -198,7 +197,6 @@ namespace Oqtane.ChatHubs.Controllers
 
         [HttpDelete]
         [ActionName("FixCorruptConnections")]
-        [Authorize(Policy = "EditModule")]
         public void FixCorruptConnections()
         {
             try

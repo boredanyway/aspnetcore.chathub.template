@@ -1,0 +1,74 @@
+﻿@namespace Oqtane.ChatHubs.Client
+@inherits EditRoomModalBase
+
+@using BlazorFileUpload
+@using BlazorSelect
+@using BlazorColorPicker
+@using BlazorModal
+
+<BlazorModalComponent ElementId="@EditRoomModalElementId">
+
+    <BlazorModalHeader>
+        <div class="p-2 bg-primary text-light">
+            <strong>EditRoom</strong>
+        </div>
+    </BlazorModalHeader>
+    <BlazorModalBody>
+
+        <div class="p-2">
+            <div class="mb-2">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" @bind="@title">
+            </div>
+            <div class="mb-2">
+                <label for="content" class="form-label">Content</label>
+                <textarea class="form-control" id="content" rows="3" @bind="@content"></textarea>
+            </div>
+            <div class="mb-2">
+                <label for="backgroundcolor" class="form-label">Backgroundcolor</label>
+                <BlazorSelectComponent SelectionItems="@BlazorColorPickerSelectionItems" SelectedItem="@BlazorColorPickerActiveType.ToString()" SelectEvent="@BlazorColorPicker_OnSelect"></BlazorSelectComponent>
+                <BlazorColorPickerComponent ContextColor="@backgroundcolor" ColorPickerType="@BlazorColorPickerActiveType"></BlazorColorPickerComponent>
+            </div>
+            <div class="mb-2">
+                <label for="type" class="form-label">Type</label>
+                <BlazorSelectComponent SelectionItems="@SelectionItems" SelectedItem="@type" SelectEvent="@OnSelect"></BlazorSelectComponent>
+            </div>
+            <div class="mb-2">
+                <label for="image" class="form-label">Image</label>
+                @if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    <img class="img-thumbnail" width="200" height="200" src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, imageUrl)" alt="Profile Image" />
+                }
+
+                @{
+                    Dictionary<string, string> headers = new Dictionary<string, string>();
+                    headers.Add("roomid", this.roomId.ToString());
+
+                    var url = string.Concat(NavigationManager.BaseUri.Substring(0, NavigationManager.BaseUri.LastIndexOf('/')), this.ChatHubService.apiurl, "/postroomimageupload");
+                }
+
+                <BlazorFileUploadComponent ApiUrl="@url" FileUploadHeaders="@headers" InputFileId="@FileUploadInputFileElementId" DropzoneElementId="@FileUploadDropzoneContainerElementId"></BlazorFileUploadComponent>
+            </div>
+        </div>
+
+    </BlazorModalBody>
+    <BlazorModalFooter>
+        @if (roomId == -1)
+        {
+
+            <button type="button" class="btn btn-sm btn-success" @onclick="@(() => CreateRoom())">Create room</button>
+        }
+        @if (roomId != -1)
+        {
+
+            <button type="button" class="btn btn-sm btn-success" @onclick="@(() => EditRoom())">Edit room</button>
+        }
+        <button type="button" class="btn btn-sm btn-secondary" @onclick="@(() => CloseModal())">Cancel</button>
+        <AuditInfo CreatedBy="@createdby" CreatedOn="@createdon" ModifiedBy="@modifiedby" ModifiedOn="@modifiedon"></AuditInfo>
+    </BlazorModalFooter>
+
+</BlazorModalComponent>
+
+@code {
+
+}

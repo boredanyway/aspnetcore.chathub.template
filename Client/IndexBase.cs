@@ -24,6 +24,7 @@ using Oqtane.ChatHubs.Shared.Models;
 using Oqtane.ChatHubs.Shared.Enums;
 using Oqtane.ChatHubs.Shared.Extensions;
 using BlazorModal;
+using Oqtane.ChatHubs.Client;
 
 namespace Oqtane.ChatHubs
 {
@@ -62,6 +63,7 @@ namespace Oqtane.ChatHubs
 
         public ImageModal ImageModalRef;
         public SettingsModal SettingsModalRef;
+        public EditRoomModal EditRoomModalRef;
 
         protected readonly string DraggableLivestreamsContainerElementId = "DraggableLivestreamsContainer";
         protected readonly string FileUploadDropzoneContainerElementId = "FileUploadDropzoneContainer";

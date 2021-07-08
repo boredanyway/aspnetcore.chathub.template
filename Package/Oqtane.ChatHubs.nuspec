@@ -10,9 +10,9 @@
     <copyright>ben wasm</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
-    <projectUrl>https://github.com/oqtane/oqtane.framework</projectUrl>
-    <iconUrl>https://www.oqtane.org/Portals/0/icon.jpg</iconUrl>
-    <tags>asp .net core signalr template oqtane module chat signalr</tags>
+    <projectUrl>https://github.com/boredanyway/aspnetcore.chathub.template</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/Modules/Oqtane.ChatHubs/images/wasmchatlogo.png</iconUrl>
+    <tags>asp .net core signalr template oqtane module chat signalr video stream</tags>
     <releaseNotes></releaseNotes>
     <summary></summary>
     <dependencies>

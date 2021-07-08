@@ -1,6 +1,6 @@
 [
   {
-    "outputFileName": "wwwroot/css/blazortouchmenu.min.css",
+    "outputFileName": "wwwroot/blazortouchmenu.min.css",
     "inputFiles": [
       "blazortouchmenu.css"
     ],
@@ -10,7 +10,7 @@
     }
   },
   {
-    "outputFileName": "wwwroot/js/blazortouchmenu.min.js",
+    "outputFileName": "wwwroot/blazortouchmenu.min.js",
     "inputFiles": [
       "swiped-events.js",
       "blazortouchmenu.js"

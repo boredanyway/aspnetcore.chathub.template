@@ -19,107 +19,8 @@
 @using Oqtane.ChatHubs.Shared.Models
 @using Oqtane.ChatHubs.Shared.Enums
 
-<style type="text/css">
-
-    .bg-green {
-        background-color: #ddffdd !important;
-    }
-
-    .bg-yellow {
-        background-color: #ffffdd !important;
-    }
-
-    .chathubs-container {
-        min-height: 1000px;
-        background-color: #ffffff;
-        border: 1px solid #dddddd;
-        opacity: 0;
-    }
-
-    .userlist .nav-link {
-        padding: .5rem .4rem;
-    }
-
-    .chathub-font-size-075rem {
-        font-size: 0.75rem;
-    }
-
-    @@media (max-width: 1199px) {
-        .userlist {
-            position: fixed;
-            z-index: 1100;
-            top: 0px;
-            left: 0px;
-            width: 100%;
-            height: 100%;
-            max-width: 100% !important;
-        }
-    }
-
-    .blazor-tabs > ul.nav-tabs {
-        border: none;
-        margin: 0;
-    }
-
-        .blazor-tabs > ul.nav-tabs li a:hover, a:focus {
-            text-decoration: none;
-            outline: none;
-        }
-
-        .blazor-tabs > ul.nav-tabs li a {
-            position: relative;
-            z-index: 2;
-            padding: 10px;
-            font-size: 18px;
-            font-weight: 600;
-            color: slateblue;
-            text-transform: capitalize;
-            border: none;
-            border-radius: 0px;
-            background: transparent;
-            transition: all 0.2s linear;
-        }
-
-            .blazor-tabs > ul.nav-tabs li a:hover,
-            .blazor-tabs > ul.nav-tabs li.active a {
-                border: none;
-            }
-
-            .blazor-tabs > ul.nav-tabs li a:before {
-                position: absolute;
-                content: "";
-                width: 100%;
-                height: 2px;
-                bottom: 0;
-                left: 0;
-                background-color: black;
-                border-color: black;
-            }
-
-            .blazor-tabs > ul.nav-tabs li a:after {
-                position: absolute;
-                content: "";
-                width: 100%;
-                height: 4px;
-                bottom: 0;
-                left: 0;
-                opacity: 0;
-                z-index: 1;
-                transition: all 0.2s linear;
-                background-color: black;
-                border-color: black;
-            }
-
-        .blazor-tabs > ul.nav-tabs li:hover a:after,
-        .blazor-tabs > ul.nav-tabs li.active a:after {
-            width: 100%;
-            opacity: 1;
-        }
-
-    .blazor-tabs > .nav-tabs-body {
-        margin-top: 10px;
-    }
-</style>
+<link href="_content/wasmchat/blazoralerts.min.css" rel="stylesheet" />
+<link href="_content/wasmchat/chat-hub-stylesheets.css" rel="stylesheet" />
 
 <div id="chathub-module-@ModuleState.ModuleId" class="chathubs-container p-sm-3 mb-4">
 
@@ -243,8 +144,8 @@
                             <div class="d-flex flex-wrap flex-sm-nowrap align-items-center w-100 py-2" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff; border-top: 1px solid red;" : "background-color: #fff; border-top: 1px solid #bb99ff")">
 
                                 <div class="px-1">
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
+                                    <img src="@string.Format("{0}/_content/wasmchat/images/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
+                                    <img src="@string.Format("{0}/_content/wasmchat/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
                                 </div>
 
                                 <div class="px-1 py-2">
@@ -296,14 +197,14 @@
             </TabContent>
         </TabItem>
 
-        @if (ChatHubService.Connection?.State == HubConnectionState.Connected)
+        @if (ChatHubService.Connection?.State == HubConnectionState.Connected && ChatHubService.Rooms.Any())
         {
 
             <TabItem>
                 <TabTitle>
                     @ModuleState.ModuleDefinition.Name
                 </TabTitle>
-                <TabContent>                    
+                <TabContent>
 
                     @if (ChatHubService.Lobbies.Any())
                     {
@@ -864,6 +765,10 @@
                 </TabContent>
             </TabItem>
 
+        }
+        @if (ChatHubService.Connection?.State == HubConnectionState.Connected)
+        {
+
             <TabItem>
                 <TabTitle>
                     Settings
@@ -986,7 +891,7 @@
                 <div class="jumbotron jumbotron-fluid bg-white py-1 mt-3 mb-0">
                     <div class="container">
 
-                        <img src="@string.Format("{0}/modules/oqtane.chathubs/images/wasmchatlogo.png", NavigationManager.BaseUri)" class="img-fluid my-2 mb-sm-5" style="max-width: 420px;" />
+                        <img src="@string.Format("{0}/_content/wasmchat/wasmchatlogo.png", NavigationManager.BaseUri)" class="img-fluid my-2 mb-sm-5" style="max-width: 420px;" />
 
                         <h4>Videostream chat rules so far</h4>
                         <ul>
@@ -1024,3 +929,7 @@
 <EditRoomModal @ref="EditRoomModalRef"></EditRoomModal>
 <SettingsModal @ref="SettingsModalRef"></SettingsModal>
 <ImageModal @ref="ImageModalRef"></ImageModal>
+
+@code {
+
+}

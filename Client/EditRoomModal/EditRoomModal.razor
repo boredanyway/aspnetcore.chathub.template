@@ -37,7 +37,7 @@
                 <label for="image" class="form-label">Image</label>
                 @if (!string.IsNullOrEmpty(imageUrl))
                 {
-                    <img class="img-thumbnail" width="200" height="200" src="@string.Format("{0}/modules/oqtane.chathubs/images/rooms/{1}", NavigationManager.BaseUri, imageUrl)" alt="Profile Image" />
+                    <img class="img-thumbnail" width="200" height="200" src="@string.Format("{0}/_content/wasmchat/images/rooms/{1}", NavigationManager.BaseUri, imageUrl)" alt="Profile Image" />
                 }
 
                 @{
@@ -53,18 +53,22 @@
 
     </BlazorModalBody>
     <BlazorModalFooter>
-        @if (roomId == -1)
-        {
 
-            <button type="button" class="btn btn-sm btn-success" @onclick="@(() => CreateRoom())">Create room</button>
-        }
-        @if (roomId != -1)
-        {
+        <div class="p-2">
 
-            <button type="button" class="btn btn-sm btn-success" @onclick="@(() => EditRoom())">Edit room</button>
-        }
-        <button type="button" class="btn btn-sm btn-secondary" @onclick="@(() => CloseModal())">Cancel</button>
-        <AuditInfo CreatedBy="@createdby" CreatedOn="@createdon" ModifiedBy="@modifiedby" ModifiedOn="@modifiedon"></AuditInfo>
+            @if (roomId == -1)
+            {
+                <button type="button" class="btn btn-sm btn-success" @onclick="@(() => CreateRoom())">Create room</button>
+            }
+            @if (roomId != -1)
+            {
+                <button type="button" class="btn btn-sm btn-success" @onclick="@(() => EditRoom())">Edit room</button>
+            }
+            <button type="button" class="btn btn-sm btn-secondary" @onclick="@(() => CloseModal())">Cancel</button>
+            <AuditInfo CreatedBy="@createdby" CreatedOn="@createdon" ModifiedBy="@modifiedby" ModifiedOn="@modifiedon"></AuditInfo>
+
+        </div>
+
     </BlazorModalFooter>
 
 </BlazorModalComponent>

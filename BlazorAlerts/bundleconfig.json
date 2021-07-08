@@ -1,6 +1,6 @@
 [
   {
-    "outputFileName": "wwwroot/css/blazoralerts.min.css",
+    "outputFileName": "wwwroot/blazoralerts.min.css",
     "inputFiles": [
       "blazoralerts.css"
     ],
@@ -10,7 +10,7 @@
     }
   },
   {
-    "outputFileName": "wwwroot/js/blazoralerts.min.js",
+    "outputFileName": "wwwroot/blazoralerts.min.js",
     "inputFiles": [
       "blazoralerts.js"
     ],

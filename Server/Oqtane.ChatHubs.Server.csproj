@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <Product>Oqtane.ChatHubs</Product>
     <Authors>ben wasm</Authors>
     <Company>ben wasm</Company>
@@ -49,8 +49,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Oqtane.Server" Version="2.1.0" />
-    <PackageReference Include="Oqtane.Shared" Version="2.1.0" />
+    <PackageReference Include="Oqtane.Server" Version="2.2.0" />
+    <PackageReference Include="Oqtane.Shared" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,6 +67,10 @@
       <LastGenOutput>CommandResources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Oqtane.ChatHubs.Server.Resources</CustomToolNamespace>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\_content\wasmchat\images\" />
   </ItemGroup>
 	
 </Project>

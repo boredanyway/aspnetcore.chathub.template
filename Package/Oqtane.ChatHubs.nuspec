@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Oqtane.ChatHubs</id>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
     <authors>ben wasm</authors>
     <owners>ben wasm</owners>
     <title>ChatHubs</title>
@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/boredanyway/aspnetcore.chathub.template</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/Modules/Oqtane.ChatHubs/images/wasmchatlogo.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/_content/wasmchat/wasmchatlogo.png</iconUrl>
     <tags>asp .net core signalr template oqtane module chat signalr video stream</tags>
     <releaseNotes></releaseNotes>
     <summary></summary>
@@ -59,7 +59,23 @@
     <file src="..\BlazorVideo\bin\Release\net5.0\BlazorVideo.pdb" target="lib\net5.0" />
     <file src="..\BlazorBrowserResize\bin\Release\net5.0\BlazorBrowserResize.dll" target="lib\net5.0" />
     <file src="..\BlazorBrowserResize\bin\Release\net5.0\BlazorBrowserResize.pdb" target="lib\net5.0" />
-    <file src="..\Server\wwwroot\**\*.*" target="wwwroot" />
-    <file src="..\BlazorAlerts\wwwroot\**\*.*" target="wwwroot" />
+
+    <file src="..\BlazorAccordion\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorAlerts\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorBrowserResize\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorColorPicker\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorDraggableList\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorDropdown\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorFileUpload\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorModal\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorPager\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorSelect\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorTouchMenu\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorVideo\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\BlazorWindows\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    <file src="..\Server\wwwroot\*" target="wwwroot/_content/wasmchat" />
+    
+    
+    
   </files>
 </package>

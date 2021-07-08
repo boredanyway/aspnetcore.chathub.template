@@ -4,7 +4,7 @@
 
 ## asp .net core blazor signalR entity framework chat hub template
 
-You can install the oqtane chathub module via nuget.
+nuget package not work so far:(
 
 #### Getting Started For Oqtane ChatHub Module Dev
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Oqtane.ChatHubs.Shared.Models
+namespace Oqtane.ChatHubs.Models
 {
     public class ChatHubInvitation
     {

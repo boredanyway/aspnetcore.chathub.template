@@ -20,11 +20,11 @@ using BlazorFileUpload;
 using BlazorBrowserResize;
 using BlazorVideo;
 using Oqtane.ChatHubs;
-using Oqtane.ChatHubs.Shared.Models;
-using Oqtane.ChatHubs.Shared.Enums;
-using Oqtane.ChatHubs.Shared.Extensions;
+using Oqtane.ChatHubs.Models;
+using Oqtane.ChatHubs.Enums;
+using Oqtane.ChatHubs.Extensions;
 using BlazorModal;
-using Oqtane.ChatHubs.Client;
+using Oqtane.Models;
 
 namespace Oqtane.ChatHubs
 {
@@ -461,6 +461,21 @@ namespace Oqtane.ChatHubs
                 }
             }
         }
+
+        public override List<Resource> Resources => new List<Resource>()
+        {
+            new Resource { ResourceType = ResourceType.Script, Bundle = "jQuery", Url = "https://code.jquery.com/jquery-3.2.1.slim.min.js", Integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+            new Resource { ResourceType = ResourceType.Script, Bundle = "IoButtons", Url = "https://buttons.github.io/buttons.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+
+            //new Resource { ResourceType = ResourceType.Script, Bundle = "BlazorStrap", Url = "/Modules/Oqtane.ChatHubs/blazorStrap.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+            //new Resource { ResourceType = ResourceType.Script, Bundle = "blazorvideojsinterop", Url = "/Modules/Oqtane.ChatHubs/blazorvideojsinterop.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+            //new Resource { ResourceType = ResourceType.Script, Bundle = "browserresizejsinterop", Url = "/Modules/Oqtane.ChatHubs/browserresizejsinterop.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+            //new Resource { ResourceType = ResourceType.Script, Bundle = "browserresizemap", Url = "/Modules/Oqtane.ChatHubs/browserresizemap.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+            //new Resource { ResourceType = ResourceType.Script, Bundle = "blazorfileuploadjsinterop", Url = "/Modules/Oqtane.ChatHubs/blazorfileuploadjsinterop.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+            //new Resource { ResourceType = ResourceType.Script, Bundle = "blazordraggablelistjsinterop", Url = "/Modules/Oqtane.ChatHubs/blazordraggablelistjsinterop.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+            //new Resource { ResourceType = ResourceType.Script, Bundle = "blazormodaljsinterop", Url = "/Modules/Oqtane.ChatHubs/blazormodaljsinterop.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+            //new Resource { ResourceType = ResourceType.Script, Bundle = "chat-hub-js-interop", Url = "/Modules/Oqtane.ChatHubs/chat-hub-js-interop.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+        };
 
         public void Dispose()
         {

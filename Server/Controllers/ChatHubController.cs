@@ -15,8 +15,8 @@ using Oqtane.Infrastructure;
 using System.Drawing;
 using Oqtane.ChatHubs.Services;
 using Oqtane.ChatHubs.Hubs;
-using Oqtane.ChatHubs.Shared.Models;
-using Oqtane.ChatHubs.Shared.Enums;
+using Oqtane.ChatHubs.Models;
+using Oqtane.ChatHubs.Enums;
 
 namespace Oqtane.ChatHubs.Controllers
 {
@@ -298,7 +298,7 @@ namespace Oqtane.ChatHubs.Controllers
                 var maxFileSize = 10;
                 var maxFileCount = 3;
 
-                string folderName = "_content/wasmchat/images/uploads";
+                string folderName = "modules/oqtane.chathubs/images/uploads";
                 string webRootPath = string.Concat(this.webHostEnvironment.ContentRootPath, "\\wwwroot");
                 string newPath = Path.Combine(webRootPath, folderName);
                 if (!Directory.Exists(newPath))
@@ -408,7 +408,7 @@ namespace Oqtane.ChatHubs.Controllers
                 var maxFileSize = 10;
                 var maxFileCount = 3;
 
-                string folderName = "_content/wasmchat/images/rooms";
+                string folderName = "modules/oqtane.chathubs/images/rooms";
                 string webRootPath = string.Concat(this.webHostEnvironment.ContentRootPath, "\\wwwroot");
                 string newPath = Path.Combine(webRootPath, folderName);
                 if (!Directory.Exists(newPath))

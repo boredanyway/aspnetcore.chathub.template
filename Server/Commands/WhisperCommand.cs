@@ -6,8 +6,8 @@ using System.Linq;
 using Oqtane.ChatHubs.Repository;
 using System;
 using System.Collections.Generic;
-using Oqtane.ChatHubs.Shared.Enums;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Enums;
+using Oqtane.ChatHubs.Models;
 
 namespace Oqtane.ChatHubs.Commands
 {

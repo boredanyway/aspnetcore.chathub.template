@@ -19,10 +19,12 @@ namespace Oqtane
 {
     public class ExtendedStartup : IServerStartup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
             services.AddScoped<BlazorAlertsService, BlazorAlertsService>();
             services.AddScoped<BlazorDraggableListService, BlazorDraggableListService>();
             services.AddScoped<BlazorFileUploadService, BlazorFileUploadService>();
@@ -34,10 +36,6 @@ namespace Oqtane
             services.AddServerSideBlazor()
                 .AddHubOptions(options => options.MaximumReceiveMessageSize = 512 * 1024);
 
-            services.AddMvc()
-                .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-
             services.AddSignalR()
                 .AddHubOptions<ChatHub>(options =>
                 {
@@ -47,13 +45,12 @@ namespace Oqtane
                     options.MaximumReceiveMessageSize = Int64.MaxValue;
                     options.StreamBufferCapacity = Int32.MaxValue;
                 })
-                .AddMessagePackProtocol()
                 .AddNewtonsoftJsonProtocol(options =>
                 {
                     options.PayloadSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
         }
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseHttpsRedirection();

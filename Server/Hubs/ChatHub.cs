@@ -16,8 +16,8 @@ using Oqtane.ChatHubs.Commands;
 using Oqtane.Modules;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using Oqtane.ChatHubs.Shared.Enums;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Enums;
+using Oqtane.ChatHubs.Models;
 
 namespace Oqtane.ChatHubs.Hubs
 {

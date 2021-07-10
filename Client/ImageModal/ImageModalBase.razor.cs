@@ -1,6 +1,6 @@
 ﻿using BlazorModal;
 using Microsoft.AspNetCore.Components;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Models;
 using Oqtane.Modules;
 using System.Threading.Tasks;
 

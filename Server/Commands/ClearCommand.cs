@@ -2,7 +2,7 @@
 using System.Composition;
 using System.Threading.Tasks;
 using Oqtane.Shared;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Models;
 
 namespace Oqtane.ChatHubs.Commands
 {

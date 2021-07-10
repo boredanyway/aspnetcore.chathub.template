@@ -10,7 +10,7 @@ using Oqtane.Migrations.Framework;
 using Oqtane.Enums;
 using Microsoft.AspNetCore.Http;
 using Oqtane.ChatHubs.Repository;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Models;
 
 namespace Oqtane.ChatHubs.Manager
 {
@@ -32,7 +32,7 @@ namespace Oqtane.ChatHubs.Manager
 
         public bool Install(Tenant tenant, string version)
         {
-            if (tenant.DBType == Constants.DefaultDBType && version == "1.0.3")
+            if (tenant.DBType == Constants.DefaultDBType && version == "4.0.0")
             {
                 // version 1.0.0 used SQL scripts rather than migrations, so we need to seed the migration history table
                 _sql.ExecuteNonQuery(tenant, MigrationUtils.BuildInsertScript("ChatHub.01.00.00.00"));
@@ -77,6 +77,7 @@ namespace Oqtane.ChatHubs.Manager
                     Room.CreatorId = room.CreatorId;
                     Room.ImageUrl = room.ImageUrl;
                     Room.OneVsOneId = room.OneVsOneId;
+                    Room.BackgroundColor = room.BackgroundColor;
 
                     _chatHubRepository.AddChatHubRoom(Room);
                 }

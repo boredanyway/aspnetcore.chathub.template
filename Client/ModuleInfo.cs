@@ -8,11 +8,12 @@ namespace Oqtane.ChatHubs
         public ModuleDefinition ModuleDefinition => new ModuleDefinition
         {
             Name = "ChatHub",
-            Description = "Asp net core signalr oqtane chathub module",
-            Version = "1.1.1",
+            Description = "ChatHub",
+            Version = "4.0.0",
             ServerManagerType = "Oqtane.ChatHubs.Manager.ChatHubManager, Oqtane.ChatHubs.Server.Oqtane",
-            ReleaseVersions = "1.1.1",
-            Dependencies = "Oqtane.ChatHubs.Shared.Oqtane"
+            ReleaseVersions = "1.0.0,4.0.0",
+            Dependencies = "Oqtane.ChatHubs.Shared.Oqtane",
+            //SettingsType = "Oqtane.ChatHubs.Settings, Oqtane.ChatHubs.Client.Oqtane"
         };
     }
 }

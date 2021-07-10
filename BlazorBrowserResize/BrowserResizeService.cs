@@ -21,7 +21,7 @@ namespace BlazorBrowserResize
         }
         public async Task InitBrowserResizeService()
         {
-            this.Module = await this.JsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BlazorBrowserResize/browserresizejsinterop.js");
+            this.Module = await this.JsRuntime.InvokeAsync<IJSObjectReference>("import", "/Modules/Oqtane.ChatHubs/browserresizejsinterop.js");
             this.BrowserResizeMap = await this.Module.InvokeAsync<IJSObjectReference>("initbrowserresize", this.DotNetObjRef);
         }
 

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Oqtane.ChatHubs.Shared.Enums;
+using Oqtane.ChatHubs.Enums;
 using Oqtane.Models;
 
-namespace Oqtane.ChatHubs.Shared.Models
+namespace Oqtane.ChatHubs.Models
 {
 
     public class ChatHubUser : User

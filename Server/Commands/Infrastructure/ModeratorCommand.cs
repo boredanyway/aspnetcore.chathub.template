@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Models;
 
 namespace Oqtane.ChatHubs.Commands
 {

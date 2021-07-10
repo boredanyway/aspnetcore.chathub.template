@@ -4,8 +4,8 @@ using Oqtane.Shared;
 using System;
 using System.Linq;
 using Oqtane.ChatHubs.Repository;
-using Oqtane.ChatHubs.Shared.Models;
-using Oqtane.ChatHubs.Shared.Enums;
+using Oqtane.ChatHubs.Models;
+using Oqtane.ChatHubs.Enums;
 
 namespace Oqtane.ChatHubs.Commands
 {

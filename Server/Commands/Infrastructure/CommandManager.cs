@@ -12,7 +12,7 @@ using System.Resources;
 using Oqtane.ChatHubs.Server.Resources;
 using System.Globalization;
 using Microsoft.AspNetCore.SignalR;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Models;
 
 namespace Oqtane.ChatHubs.Commands
 {

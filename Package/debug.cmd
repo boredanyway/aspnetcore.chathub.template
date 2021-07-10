@@ -28,11 +28,3 @@ XCOPY "..\BlazorVideo\bin\Debug\net5.0\BlazorVideo.dll" "..\..\oqtane.framework\
 XCOPY "..\BlazorVideo\bin\Debug\net5.0\BlazorVideo.pdb" "..\..\oqtane.framework\Oqtane.Server\bin\Debug\net5.0\" /Y
 XCOPY "..\BlazorBrowserResize\bin\Debug\net5.0\BlazorBrowserResize.dll" "..\..\oqtane.framework\Oqtane.Server\bin\Debug\net5.0\" /Y
 XCOPY "..\BlazorBrowserResize\bin\Debug\net5.0\BlazorBrowserResize.pdb" "..\..\oqtane.framework\Oqtane.Server\bin\Debug\net5.0\" /Y
-
-XCOPY "..\Server\wwwroot\_content\wasmchat\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\wasmchat\" /Y /S /I
-XCOPY "..\BlazorAlerts\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\wasmchat\" /Y /S /I
-XCOPY "..\BlazorVideo\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\wasmchat\" /Y /S /I
-XCOPY "..\BlazorBrowserResize\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\wasmchat\" /Y /S /I
-XCOPY "..\BlazorFileUpload\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\wasmchat\" /Y /S /I
-XCOPY "..\BlazorDraggableList\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\wasmchat\" /Y /S /I
-XCOPY "..\BlazorModal\wwwroot\*" "..\..\oqtane.framework\Oqtane.Server\wwwroot\_content\wasmchat\" /Y /S /I

@@ -5,8 +5,8 @@ using BlazorSelect;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Oqtane.ChatHubs.Services;
-using Oqtane.ChatHubs.Shared.Enums;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Enums;
+using Oqtane.ChatHubs.Models;
 using Oqtane.Modules;
 using Oqtane.Shared;
 using System;
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Oqtane.ChatHubs.Client
+namespace Oqtane.ChatHubs
 {
     public class EditRoomModalBase : ModuleBase, IDisposable
     {

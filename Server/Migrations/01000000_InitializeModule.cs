@@ -17,55 +17,66 @@ namespace Oqtane.ChatHubs.Migrations
 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
             var entityBuilderRoom = new ChatHubRoomEntityBuilder(migrationBuilder, ActiveDatabase);
-            entityBuilderRoom.Create();
-
+            entityBuilderRoom.Create();            
             var entityBuilderRoomUser = new ChatHubRoomChatHubUserEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderRoomUser.Create();
-
             var entityBuilderMessage = new ChatHubMessageEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderMessage.Create();
-
             var entityBuilderConnection = new ChatHubConnectionEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderConnection.Create();
-
             var entityBuilderPhoto = new ChatHubPhotoEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderPhoto.Create();
-
             var entityBuilderSetting = new ChatHubSettingEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderSetting.Create();
-
             var entityBuilderCam = new ChatHubCamEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderCam.Create();
-
             var entityBuilderIgnore = new ChatHubIgnoreEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderIgnore.Create();
-
             var entityBuilderModerator = new ChatHubModeratorEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderModerator.Create();
-
             var entityBuilderChatHubRoomChatHubModerator = new ChatHubRoomChatHubModeratorEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderChatHubRoomChatHubModerator.Create();
-
             var entityBuilderChatHubWhitelistUser = new ChatHubWhitelistUserEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderChatHubWhitelistUser.Create();
-
             var entityBuilderChatHubRoomChatHubWhitelistUser = new ChatHubRoomChatHubWhitelistUserEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderChatHubRoomChatHubWhitelistUser.Create();
-
             var entityBuilderChatHubBlacklistUser = new ChatHubBlacklistUserEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderChatHubBlacklistUser.Create();
-
             var entityBuilderChatHubRoomChatHubBlacklistUser = new ChatHubRoomChatHubBlacklistUserEntityBuilder(migrationBuilder, ActiveDatabase);
             entityBuilderChatHubRoomChatHubBlacklistUser.Create();
-
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            var entityBuilder = new ChatHubRoomEntityBuilder(migrationBuilder, ActiveDatabase);
-            entityBuilder.Drop();
+            var entityBuilderChatHubRoomChatHubBlacklistUser = new ChatHubRoomChatHubBlacklistUserEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderChatHubRoomChatHubBlacklistUser.Drop();
+            var entityBuilderChatHubBlacklistUser = new ChatHubBlacklistUserEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderChatHubBlacklistUser.Drop();
+            var entityBuilderChatHubRoomChatHubWhitelistUser = new ChatHubRoomChatHubWhitelistUserEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderChatHubRoomChatHubWhitelistUser.Drop();
+            var entityBuilderChatHubWhitelistUser = new ChatHubWhitelistUserEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderChatHubWhitelistUser.Drop();
+            var entityBuilderChatHubRoomChatHubModerator = new ChatHubRoomChatHubModeratorEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderChatHubRoomChatHubModerator.Drop();
+            var entityBuilderModerator = new ChatHubModeratorEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderModerator.Drop();
+            var entityBuilderIgnore = new ChatHubIgnoreEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderIgnore.Drop();
+            var entityBuilderCam = new ChatHubCamEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderCam.Drop();
+            var entityBuilderSetting = new ChatHubSettingEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderSetting.Drop();
+            var entityBuilderPhoto = new ChatHubPhotoEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderPhoto.Drop();
+            var entityBuilderConnection = new ChatHubConnectionEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderConnection.Drop();
+            var entityBuilderMessage = new ChatHubMessageEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderMessage.Drop();
+            var entityBuilderRoomUser = new ChatHubRoomChatHubUserEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderRoomUser.Drop();
+            var entityBuilderRoom = new ChatHubRoomEntityBuilder(migrationBuilder, ActiveDatabase);
+            entityBuilderRoom.Drop();
         }
     }
 }

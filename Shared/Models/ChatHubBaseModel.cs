@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Oqtane.ChatHubs.Shared.Models
+namespace Oqtane.ChatHubs.Models
 {
     public class ChatHubBaseModel : IChatHubBaseModel, IAuditable
     {

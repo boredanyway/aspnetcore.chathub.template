@@ -21,9 +21,9 @@ using BlazorDraggableList;
 using BlazorVideo;
 using BlazorBrowserResize;
 using System.Net.Http.Json;
-using Oqtane.ChatHubs.Shared.Models;
-using Oqtane.ChatHubs.Shared.Extensions;
-using Oqtane.ChatHubs.Shared.Enums;
+using Oqtane.ChatHubs.Models;
+using Oqtane.ChatHubs.Extensions;
+using Oqtane.ChatHubs.Enums;
 
 namespace Oqtane.ChatHubs.Services
 {
@@ -149,7 +149,6 @@ namespace Oqtane.ChatHubs.Services
                 options.Headers.Add("platform", "Oqtane");
                 options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
             })
-            .AddMessagePackProtocol()
             .AddNewtonsoftJsonProtocol(options => {
                 options.PayloadSerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             })

@@ -1,4 +1,4 @@
-﻿namespace Oqtane.ChatHubs.Shared.Enums
+﻿namespace Oqtane.ChatHubs.Enums
 {
     public enum ChatHubRoomType
     {

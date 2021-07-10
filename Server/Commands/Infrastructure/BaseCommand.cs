@@ -1,4 +1,4 @@
-﻿using Oqtane.ChatHubs.Shared.Models;
+﻿using Oqtane.ChatHubs.Models;
 using System.Composition;
 using System.Threading.Tasks;
 

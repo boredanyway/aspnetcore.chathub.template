@@ -24,7 +24,7 @@ namespace BlazorFileUpload
 
         public async Task InitFileUploadDropzone(string inputFileId, string elementId)
         {
-            this.Module = await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BlazorFileUpload/blazorfileuploadjsinterop.js");
+            this.Module = await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", "/Modules/Oqtane.ChatHubs/blazorfileuploadjsinterop.js");
             this.FileUploadMap = await this.Module.InvokeAsync<IJSObjectReference>("initfileupload", this.dotNetObjectReference, inputFileId, elementId);
         }
 

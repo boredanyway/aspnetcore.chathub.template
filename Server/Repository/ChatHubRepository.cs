@@ -5,8 +5,8 @@ using Oqtane.Modules;
 using System;
 using System.Threading.Tasks;
 using Oqtane.Models;
-using Oqtane.ChatHubs.Shared.Models;
-using Oqtane.ChatHubs.Shared.Enums;
+using Oqtane.ChatHubs.Models;
+using Oqtane.ChatHubs.Enums;
 
 namespace Oqtane.ChatHubs.Repository
 {

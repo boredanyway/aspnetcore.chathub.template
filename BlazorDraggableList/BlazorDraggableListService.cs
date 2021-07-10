@@ -24,7 +24,7 @@ namespace BlazorDraggableList
 
         public async Task InitDraggableList(string elementId)
         {
-            this.Module = await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BlazorDraggableList/blazordraggablelistjsinterop.js");
+            this.Module = await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", "/Modules/Oqtane.ChatHubs/blazordraggablelistjsinterop.js");
             this.DraggableListMap = await this.Module.InvokeAsync<IJSObjectReference>("initblazordraggablelist", this.dotNetObjectReference, elementId);
         }
 

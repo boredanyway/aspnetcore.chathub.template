@@ -1,7 +1,7 @@
 ﻿using System.Composition;
 using System.Threading.Tasks;
-using Oqtane.ChatHubs.Shared.Enums;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Enums;
+using Oqtane.ChatHubs.Models;
 using Oqtane.Shared;
 
 namespace Oqtane.ChatHubs.Commands

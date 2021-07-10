@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Oqtane.Modules;
 using Microsoft.AspNetCore.Http;
+using Oqtane.Modules;
 using Oqtane.Repository;
-using Oqtane.Models;
-using Oqtane.Repository.Databases.Interfaces;
+using Oqtane.ChatHubs.Models;
 using Oqtane.Infrastructure;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.Repository.Databases.Interfaces;
+using Oqtane.Models;
 
 namespace Oqtane.ChatHubs.Repository
 {
@@ -28,11 +28,23 @@ namespace Oqtane.ChatHubs.Repository
         public virtual DbSet<ChatHubBlacklistUser> ChatHubBlacklistUser { get; set; }
         public virtual DbSet<ChatHubRoomChatHubBlacklistUser> ChatHubRoomChatHubBlacklistUser { get; set; }
 
+        public ChatHubContext(ITenantManager tenantManager, IHttpContextAccessor accessor) : base(tenantManager, accessor)
+        {
+            // ContextBase handles multi-tenant database connections
+        }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<ChatHubUser>().HasNoKey();
             modelBuilder.Entity<User>().HasDiscriminator<string>("UserType").HasValue<User>("User").HasValue<ChatHubUser>("ChatHubUser");
 
+            this.OnModelCreatingExtended(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
+        protected void OnModelCreatingExtended(ModelBuilder modelBuilder)
+        {
             // Relations
             // Many-to-many
             // ChatHubRoom / ChatHubUser
@@ -154,13 +166,6 @@ namespace Oqtane.ChatHubs.Repository
                 .HasOne(room_blacklistuser => room_blacklistuser.BlacklistUser)
                 .WithMany(blacklistuser => blacklistuser.BlacklistUserRooms)
                 .HasForeignKey(room_blacklistuser => room_blacklistuser.ChatHubBlacklistUserId);
-
-            base.OnModelCreating(modelBuilder);
-        }
-
-        public ChatHubContext(ITenantManager tenantManager, IHttpContextAccessor accessor) : base(tenantManager, accessor)
-        {
-            // ContextBase handles multi-tenant database connections
         }
 
     }

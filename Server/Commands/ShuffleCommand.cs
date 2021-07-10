@@ -3,8 +3,8 @@ using System.Composition;
 using System.Threading.Tasks;
 using Oqtane.Shared;
 using System;
-using Oqtane.ChatHubs.Shared.Enums;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Enums;
+using Oqtane.ChatHubs.Models;
 
 namespace Oqtane.ChatHubs.Commands
 {

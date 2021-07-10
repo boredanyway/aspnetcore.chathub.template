@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Oqtane.ChatHubs</id>
-    <version>1.1.1</version>
+    <version>4.0.0</version>
     <authors>ben wasm</authors>
     <owners>ben wasm</owners>
     <title>ChatHubs</title>
@@ -11,31 +11,33 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/boredanyway/aspnetcore.chathub.template</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/_content/wasmchat/wasmchatlogo.png</iconUrl>
-    <tags>asp .net core signalr template oqtane module chat signalr video stream</tags>
+    <iconUrl>https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/Modules/Oqtane.ChatHubs/wasmchatlogo.png</iconUrl>
+    <tags>oqtane chathubs chat video stream module</tags>
     <releaseNotes></releaseNotes>
     <summary></summary>
     <dependencies>
 		
-        <dependency id="Oqtane.Framework" version="2.2.0" />
+        <dependency id="Oqtane.Framework" version="2.0.0" />
         <dependency id="System.Drawing.Common" version="5.0.2" />
         <dependency id="Microsoft.CSharp" version="4.7.0" />
         <dependency id="BlazorStrap" version="1.3.3" />
-        <dependency id="Microsoft.AspNetCore.SignalR.Client" version="5.0.0" />
-        <dependency id="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" version="5.0.0" />
-        <dependency id="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" version="5.0.0" />
+        <dependency id="Microsoft.AspNetCore.SignalR.Client" version="5.0.4" />
+        <dependency id="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" version="5.0.4" />
         <dependency id="Microsoft.Composition" version="1.0.31" />
       
     </dependencies>
   </metadata>
   <files>
+    
     <file src="..\Client\bin\Release\net5.0\Oqtane.ChatHubs.Client.Oqtane.dll" target="lib\net5.0" />
     <file src="..\Client\bin\Release\net5.0\Oqtane.ChatHubs.Client.Oqtane.pdb" target="lib\net5.0" />
     <file src="..\Server\bin\Release\net5.0\Oqtane.ChatHubs.Server.Oqtane.dll" target="lib\net5.0" />
     <file src="..\Server\bin\Release\net5.0\Oqtane.ChatHubs.Server.Oqtane.pdb" target="lib\net5.0" />
     <file src="..\Shared\bin\Release\net5.0\Oqtane.ChatHubs.Shared.Oqtane.dll" target="lib\net5.0" />
     <file src="..\Shared\bin\Release\net5.0\Oqtane.ChatHubs.Shared.Oqtane.pdb" target="lib\net5.0" />
-    <file src="..\Server\wwwroot\*" target="wwwroot" /> 
+
+    <file src="..\Server\wwwroot\**\*.*" target="wwwroot" />
+    
     
     <file src="..\BlazorAlerts\bin\Release\net5.0\BlazorAlerts.dll" target="lib\net5.0" />
     <file src="..\BlazorAlerts\bin\Release\net5.0\BlazorAlerts.pdb" target="lib\net5.0" />
@@ -61,20 +63,21 @@
     <file src="..\BlazorVideo\bin\Release\net5.0\BlazorVideo.pdb" target="lib\net5.0" />
     <file src="..\BlazorBrowserResize\bin\Release\net5.0\BlazorBrowserResize.dll" target="lib\net5.0" />
     <file src="..\BlazorBrowserResize\bin\Release\net5.0\BlazorBrowserResize.pdb" target="lib\net5.0" />
-
-    <file src="..\BlazorAccordion\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorAlerts\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorBrowserResize\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorColorPicker\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorDraggableList\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorDropdown\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorFileUpload\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorModal\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorPager\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorSelect\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorTouchMenu\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorVideo\wwwroot\*" target="wwwroot/_content/wasmchat" />
-    <file src="..\BlazorWindows\wwwroot\*" target="wwwroot/_content/wasmchat" />
     
+    
+    <file src="..\BlazorAccordion\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorAlerts\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorBrowserResize\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorColorPicker\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorDraggableList\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorDropdown\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorFileUpload\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorModal\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorPager\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorSelect\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorTouchMenu\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorVideo\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
+    <file src="..\BlazorWindows\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />    
+
   </files>
 </package>

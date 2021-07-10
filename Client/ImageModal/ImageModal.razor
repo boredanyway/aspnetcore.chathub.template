@@ -24,7 +24,7 @@
             <div>
                 @foreach (var photo in Message.Photos)
                 {
-                    <img class="img-fluid" src="@string.Format("{0}/_content/wasmchat/images/uploads/{1}", NavigationManager.BaseUri, photo.Source)" />
+                    <img class="img-fluid" src="@string.Format("{0}/modules/oqtane.chathubs/images/uploads/{1}", NavigationManager.BaseUri, photo.Source)" />
                 }
             </div>
 

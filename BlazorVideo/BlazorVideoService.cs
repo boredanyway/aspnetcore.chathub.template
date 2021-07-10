@@ -35,7 +35,7 @@ namespace BlazorVideo
         {
             if(this.Module == null)
             {
-                this.Module = await this.JsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BlazorVideo/blazorvideojsinterop.js");
+                this.Module = await this.JsRuntime.InvokeAsync<IJSObjectReference>("import", "/Modules/Oqtane.ChatHubs/blazorvideojsinterop.js");
             }
         }
         public async Task InitBlazorVideoMap(string id, string connectionId, BlazorVideoType type)

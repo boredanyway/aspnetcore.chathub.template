@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Oqtane.ChatHubs.Repository;
-using Oqtane.ChatHubs.Shared.Enums;
-using Oqtane.ChatHubs.Shared.Models;
+using Oqtane.ChatHubs.Enums;
+using Oqtane.ChatHubs.Models;
 using Oqtane.Modules;
 using System;
 using System.Collections.Generic;

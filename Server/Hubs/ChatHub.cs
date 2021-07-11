@@ -277,6 +277,65 @@ namespace Oqtane.ChatHubs.Hubs
         }
 
         [AllowAnonymous]
+        public async Task<ChatHubRoom> CreateRoom(ChatHubRoom room)
+        {
+            ChatHubUser user = await this.GetChatHubUserAsync();
+
+            try
+            {
+                if(room.CreatorId == user.UserId)
+                {
+                    var createdRoom = chatHubRepository.AddChatHubRoom(room);
+                    return await this.chatHubService.CreateChatHubRoomClientModelAsync(createdRoom);
+                }
+
+                return null;
+            }
+            catch
+            {
+                throw new HubException("Failed to create room.");
+            }
+        }
+        [AllowAnonymous]
+        public async Task<ChatHubRoom> UpdateRoom(ChatHubRoom room)
+        {
+            ChatHubUser user = await this.GetChatHubUserAsync();
+
+            try
+            {
+                if(room.CreatorId == user.UserId)
+                {
+                    var updatedRoom = chatHubRepository.UpdateChatHubRoom(room);
+                    return await this.chatHubService.CreateChatHubRoomClientModelAsync(updatedRoom);
+                }
+
+                return null;
+            }
+            catch
+            {
+                throw new HubException("Failed to update room.");
+            }
+        }
+        [AllowAnonymous]
+        public async Task DeleteRoom(int roomId)
+        {
+            ChatHubUser user = await this.GetChatHubUserAsync();
+            ChatHubRoom room = chatHubRepository.GetChatHubRoom(roomId);
+
+            try
+            {
+                if(room.CreatorId == user.UserId)
+                {
+                    chatHubRepository.DeleteChatHubRoom(room.Id);
+                }                
+            }
+            catch
+            {
+                throw new HubException("Failed to delete room.");
+            }
+        }
+
+        [AllowAnonymous]
         public async Task EnterChatRoom(int roomId)
         {
             ChatHubUser user = await this.GetChatHubUserAsync();

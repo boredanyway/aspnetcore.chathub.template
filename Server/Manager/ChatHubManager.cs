@@ -32,10 +32,13 @@ namespace Oqtane.ChatHubs.Manager
 
         public bool Install(Tenant tenant, string version)
         {
-            if (tenant.DBType == Constants.DefaultDBType && version == "4.0.0")
+            if (tenant.DBType == Constants.DefaultDBType)
             {
-                // version 1.0.0 used SQL scripts rather than migrations, so we need to seed the migration history table
-                _sql.ExecuteNonQuery(tenant, MigrationUtils.BuildInsertScript("ChatHub.01.00.00.00"));
+                if (version == "4.0.0" || version == "4.0.1")
+                {
+                    // version 1.0.0 used SQL scripts rather than migrations, so we need to seed the migration history table
+                    _sql.ExecuteNonQuery(tenant, MigrationUtils.BuildInsertScript("ChatHub.01.00.00.00"));
+                }
             }
             return Migrate(new ChatHubContext(_tenantManager, _accessor), tenant, MigrationType.Up);
         }

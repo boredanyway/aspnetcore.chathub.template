@@ -644,12 +644,11 @@ namespace Oqtane.ChatHubs.Repository
                 throw;
             }
         }
-        public void DeleteChatHubRoom(int ChatHubRoomId, int ModuleId)
+        public void DeleteChatHubRoom(int ChatHubRoomId)
         {
             try
             {
-                ChatHubRoom ChatHubRoom = db.ChatHubRoom.Where(item => item.Id == ChatHubRoomId)
-                    .Where(item => item.ModuleId == ModuleId).FirstOrDefault();
+                ChatHubRoom ChatHubRoom = db.ChatHubRoom.Where(item => item.Id == ChatHubRoomId).FirstOrDefault();
                 db.ChatHubRoom.Remove(ChatHubRoom);
                 db.SaveChanges();
             }

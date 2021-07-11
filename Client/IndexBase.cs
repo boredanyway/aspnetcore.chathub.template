@@ -201,7 +201,7 @@ namespace Oqtane.ChatHubs
         {
             try
             {
-                await ChatHubService.DeleteChatHubRoomAsync(id, ModuleState.ModuleId);
+                await ChatHubService.DeleteRoom(id);
                 await logger.LogInformation("Room Deleted {ChatHubRoomId}", id);
                 NavigationManager.NavigateTo(NavigateUrl());
             }

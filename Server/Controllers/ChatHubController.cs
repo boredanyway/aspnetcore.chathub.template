@@ -185,7 +185,7 @@ namespace Oqtane.ChatHubs.Controllers
         {
             try
             {
-                chatHubRepository.DeleteChatHubRoom(id, this.EntityId);
+                chatHubRepository.DeleteChatHubRoom(id);
                 logger.Log(LogLevel.Information, this, LogFunction.Delete, "ChatHubRoom Deleted {ChatHubRoomId}", id);
             }
             catch (Exception ex)

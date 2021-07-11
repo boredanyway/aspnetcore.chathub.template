@@ -270,6 +270,44 @@ namespace Oqtane.ChatHubs.Services
             }
         }
 
+        public async Task<ChatHubRoom> CreateRoom(ChatHubRoom room)
+        {
+            ChatHubRoom createdRoom = null;
+            await this.Connection.InvokeAsync<ChatHubRoom>("CreateRoom", room).ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                    createdRoom = task.Result;
+                }
+            });
+
+            return createdRoom;
+        }
+        public async Task<ChatHubRoom> UpdateRoom(ChatHubRoom room)
+        {
+            ChatHubRoom updatedRoom = null;
+            await this.Connection.InvokeAsync<ChatHubRoom>("UpdateRoom", room).ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                    updatedRoom = task.Result;
+                }
+            });
+
+            return updatedRoom;
+        }
+        public async Task DeleteRoom(int roomId)
+        {
+            await this.Connection.InvokeAsync("DeleteRoom", roomId).ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                }
+            });
+        }
         public async Task EnterChatRoom(int roomId)
         {
             await this.Connection.InvokeAsync("EnterChatRoom", roomId).ContinueWith((task) =>

@@ -2,7 +2,7 @@
 	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/Modules/Oqtane.ChatHubs/wasmchatlogo.png" width="420" title="wasmchat">
 </div>
 
-## asp .net core blazor signalR entity framework chat hub template
+## asp .net core blazor signalR entity framework video chat hub template
 
 You can download oqtane.chathubs package 4.0.0 <a href="https://www.nuget.org/packages/Oqtane.ChatHubs/">here</a>. Then follow the instructions below.
 

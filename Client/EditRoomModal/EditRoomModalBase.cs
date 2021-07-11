@@ -101,8 +101,7 @@ namespace Oqtane.ChatHubs
                 CreatorId = ChatHubService.ConnectedUser.UserId,
             };
 
-            // TODO: add room via chathub
-            room = await this.ChatHubService.AddChatHubRoomAsync(room);
+            room = await this.ChatHubService.CreateRoom(room);
             await this.CloseModal();
             this.BlazorAlertsService.NewBlazorAlert("Successfully created room.", "[Javascript Application]", PositionType.Fixed);
             StateHasChanged();
@@ -151,8 +150,7 @@ namespace Oqtane.ChatHubs
                     room.BackgroundColor = this.backgroundcolor;
                     room.Type = this.type;
 
-                    // TODO: update room via chathub
-                    await this.ChatHubService.UpdateChatHubRoomAsync(room);
+                    await this.ChatHubService.UpdateRoom(room);
                     await this.CloseModal();
                     this.BlazorAlertsService.NewBlazorAlert("Successfully edited room.", "[Javascript Application]", PositionType.Fixed);
                 }

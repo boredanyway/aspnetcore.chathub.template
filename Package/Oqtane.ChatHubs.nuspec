@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Oqtane.ChatHubs</id>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
     <authors>ben wasm</authors>
     <owners>ben wasm</owners>
     <title>ChatHubs</title>
@@ -14,7 +14,7 @@
     <iconUrl>https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/Modules/Oqtane.ChatHubs/wasmchatlogo.png</iconUrl>
     <tags>oqtane chathubs chat video stream module</tags>
     <releaseNotes></releaseNotes>
-    <summary></summary>
+    <summary>asp net core signalr entity framework oqtane base video chat module</summary>
     <dependencies>
 		
         <dependency id="Oqtane.Framework" version="2.0.0" />

@@ -8,12 +8,13 @@ You can download oqtane package <a href="https://www.nuget.org/packages/Oqtane.C
 
 #### Getting Started For Oqtane ChatHub Module Dev
 
-- [x] Get familiar with the [Oqtane Framework](https://github.com/oqtane/oqtane.framework).
+- [x] Check out the [Oqtane Blog Module](https://github.com/oqtane/oqtane.blogs).
+- [x] Check out the [Oqtane Framework](https://github.com/oqtane/oqtane.framework).
 - [x] Clone the Oqtane Github Repository in Visual Studio Team Explorer.
-- [x] Clone the Oqtane ChatHub Module in VS Team Explorer and build in debug and release mode.
+- [x] Clone the Oqtane ChatHubs Module in VS Team Explorer and build in debug and release mode.
 - [ ] get it work somehow good luck anyways
 
-#### Optionally edit Default.razor under oqtane client themes
+#### Optional edit Default.razor under oqtane client oqtane theme and uncomment the bootstrap cyborg css or create your own bootstrap css
 ```HTML
 new Resource { ResourceType = ResourceType.Stylesheet, Url = "https://wasmchat.com/Modules/Oqtane.ChatHubs/chat-hub-generated-bootstrap.min.css", CrossOrigin = "anonymous" },
 ```
@@ -30,7 +31,7 @@ new Resource { ResourceType = ResourceType.Stylesheet, Url = "https://wasmchat.c
 <script src="/Modules/Oqtane.ChatHubs/chat-hub-js-interop.js"></script>
 ```
 
-#### To run locally and debug add this to oqtane.server.csproj
+#### Add this to oqtane.server.csproj
 ```C#  
 <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.4" />
 <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.4" />
@@ -39,7 +40,7 @@ new Resource { ResourceType = ResourceType.Stylesheet, Url = "https://wasmchat.c
 <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
 ```
 
-#### To run locally and debug add this to oqtane.client.csproj
+#### And add this to oqtane.client.csproj
 ```C#  
 <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
 <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.4" />

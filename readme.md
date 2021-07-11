@@ -4,7 +4,7 @@
 
 ## asp .net core blazor signalR entity framework chat hub template
 
-You can download oqtane package <a href="https://www.nuget.org/packages/Oqtane.ChatHubs/">here</a>. Then follow the instructions below.
+You can download oqtane.chathubs package 4.0.0 <a href="https://www.nuget.org/packages/Oqtane.ChatHubs/">here</a>. Then follow the instructions below.
 
 #### Getting Started For Oqtane ChatHub Module Dev
 
@@ -16,10 +16,10 @@ You can download oqtane package <a href="https://www.nuget.org/packages/Oqtane.C
 
 #### Optional edit Default.razor under oqtane client oqtane theme and uncomment the bootstrap cyborg css or create your own bootstrap css
 ```HTML
-new Resource 
-{ ResourceType = ResourceType.Stylesheet, 
-Url = "https://wasmchat.com/Modules/Oqtane.ChatHubs/chat-hub-generated-bootstrap.min.css", 
-CrossOrigin = "anonymous" },
+new Resource { 
+	ResourceType = ResourceType.Stylesheet, 
+	Url = "/Modules/Oqtane.ChatHubs/chat-hub-generated-bootstrap.min.css", 
+	CrossOrigin = "anonymous" },
 ```
 
 #### Edit _Host.cshtml and paste at the end of body

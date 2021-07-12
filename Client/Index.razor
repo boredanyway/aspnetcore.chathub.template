@@ -234,15 +234,23 @@
 
                                             @if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
                                             {
-                                                <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(connection => room.Cams.Any(cam => cam.ChatHubConnectionId == connection.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)"></BlazorVideoComponent>
+                                                <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(c => room.Cams.Any(cam => cam.ChatHubConnectionId == c.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)"></BlazorVideoComponent>
                                             }
                                             else
                                             {
                                                 if(room.Creator != null)
                                                 {
-                                                    foreach (var connection in room.Creator?.Connections)
+                                                    foreach (var connection in room.Creator.Connections)
                                                     {
-                                                        <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@connection.ConnectionId" Type="@BlazorVideoType.RemoteLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(creatorConnection => creatorConnection.Cams.Any(cam => cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)"></BlazorVideoComponent>
+                                                        BlazorVideoStatusType status = BlazorVideoStatusType.Offline;
+                                                        var bCams = room.Creator.Connections.Where(c => c.Cams.Any(cam => cam.Status == ChatHubCamStatus.Broadcasting.ToString())).ToList();
+
+                                                        if(bCams.Any())
+                                                        {
+                                                            status = BlazorVideoStatusType.Live;
+                                                        }
+
+                                                        <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@connection.ConnectionId" Type="@BlazorVideoType.RemoteLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@status"></BlazorVideoComponent>
                                                     }
                                                 }
                                             }

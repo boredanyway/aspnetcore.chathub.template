@@ -638,13 +638,22 @@ namespace Oqtane.ChatHubs.Hubs
         [AllowAnonymous]
         public async Task StopCam(int roomId)
         {
+            ChatHubUser user = await this.GetChatHubUserAsync();
+            var connectionsIds = this.chatHubService.GetAllExceptConnectionIds(user);
+
             ChatHubConnection connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
             ChatHubCam cam = this.chatHubRepository.GetChatHubCam(roomId, connection.Id);
             if(cam != null)
             {
                 cam.Status = ChatHubCamStatus.Inactive.ToString();
                 this.chatHubRepository.UpdateChatHubCam(cam);
-            }            
+            }
+
+            var room = this.chatHubRepository.GetChatHubRoom(roomId);
+            var creator = await this.chatHubRepository.GetUserByIdAsync(room.CreatorId);
+            ChatHubUser creatorClientModel = this.chatHubService.CreateChatHubUserClientModel(creator);
+
+            await Clients.GroupExcept(roomId.ToString(), connectionsIds).SendAsync("UpdateRoomCreator", creatorClientModel);
         }
 
         [AllowAnonymous]

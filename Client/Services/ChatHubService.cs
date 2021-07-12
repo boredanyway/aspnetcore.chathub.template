@@ -81,6 +81,7 @@ namespace Oqtane.ChatHubs.Services
         public event Action<ChatHubCam, int> OnAddChatHubCamEvent;
         public event Action<ChatHubCam, int> OnRemoveChatHubCamEvent;
         public event Action<string, string, string, ChatHubUser> OnDownloadBytesEvent;
+        public event Action<int, ChatHubUser> UpdateRoomCreator;
         public event EventHandler<int> OnClearHistoryEvent;
         public event EventHandler<ChatHubUser> OnDisconnectEvent;
 
@@ -124,6 +125,7 @@ namespace Oqtane.ChatHubs.Services
             this.OnAddChatHubCamEvent += OnAddChatHubCamExecute;
             this.OnRemoveChatHubCamEvent += OnRemoveChatHubCamExecute;
             this.OnDownloadBytesEvent += async (string dataURI, string id, string connectionId, ChatHubUser creator) => await OnDownloadBytesExecuteAsync(dataURI, id, connectionId, creator);
+            this.UpdateRoomCreator += OnUpdateRoomCreator;
             this.OnRemoveIgnoredByUserEvent += OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent += OnClearHistoryExecute;
             this.OnDisconnectEvent += OnDisconnectExecute;
@@ -201,6 +203,7 @@ namespace Oqtane.ChatHubs.Services
             this.Connection.On("AddIgnoredByUser", (ChatHubUser ignoredUser) => OnAddIgnoredByUserEvent(this, ignoredUser));
             this.Connection.On("RemoveIgnoredByUser", (ChatHubUser ignoredUser) => OnRemoveIgnoredByUserEvent(this, ignoredUser));
             this.Connection.On("DownloadBytes", (string dataURI, string id, string connectionId, ChatHubUser creator) => OnDownloadBytesEvent(dataURI, id, connectionId, creator));
+            this.Connection.On("UpdateRoomCreator", (int roomId, ChatHubUser user) => UpdateRoomCreator(roomId, user));
             this.Connection.On("AddModerator", (ChatHubModerator moderator, int roomId) => OnAddModeratorEvent(moderator, roomId));
             this.Connection.On("RemoveModerator", (ChatHubModerator moderator, int roomId) => OnRemoveModeratorEvent(moderator, roomId));
             this.Connection.On("AddWhitelistUser", (ChatHubWhitelistUser whitelistUser, int roomId) => OnAddWhitelistUserEvent(whitelistUser,roomId));
@@ -267,6 +270,14 @@ namespace Oqtane.ChatHubs.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+        }
+        public void OnUpdateRoomCreator(int roomId, ChatHubUser creator)
+        {
+            var room = this.Rooms.FirstOrDefault(item => item.Id == roomId);
+            if(room != null)
+            {
+                room.Creator = creator;
             }
         }
 

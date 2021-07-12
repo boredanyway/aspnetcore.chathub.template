@@ -119,12 +119,16 @@ namespace Oqtane.ChatHubs.Services
         }
         public ChatHubConnection CreateChatHubConnectionClientModel(ChatHubConnection connection)
         {
+            var cams = this.chatHubRepository.GetChatHubCams(connection).ToList();
+            cams = cams != null ? cams.Select(cam => this.CreateChatHubCamClientModel(cam)).ToList() : null;
+
             return new ChatHubConnection()
             {
                 ChatHubUserId = connection.ChatHubUserId,
                 ConnectionId = connection.ConnectionId,
                 Status = connection.Status,
                 User = connection.User,
+                Cams = cams,
                 CreatedOn = connection.CreatedOn,
                 CreatedBy = connection.CreatedBy,
                 ModifiedOn = connection.ModifiedOn,

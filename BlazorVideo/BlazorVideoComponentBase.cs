@@ -13,6 +13,7 @@ namespace BlazorVideo
         [Parameter] public string Name { get; set; }
         [Parameter] public BlazorVideoType Type { get; set; }
         [Parameter] public string BackgroundColor { get; set; }
+        [Parameter] public BlazorVideoStatusType Status { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

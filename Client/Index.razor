@@ -234,18 +234,16 @@
 
                                             @if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
                                             {
-                                                <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title"></BlazorVideoComponent>
+                                                <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(connection => room.Cams.Any(cam => cam.ChatHubConnectionId == connection.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)"></BlazorVideoComponent>
                                             }
                                             else
                                             {
-                                                if (room.Creator != null)
+                                                if(room.Creator != null)
                                                 {
-
                                                     foreach (var connection in room.Creator?.Connections)
                                                     {
-                                                        <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@connection.ConnectionId" Type="@BlazorVideoType.RemoteLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title"></BlazorVideoComponent>
+                                                        <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@connection.ConnectionId" Type="@BlazorVideoType.RemoteLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(creatorConnection => creatorConnection.Cams.Any(cam => cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)"></BlazorVideoComponent>
                                                     }
-
                                                 }
                                             }
 
@@ -796,25 +794,25 @@
 
                                 @if (ChatHubService.IgnoredUsers == null || !ChatHubService.IgnoredUsers.Any())
                                 {
-                                <div class="alert alert-info"><small>No one found yet</small></div>
+                                    <div class="alert alert-info"><small>No one found yet</small></div>
                                 }
                                 else
                                 {
-                                <table class="table table-sm">
-                                    <tbody>
-                                        @foreach (var ignoredUser in ChatHubService.IgnoredUsers)
+                                    <table class="table table-sm">
+                                        <tbody>
+                                            @foreach (var ignoredUser in ChatHubService.IgnoredUsers)
                                             {
-                                        <tr>
-                                            <td>@ignoredUser.DisplayName</td>
-                                            <td>
-                                                <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.UnignoreUser_Clicked(ignoredUser.Username)">
-                                                    <span class="oi oi-x"></span>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                                <tr>
+                                                    <td>@ignoredUser.DisplayName</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.UnignoreUser_Clicked(ignoredUser.Username)">
+                                                            <span class="oi oi-x"></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
                                             }
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
                                 }
 
                             </div>
@@ -829,13 +827,13 @@
 
                                 @if (ChatHubService.IgnoredByUsers == null || !ChatHubService.IgnoredByUsers.Any())
                                 {
-                                <div class="alert alert-info"><small>No one found yet</small></div>
+                                    <div class="alert alert-info"><small>No one found yet</small></div>
                                 }
                                 else
                                 {
-                                @foreach (var ignoredByUser in ChatHubService.IgnoredByUsers)
+                                    @foreach (var ignoredByUser in ChatHubService.IgnoredByUsers)
                                     {
-                                <div>@ignoredByUser.DisplayName</div>
+                                        <div>@ignoredByUser.DisplayName</div>
 
                                     }
                                 }
@@ -853,24 +851,24 @@
                                 <div>
                                     @foreach (var item in ChatHubService.Invitations)
                                     {
-                                    <div class="d-flex">
-                                        <div class="flex-fill">
-                                            <button type="button" @onclick="@(async () => await FollowInvitation_Clicked(item.Guid, item.RoomId))" class="btn btn-sm btn-link">@item.Hostname</button>
+                                        <div class="d-flex">
+                                            <div class="flex-fill">
+                                                <button type="button" @onclick="@(async () => await FollowInvitation_Clicked(item.Guid, item.RoomId))" class="btn btn-sm btn-link">@item.Hostname</button>
+                                            </div>
+                                            <div class="flex-fill">
+                                                <button type="button" @onclick="@(() => RemoveInvitation_Clicked(item.Guid))" class="btn btn-sm btn-danger">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="flex-fill">
-                                            <button type="button" @onclick="@(() => RemoveInvitation_Clicked(item.Guid))" class="btn btn-sm btn-danger">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    </div>
                                     }
                                 </div>
 
                                 @if (!ChatHubService.Invitations.Any())
                                 {
-                                <div class="alert alert-warning" role="alert">
-                                    No invitations found yet.
-                                </div>
+                                    <div class="alert alert-warning" role="alert">
+                                        No invitations found yet.
+                                    </div>
                                 }
 
                             </div>

@@ -277,6 +277,53 @@ namespace Oqtane.ChatHubs.Hubs
         }
 
         [AllowAnonymous]
+        public async Task<ChatHubRoom> GetRoom(int roomId)
+        {
+            try
+            {
+                ChatHubRoom chatHubRoom = this.chatHubRepository.GetChatHubRoom(roomId);
+                ChatHubRoom chatHubRoomClientModel = await this.chatHubService.CreateChatHubRoomClientModelAsync(chatHubRoom);
+
+                return chatHubRoomClientModel;
+            }
+            catch
+            {
+                throw new HubException("Failed get room.");
+            }
+        }
+        [AllowAnonymous]
+        public async Task<List<ChatHubRoom>> GetRoomsByModuleId()
+        {
+            try
+            {
+                int moduleId = Convert.ToInt32(Context.GetHttpContext().Request.Headers["moduleid"]);
+                List<ChatHubRoom> chatHubRooms = new List<ChatHubRoom>();
+                List<ChatHubRoom> rooms = new List<ChatHubRoom>();
+                rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(moduleId).Public().ToList());
+                rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(moduleId).Private().ToList());
+
+                if (Context.User.Identity.IsAuthenticated)
+                {
+                    rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(moduleId).Protected().ToList());
+                }
+
+                if (rooms != null && rooms.Any())
+                {
+                    foreach (var room in rooms)
+                    {
+                        var item = await this.chatHubService.CreateChatHubRoomClientModelAsync(room);
+                        chatHubRooms.Add(item);
+                    }
+                }
+
+                return chatHubRooms;
+            }
+            catch
+            {
+                throw new HubException("Failed get rooms by module.");
+            }
+        }
+        [AllowAnonymous]
         public async Task<ChatHubRoom> CreateRoom(ChatHubRoom room)
         {
             ChatHubUser user = await this.GetChatHubUserAsync();

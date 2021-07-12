@@ -270,6 +270,34 @@ namespace Oqtane.ChatHubs.Services
             }
         }
 
+        public async Task<ChatHubRoom> GetRoom(int roomId, int moduleId)
+        {
+            ChatHubRoom gotRoom = null;
+            await this.Connection.InvokeAsync<ChatHubRoom>("GetRoom", roomId).ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                    gotRoom = task.Result;
+                }
+            });
+
+            return gotRoom;
+        }
+        public async Task<List<ChatHubRoom>> GetRoomsByModuleId(int moduleId)
+        {
+            List<ChatHubRoom> rooms = new List<ChatHubRoom>();
+            await this.Connection.InvokeAsync<List<ChatHubRoom>>("GetRoomsByModuleId").ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                    rooms = task.Result;
+                }
+            });
+
+            return rooms;
+        }
         public async Task<ChatHubRoom> CreateRoom(ChatHubRoom room)
         {
             ChatHubRoom createdRoom = null;
@@ -359,7 +387,7 @@ namespace Oqtane.ChatHubs.Services
                     this.RunUpdateUI();
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 //this.HandleException(ex);
             }
@@ -573,7 +601,7 @@ namespace Oqtane.ChatHubs.Services
         }
         private async void OnRemovedChathubWaitingRoomItemExecute(object sender, ChatHubWaitingRoomItem e)
         {
-            var room = await this.GetChatHubRoomAsync(e.RoomId, this.ModuleId);
+            var room = await this.GetRoom(e.RoomId, this.ModuleId);
             this.BlazorAlertsService.NewBlazorAlert($"You have been granted access to the room named {room.Title}. Do you like to enter??", "Javascript Application", PositionType.Fixed, true, e.RoomId.ToString());
         }
         private void OnAddIngoredUserExexute(object sender, ChatHubUser user)

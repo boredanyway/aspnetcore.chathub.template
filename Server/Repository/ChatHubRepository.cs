@@ -373,6 +373,18 @@ namespace Oqtane.ChatHubs.Repository
             }
         }
 
+        public IQueryable<ChatHubCam> GetChatHubCams(ChatHubConnection ChatHubConnection)
+        {
+            try
+            {
+                return db.ChatHubCam.Where(item => item.ChatHubConnectionId == ChatHubConnection.Id);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         #endregion
 
         #region ADD

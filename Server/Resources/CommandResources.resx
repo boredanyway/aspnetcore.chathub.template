@@ -127,7 +127,7 @@
     <value>clear;recycle;free;</value>
   </data>
   <data name="commands" xml:space="preserve">
-    <value>commands;list-commands;</value>
+    <value>commands;list-commands;help;</value>
   </data>
   <data name="disconnect" xml:space="preserve">
     <value>disconnect;exit;shutdown;</value>

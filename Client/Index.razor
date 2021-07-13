@@ -438,7 +438,7 @@
 
                                                             <div class="input-group">
 
-                                                                <input type="text" class="form-control" @bind-value="@room.MessageInput" @onkeyup="async (e) => await KeyDown(e, room)" placeholder="Type your message here" />
+                                                                <input type="text" class="form-control" @bind-value="@room.MessageInput" @onkeyup="async (e) => await KeyDown(e, room)" placeholder="Send your msg here or type /help for commands" />
 
                                                                 <button type="button" class="btn btn-primary mr-0 mr-sm-4" @onclick="async () => await SendMessage_Clicked(room.MessageInput, room)"><span class="oi oi-envelope-open"></span></button>
                                                                 <button type="button" class="btn btn-info d-none d-sm-inline-block" @onclick="() => ChatHubService.ClearHistory(room.Id)"><span class="oi oi-trash"></span></button>

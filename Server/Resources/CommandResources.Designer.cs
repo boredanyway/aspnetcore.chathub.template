@@ -88,7 +88,7 @@ namespace Oqtane.ChatHubs.Server.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to commands;list-commands;.
+        ///   Looks up a localized string similar to commands;list-commands;help;.
         /// </summary>
         public static string commands {
             get {

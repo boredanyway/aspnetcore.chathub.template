@@ -243,9 +243,9 @@
                                                     foreach (var connection in room.Creator.Connections)
                                                     {
                                                         BlazorVideoStatusType status = BlazorVideoStatusType.Offline;
-                                                        var bCams = room.Creator.Connections.Where(c => c.Cams.Any(cam => cam.Status == ChatHubCamStatus.Broadcasting.ToString())).ToList();
+                                                        var broadcastingConnections = room.Creator.Connections.Where(c => c.Cams.Any(cam => cam.Status == ChatHubCamStatus.Broadcasting.ToString())).ToList();
 
-                                                        if(bCams.Any())
+                                                        if(broadcastingConnections.Any(item => item.ConnectionId == connection.ConnectionId))
                                                         {
                                                             status = BlazorVideoStatusType.Live;
                                                         }

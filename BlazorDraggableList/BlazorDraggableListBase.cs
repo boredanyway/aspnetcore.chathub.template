@@ -13,6 +13,7 @@ namespace BlazorDraggableList
         [Parameter] public IList<TItemGeneric> Items { get; set; }
         [Parameter] public string Id { get; set; }
         [Parameter] public string Class { get; set; }
+        [Parameter] public BlazorDraggableListOrientationType Orientation { get; set; }
         [Parameter] public RenderFragment<TItemGeneric> BlazorDraggableListItem { get; set; }
 
         protected override async Task OnInitializedAsync()

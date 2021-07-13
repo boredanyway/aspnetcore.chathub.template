@@ -277,116 +277,13 @@ namespace Oqtane.ChatHubs.Hubs
         }
 
         [AllowAnonymous]
-        public async Task<ChatHubRoom> GetRoom(int roomId)
-        {
-            try
-            {
-                ChatHubRoom chatHubRoom = this.chatHubRepository.GetChatHubRoom(roomId);
-                ChatHubRoom chatHubRoomClientModel = await this.chatHubService.CreateChatHubRoomClientModelAsync(chatHubRoom);
-
-                return chatHubRoomClientModel;
-            }
-            catch
-            {
-                throw new HubException("Failed get room.");
-            }
-        }
-        [AllowAnonymous]
-        public async Task<List<ChatHubRoom>> GetRoomsByModuleId()
-        {
-            try
-            {
-                int moduleId = Convert.ToInt32(Context.GetHttpContext().Request.Headers["moduleid"]);
-                List<ChatHubRoom> chatHubRooms = new List<ChatHubRoom>();
-                List<ChatHubRoom> rooms = new List<ChatHubRoom>();
-                rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(moduleId).Public().ToList());
-                rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(moduleId).Private().ToList());
-
-                if (Context.User.Identity.IsAuthenticated)
-                {
-                    rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(moduleId).Protected().ToList());
-                }
-
-                if (rooms != null && rooms.Any())
-                {
-                    foreach (var room in rooms)
-                    {
-                        var item = await this.chatHubService.CreateChatHubRoomClientModelAsync(room);
-                        chatHubRooms.Add(item);
-                    }
-                }
-
-                return chatHubRooms;
-            }
-            catch
-            {
-                throw new HubException("Failed get rooms by module.");
-            }
-        }
-        [AllowAnonymous]
-        public async Task<ChatHubRoom> CreateRoom(ChatHubRoom room)
-        {
-            ChatHubUser user = await this.GetChatHubUserAsync();
-
-            try
-            {
-                if(room.CreatorId == user.UserId)
-                {
-                    var createdRoom = chatHubRepository.AddChatHubRoom(room);
-                    return await this.chatHubService.CreateChatHubRoomClientModelAsync(createdRoom);
-                }
-
-                return null;
-            }
-            catch
-            {
-                throw new HubException("Failed to create room.");
-            }
-        }
-        [AllowAnonymous]
-        public async Task<ChatHubRoom> UpdateRoom(ChatHubRoom room)
-        {
-            ChatHubUser user = await this.GetChatHubUserAsync();
-
-            try
-            {
-                if(room.CreatorId == user.UserId)
-                {
-                    var updatedRoom = chatHubRepository.UpdateChatHubRoom(room);
-                    return await this.chatHubService.CreateChatHubRoomClientModelAsync(updatedRoom);
-                }
-
-                return null;
-            }
-            catch
-            {
-                throw new HubException("Failed to update room.");
-            }
-        }
-        [AllowAnonymous]
-        public async Task DeleteRoom(int roomId)
-        {
-            ChatHubUser user = await this.GetChatHubUserAsync();
-            ChatHubRoom room = chatHubRepository.GetChatHubRoom(roomId);
-
-            try
-            {
-                if(room.CreatorId == user.UserId)
-                {
-                    chatHubRepository.DeleteChatHubRoom(room.Id);
-                }                
-            }
-            catch
-            {
-                throw new HubException("Failed to delete room.");
-            }
-        }
-
-        [AllowAnonymous]
         public async Task EnterChatRoom(int roomId)
         {
             ChatHubUser user = await this.GetChatHubUserAsync();
             ChatHubRoom room = chatHubRepository.GetChatHubRoom(roomId);
+
+            if (room == null)
+                throw new HubException("This room does not exist anymore.");
 
             if(room.Status == ChatHubRoomStatus.Archived.ToString())
             {
@@ -476,6 +373,9 @@ namespace Oqtane.ChatHubs.Hubs
             ChatHubUser user = await this.GetChatHubUserAsync();
             ChatHubRoom room = chatHubRepository.GetChatHubRoom(roomId);
 
+            if (room == null)
+                throw new HubException("This room does not exist anymore.");
+
             if (!this.chatHubRepository.GetChatHubUsersByRoom(room).Any(item => item.UserId == user.UserId))
             {
                 throw new HubException("User already left room.");
@@ -535,6 +435,10 @@ namespace Oqtane.ChatHubs.Hubs
         {
             string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
+            ChatHubRoom room = chatHubRepository.GetChatHubRoom(roomId);
+
+            if (room == null)
+                throw new HubException("This room does not exist anymore.");
 
             if (await ExecuteCommandManager(user, message, roomId, Convert.ToInt32(moduleId)))
             {
@@ -626,6 +530,9 @@ namespace Oqtane.ChatHubs.Hubs
             ChatHubUser user = await this.GetChatHubUserAsync();
             ChatHubRoom room = chatHubRepository.GetChatHubRoom(roomId);
 
+            if (room == null)
+                throw new HubException("This room does not exist anymore.");
+
             ChatHubConnection connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
             ChatHubCam cam = this.chatHubRepository.GetChatHubCam(roomId, connection.Id);
             if(cam != null)
@@ -634,11 +541,15 @@ namespace Oqtane.ChatHubs.Hubs
                 this.chatHubRepository.UpdateChatHubCam(cam);
             }
         }
-
         [AllowAnonymous]
         public async Task StopCam(int roomId)
         {
             ChatHubUser user = await this.GetChatHubUserAsync();
+            ChatHubRoom room = this.chatHubRepository.GetChatHubRoom(roomId);
+
+            if (room == null)
+                throw new HubException("This room does not exist anymore.");
+
             var connectionsIds = this.chatHubService.GetAllExceptConnectionIds(user);
 
             ChatHubConnection connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
@@ -648,8 +559,7 @@ namespace Oqtane.ChatHubs.Hubs
                 cam.Status = ChatHubCamStatus.Inactive.ToString();
                 this.chatHubRepository.UpdateChatHubCam(cam);
             }
-
-            var room = this.chatHubRepository.GetChatHubRoom(roomId);
+            
             var creator = await this.chatHubRepository.GetUserByIdAsync(room.CreatorId);
             ChatHubUser creatorClientModel = this.chatHubService.CreateChatHubUserClientModel(creator);
 
@@ -993,7 +903,113 @@ namespace Oqtane.ChatHubs.Hubs
 
             await Clients.Clients(targetUser.Connections.Active().Select(item => item.ConnectionId)).SendAsync("RemovedWaitingRoomItem", waitingRoomItem);            
         }
-        
+
+        [AllowAnonymous]
+        public async Task<ChatHubRoom> GetRoom(int roomId)
+        {
+            try
+            {
+                ChatHubRoom chatHubRoom = this.chatHubRepository.GetChatHubRoom(roomId);
+                ChatHubRoom chatHubRoomClientModel = await this.chatHubService.CreateChatHubRoomClientModelAsync(chatHubRoom);
+
+                return chatHubRoomClientModel;
+            }
+            catch
+            {
+                throw new HubException("Failed get room.");
+            }
+        }
+        [AllowAnonymous]
+        public async Task<List<ChatHubRoom>> GetRoomsByModuleId()
+        {
+            try
+            {
+                int moduleId = Convert.ToInt32(Context.GetHttpContext().Request.Headers["moduleid"]);
+                List<ChatHubRoom> chatHubRooms = new List<ChatHubRoom>();
+                List<ChatHubRoom> rooms = new List<ChatHubRoom>();
+                rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(moduleId).Public().ToList());
+                rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(moduleId).Private().ToList());
+
+                if (Context.User.Identity.IsAuthenticated)
+                {
+                    rooms.AddRange(this.chatHubRepository.GetChatHubRooms().FilterByModuleId(moduleId).Protected().ToList());
+                }
+
+                if (rooms != null && rooms.Any())
+                {
+                    foreach (var room in rooms)
+                    {
+                        var item = await this.chatHubService.CreateChatHubRoomClientModelAsync(room);
+                        chatHubRooms.Add(item);
+                    }
+                }
+
+                return chatHubRooms;
+            }
+            catch
+            {
+                throw new HubException("Failed get rooms by module.");
+            }
+        }
+        [AllowAnonymous]
+        public async Task<ChatHubRoom> CreateRoom(ChatHubRoom room)
+        {
+            ChatHubUser user = await this.GetChatHubUserAsync();
+
+            try
+            {
+                if (room.CreatorId == user.UserId)
+                {
+                    var createdRoom = chatHubRepository.AddChatHubRoom(room);
+                    return await this.chatHubService.CreateChatHubRoomClientModelAsync(createdRoom);
+                }
+
+                return null;
+            }
+            catch
+            {
+                throw new HubException("Failed to create room.");
+            }
+        }
+        [AllowAnonymous]
+        public async Task<ChatHubRoom> UpdateRoom(ChatHubRoom room)
+        {
+            ChatHubUser user = await this.GetChatHubUserAsync();
+
+            try
+            {
+                if (room.CreatorId == user.UserId)
+                {
+                    var updatedRoom = chatHubRepository.UpdateChatHubRoom(room);
+                    return await this.chatHubService.CreateChatHubRoomClientModelAsync(updatedRoom);
+                }
+
+                return null;
+            }
+            catch
+            {
+                throw new HubException("Failed to update room.");
+            }
+        }
+        [AllowAnonymous]
+        public async Task DeleteRoom(int roomId)
+        {
+            ChatHubUser user = await this.GetChatHubUserAsync();
+            ChatHubRoom room = chatHubRepository.GetChatHubRoom(roomId);
+
+            try
+            {
+                if (room.CreatorId == user.UserId)
+                {
+                    chatHubRepository.DeleteChatHubRoom(room.Id);
+                }
+            }
+            catch
+            {
+                throw new HubException("Failed to delete room.");
+            }
+        }
+
         private string CreateUsername(string guestname)
         {
             string base64Guid = Convert.ToBase64String(Guid.NewGuid().ToByteArray());

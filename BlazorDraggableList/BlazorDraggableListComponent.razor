@@ -36,7 +36,7 @@
 
         <div class="position-relative">
 
-            <div id="blazor-draggable-list-item-@temp" class="draggable-item" draggable="true">
+            <div id="blazor-draggable-list-item-@temp" class="draggable-item @(Orientation == BlazorDraggableListOrientationType.Horizontal ? "d-flex" : "")" draggable="true">
                 @BlazorDraggableListItem(Items[temp])
             </div>
 

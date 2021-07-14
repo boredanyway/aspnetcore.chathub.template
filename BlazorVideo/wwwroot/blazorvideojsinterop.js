@@ -140,7 +140,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                         option.value = deviceInfo.deviceId;
                         if (deviceInfo.kind === "audioinput")
                         {
-                            option.text = deviceInfo.label || "microphone " + (__selflocallivestream.microselect.length + 1);
+                            option.text = deviceInfo.label || "Microphone " + (__selflocallivestream.microselect.length + 1);
                             __selflocallivestream.microselect.appendChild(option);
                         }
                         else if (deviceInfo.kind === 'audiooutput') {
@@ -149,7 +149,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                         }
                         else if (deviceInfo.kind === "videoinput")
                         {
-                            option.text = deviceInfo.label || "camera " + (__selflocallivestream.videoselect.length + 1);
+                            option.text = deviceInfo.label || "Camera " + (__selflocallivestream.videoselect.length + 1);
                             __selflocallivestream.videoselect.appendChild(option);
                         }                        
                         else {
@@ -162,7 +162,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
 
                         var option = document.createElement("option");
                         option.text = "None";
-                        option.value = "0000000000000000000000000000000000000000000000000000000000000000";
+                        option.value = null;
                         element.appendChild(option);
                     });
                 };
@@ -188,7 +188,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                     this.constrains.audio['deviceId'] = { ideal: __selflocallivestream.microselect.value };
                     this.constrains.audio['deviceId'] = { ideal: __selflocallivestream.audioselect.value };
                     this.constrains.video['deviceId'] = { ideal: __selflocallivestream.videoselect.value };
-
+                    
                     window.navigator.mediaDevices
                         .getUserMedia(this.constrains)
                         .then(function (mediastream) {
@@ -492,12 +492,17 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                         reader.onloadend = function (event) {
 
                             var timeDiff = __selfremotelivestream.sourcebuffer.timestampOffset - __selfremotelivestream.video.currentTime;
-                            if (timeDiff > 1) {
-                                __selfremotelivestream.video.currentTime = __selfremotelivestream.sourcebuffer.timestampOffset - 0.42;
+                            if (timeDiff < 1) {
 
                                 if (__selfremotelivestream.video.paused) {
 
-                                    __selfremotelivestream.video.play();
+                                    __selfremotelivestream.video.pause();
+                                    window.setTimeout(function () {
+
+                                        __selfremotelivestream.video.play();
+                                    },
+                                        1240
+                                    );
                                 }
                             }
                             console.log('time diff: ' + timeDiff);

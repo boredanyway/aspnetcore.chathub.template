@@ -9,6 +9,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
             this.locallivestreamelementidprefix = '#local-livestream-element-id-';
             this.remotelivestreamelementidprefix = '#remote-livestream-element-id-';
 
+            this.microsourcelocalid = '#local-livestream-micro-source-';
             this.audiosourcelocalid = '#local-livestream-audio-source-';
             this.videosourcelocalid = '#local-livestream-video-source-';
 
@@ -79,6 +80,10 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                     return document.querySelector(__selflocallivestream.videoelementid);
                 };
 
+                this.microsourcelocalid = __selfblazorvideomap.microsourcelocalid + id + connectionid;
+                this.getmicrosourcelocaldomelement = function () {
+                    return document.querySelector(__selflocallivestream.microsourcelocalid);
+                };
                 this.audiosourcelocalid = __selfblazorvideomap.audiosourcelocalid + id + connectionid;
                 this.getaudiosourcelocaldomelement = function () {
                     return document.querySelector(__selflocallivestream.audiosourcelocalid);
@@ -88,6 +93,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                     return document.querySelector(__selflocallivestream.videosourcelocalid);
                 };
 
+                this.microselect = this.getmicrosourcelocaldomelement();
                 this.audioselect = this.getaudiosourcelocaldomelement();
                 this.videoselect = this.getvideosourcelocaldomelement();
 
@@ -108,6 +114,12 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                 this.currentgotdevices = null;
                 this.gotDevices = function (mediadeviceinfos) {
 
+                    var microselectchild = __selflocallivestream.microselect.firstElementChild;
+                    while (microselectchild) {
+                        __selflocallivestream.microselect.removeChild(microselectchild);
+                        microselectchild = __selflocallivestream.microselect.firstElementChild;
+                    }
+
                     var audioselectchild = __selflocallivestream.audioselect.firstElementChild;
                     while (audioselectchild) {
                         __selflocallivestream.audioselect.removeChild(audioselectchild);
@@ -119,23 +131,40 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                         __selflocallivestream.videoselect.removeChild(videoselectchild);
                         videoselectchild = __selflocallivestream.videoselect.firstElementChild;
                     }
-
+                    
                     for (var i = 0; i < mediadeviceinfos.length; i++) {
 
                         var temp = i;
                         const deviceInfo = mediadeviceinfos[temp];
                         const option = document.createElement("option");
                         option.value = deviceInfo.deviceId;
-                        if (deviceInfo.kind === "audioinput") {
-                            option.text = deviceInfo.label || "microphone " + (__selflocallivestream.audioselect.length + 1);
+                        if (deviceInfo.kind === "audioinput")
+                        {
+                            option.text = deviceInfo.label || "microphone " + (__selflocallivestream.microselect.length + 1);
+                            __selflocallivestream.microselect.appendChild(option);
+                        }
+                        else if (deviceInfo.kind === 'audiooutput') {
+                            option.text = deviceInfo.label || 'Speaker ' + (__selflocallivestream.audioselect.length + 1);
                             __selflocallivestream.audioselect.appendChild(option);
-                        } else if (deviceInfo.kind === "videoinput") {
+                        }
+                        else if (deviceInfo.kind === "videoinput")
+                        {
                             option.text = deviceInfo.label || "camera " + (__selflocallivestream.videoselect.length + 1);
                             __selflocallivestream.videoselect.appendChild(option);
-                        } else {
-                            console.log("Found another kind of device: ", deviceInfo);
+                        }                        
+                        else {
+                            console.log("Found another device: ", deviceInfo);
                         }
                     }
+
+                    var arr = [__selflocallivestream.microselect, __selflocallivestream.audioselect, __selflocallivestream.videoselect];
+                    arr.forEach(function (element, index, array) {
+
+                        var option = document.createElement("option");
+                        option.text = "None";
+                        option.value = "0000000000000000000000000000000000000000000000000000000000000000";
+                        element.appendChild(option);
+                    });
                 };
 
                 this.currentgetstream = null;
@@ -156,6 +185,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                         }
                     };
 
+                    this.constrains.audio['deviceId'] = { ideal: __selflocallivestream.microselect.value };
                     this.constrains.audio['deviceId'] = { ideal: __selflocallivestream.audioselect.value };
                     this.constrains.video['deviceId'] = { ideal: __selflocallivestream.videoselect.value };
 
@@ -166,7 +196,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
 
                             __selflocallivestream.vElement.srcObject = mediastream;
 
-                            __selfgetstream.options = { mimeType: __selfblazorvideomap.videomimetypeobject.mimetype, audioBitsPerSecond: 420000, videoBitsPerSecond: 800000, ignoreMutedMedia: true };
+                            __selfgetstream.options = { mimeType: __selfblazorvideomap.videomimetypeobject.mimetype, audioBitsPerSecond: 100000, videoBitsPerSecond: 240000, ignoreMutedMedia: true };
                             __selfgetstream.recorder = new MediaRecorder(mediastream, __selfgetstream.options);
 
                             __selfgetstream.recorder.start();
@@ -254,6 +284,9 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                     await __selflocallivestream.cancel();
                     __selflocallivestream.initstream();
                 };
+
+                this.microselect.removeEventListener("change", __selflocallivestream.handleonchangeevent);
+                this.microselect.addEventListener("change", __selflocallivestream.handleonchangeevent);
 
                 this.audioselect.removeEventListener("change", __selflocallivestream.handleonchangeevent);
                 this.audioselect.addEventListener("change", __selflocallivestream.handleonchangeevent);
@@ -389,6 +422,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                 var livestream = __selfblazorvideomap.getlivestream(id, connectionid);
                 if (livestream !== undefined && livestream.item instanceof __selfblazorvideomap.locallivestream) {
 
+                    livestream.item.microselect.removeEventListener("change", livestream.item.handleonchangeevent);
                     livestream.item.audioselect.removeEventListener("change", livestream.item.handleonchangeevent);
                     livestream.item.videoselect.removeEventListener("change", livestream.item.handleonchangeevent);
 

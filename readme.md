@@ -4,7 +4,7 @@
 
 ## asp .net core blazor signalR entity framework video chat hub template
 
-You can download oqtane.chathubs package 4.0.0 <a href="https://www.nuget.org/packages/Oqtane.ChatHubs/">here</a>. Then follow the instructions below.
+You can download the latest oqtane.chathubs package 4.0.2 <a href="https://www.nuget.org/packages/Oqtane.ChatHubs/">here</a>. Then follow the instructions below.
 
 #### Getting Started For Oqtane ChatHub Module Dev
 

@@ -69,10 +69,13 @@
                     <video id="local-livestream-element-id-@(Id + ConnectionId)" class="blazor-video-item mb-0 w-100 h-100" controls></video>
 
                     <div class="position-absolute video-item-devices" style="right: 0px; top: 0px;">
-                        <div class="input-group" style="padding: 0.25rem 0.25rem 0.125rem 0.25rem">
+                        <div class="input-group" style="padding: 0.25rem 0.25rem 0.1rem 0.25rem">
+                            <select id="local-livestream-micro-source-@(Id + ConnectionId)" class="custom-select custom-select-sm" style="width: 120px !important;"></select>
+                        </div>
+                        <div class="input-group" style="padding: 0.25rem 0.25rem 0.1rem 0.25rem">
                             <select id="local-livestream-audio-source-@(Id + ConnectionId)" class="custom-select custom-select-sm" style="width: 120px !important;"></select>
                         </div>
-                        <div class="input-group" style="padding: 0.125rem 0.25rem 0.25rem 0.25rem">
+                        <div class="input-group" style="padding: 0.125rem 0.25rem 0.1rem 0.25rem">
                             <select id="local-livestream-video-source-@(Id + ConnectionId)" class="custom-select custom-select-sm" style="width: 120px !important;"></select>
                         </div>
                     </div>

@@ -214,6 +214,14 @@ namespace Oqtane.ChatHubs.Hubs
 
             ChatHubUser chatHubUserClientModel = this.chatHubService.CreateChatHubUserClientModel(user);
             await Clients.Clients(user.Connections.Select(item => item.ConnectionId).ToArray<string>()).SendAsync("OnUpdateConnectedUser", chatHubUserClientModel);
+
+            var exceptConnectionIds = this.chatHubService.GetAllExceptConnectionIds(user);
+            var creatorRooms = await this.chatHubRepository.GetChatHubRoomsByCreator(user.UserId).ToListAsync();
+            foreach (var room in creatorRooms)
+            {
+                await this.UpdateRoomCreator(room, exceptConnectionIds);
+            }
+
             await base.OnConnectedAsync();
         }
 
@@ -224,8 +232,8 @@ namespace Oqtane.ChatHubs.Hubs
             ChatHubUser user = await this.GetChatHubUserAsync();
 
             var exceptConnectionIds = this.chatHubService.GetAllExceptConnectionIds(user);
-            var rooms = chatHubRepository.GetChatHubRoomsByUser(user).Enabled();
-            foreach (var room in await rooms.ToListAsync())
+            var rooms = await chatHubRepository.GetChatHubRoomsByUser(user).Enabled().ToListAsync();
+            foreach (var room in rooms)
             {
                 if (user.Connections.Active().Count() == 1)
                 {
@@ -235,11 +243,6 @@ namespace Oqtane.ChatHubs.Hubs
 
                 await this.SendGroupNotification(string.Format("{0} disconnected from chat with client device {1}.", user.DisplayName, Context.ConnectionId), room.Id, Context.ConnectionId, user, ChatHubMessageType.Connect_Disconnect);
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, room.Id.ToString());
-                
-                if(user.UserId == room.CreatorId)
-                {
-                    await this.UpdateRoomCreator(room, exceptConnectionIds);
-                }
             }
 
             if (!Context.User.HasClaim(ClaimTypes.Role, RoleNames.Registered) && !Context.User.HasClaim(ClaimTypes.Role, RoleNames.Admin) && !Context.User.HasClaim(ClaimTypes.Role, RoleNames.Host))
@@ -258,6 +261,12 @@ namespace Oqtane.ChatHubs.Hubs
 
             ChatHubUser chatHubUserClientModel = this.chatHubService.CreateChatHubUserClientModel(user);
             await Clients.Clients(user.Connections.Select(item => item.ConnectionId)).SendAsync("OnUpdateConnectedUser", chatHubUserClientModel);
+
+            var creatorRooms = await this.chatHubRepository.GetChatHubRoomsByCreator(user.UserId).ToListAsync();
+            foreach(var room in creatorRooms)
+            {
+                await this.UpdateRoomCreator(room, exceptConnectionIds);
+            }
 
             await base.OnDisconnectedAsync(exception);
         }

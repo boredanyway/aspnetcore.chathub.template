@@ -223,6 +223,7 @@ namespace Oqtane.ChatHubs.Hubs
             string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
 
+            var exceptConnectionIds = this.chatHubService.GetAllExceptConnectionIds(user);
             var rooms = chatHubRepository.GetChatHubRoomsByUser(user).Enabled();
             foreach (var room in await rooms.ToListAsync())
             {
@@ -234,6 +235,11 @@ namespace Oqtane.ChatHubs.Hubs
 
                 await this.SendGroupNotification(string.Format("{0} disconnected from chat with client device {1}.", user.DisplayName, Context.ConnectionId), room.Id, Context.ConnectionId, user, ChatHubMessageType.Connect_Disconnect);
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, room.Id.ToString());
+                
+                if(user.UserId == room.CreatorId)
+                {
+                    await this.UpdateRoomCreator(room, exceptConnectionIds);
+                }
             }
 
             if (!Context.User.HasClaim(ClaimTypes.Role, RoleNames.Registered) && !Context.User.HasClaim(ClaimTypes.Role, RoleNames.Admin) && !Context.User.HasClaim(ClaimTypes.Role, RoleNames.Host))
@@ -426,7 +432,7 @@ namespace Oqtane.ChatHubs.Hubs
 
                 ChatHubUser chatHubUserClientModel = this.chatHubService.CreateChatHubUserClientModel(user);
                 await Clients.Group(room.Id.ToString()).SendAsync("RemoveUser", chatHubUserClientModel, room.Id.ToString());
-                await this.SendGroupNotification(string.Format("{0} left chat room with client device {1}.", user.DisplayName, Context.ConnectionId), room.Id, Context.ConnectionId, user, ChatHubMessageType.Enter_Leave);
+                await this.SendGroupNotification(string.Format("{0} left chat room with client device {1}.", user.DisplayName, Context.ConnectionId), room.Id, Context.ConnectionId, user, ChatHubMessageType.Enter_Leave);              
             }
         }
 
@@ -550,8 +556,6 @@ namespace Oqtane.ChatHubs.Hubs
             if (room == null)
                 throw new HubException("This room does not exist anymore.");
 
-            var connectionsIds = this.chatHubService.GetAllExceptConnectionIds(user);
-
             ChatHubConnection connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
             ChatHubCam cam = this.chatHubRepository.GetChatHubCam(roomId, connection.Id);
             if(cam != null)
@@ -559,11 +563,12 @@ namespace Oqtane.ChatHubs.Hubs
                 cam.Status = ChatHubCamStatus.Inactive.ToString();
                 this.chatHubRepository.UpdateChatHubCam(cam);
             }
-            
-            var creator = await this.chatHubRepository.GetUserByIdAsync(room.CreatorId);
-            ChatHubUser creatorClientModel = this.chatHubService.CreateChatHubUserClientModel(creator);
 
-            await Clients.GroupExcept(roomId.ToString(), connectionsIds).SendAsync("UpdateRoomCreator", creatorClientModel);
+            if(user.UserId == room.CreatorId)
+            {
+                var exceptConnectionIds = this.chatHubService.GetAllExceptConnectionIds(user);
+                await this.UpdateRoomCreator(room, exceptConnectionIds);
+            }
         }
 
         [AllowAnonymous]
@@ -1010,6 +1015,12 @@ namespace Oqtane.ChatHubs.Hubs
             }
         }
 
+        public async Task UpdateRoomCreator(ChatHubRoom room, List<string> exceptConnectionIds)
+        {
+            var creator = await this.chatHubRepository.GetUserByIdAsync(room.CreatorId);
+            ChatHubUser creatorClientModel = this.chatHubService.CreateChatHubUserClientModel(creator);
+            await Clients.GroupExcept(room.Id.ToString(), exceptConnectionIds).SendAsync("UpdateRoomCreator", room.Id, creatorClientModel);
+        }
         private string CreateUsername(string guestname)
         {
             string base64Guid = Convert.ToBase64String(Guid.NewGuid().ToByteArray());

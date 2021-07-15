@@ -278,6 +278,7 @@ namespace Oqtane.ChatHubs.Services
             if(room != null)
             {
                 room.Creator = creator;
+                this.RunUpdateUI();
             }
         }
 

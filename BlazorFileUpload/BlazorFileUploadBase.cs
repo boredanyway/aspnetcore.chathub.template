@@ -18,6 +18,8 @@ namespace BlazorFileUpload
         [Parameter] public string InputFileId { get; set; }
         [Parameter] public string DropzoneElementId { get; set; }
 
+        public int maxFiles { get; set; } = 10;
+
         public event EventHandler<Dictionary<Guid, BlazorFileUploadModel>> OnUploadImagesEvent;
         public Dictionary<Guid, BlazorFileUploadModel> FileUploadModels = new Dictionary<Guid, BlazorFileUploadModel>();
 
@@ -38,10 +40,9 @@ namespace BlazorFileUpload
 
         public async Task OnBlazorFileUploadChange(InputFileChangeEventArgs e)
         {
-            var maxFiles = 3;
             var imageFormat = "image/png";
 
-            foreach (var iBrowserFile in e.GetMultipleFiles(maxFiles))
+            foreach (var iBrowserFile in e.GetMultipleFiles(this.maxFiles))
             {
                 var previewImage = await iBrowserFile.RequestImageFileAsync(imageFormat, 100, 100);
                 var bytes = new byte[previewImage.Size];

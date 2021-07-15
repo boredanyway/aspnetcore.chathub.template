@@ -1,5 +1,5 @@
 ﻿<div align="center">
-	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/Modules/Oqtane.ChatHubs/wasmchatlogo.png" width="420" title="wasmchat">
+	<img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/Server/wwwroot/Modules/Oqtane.ChatHubs/wasmchatlogo.png" class="img-fluid" width="420" title="wasmchat">
 </div>
 
 ## asp .net core blazor signalR entity framework video chat hub template

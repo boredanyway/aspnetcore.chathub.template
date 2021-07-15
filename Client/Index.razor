@@ -238,14 +238,23 @@
                                             }
                                             else
                                             {
-                                                if(room.Creator != null)
+                                                if (room.Creator != null)
                                                 {
+                                                    if (!room.Creator.Connections.Any())
+                                                    {
+                                                        <div class="card bg-light" style="width: 240px; height: 180px;">
+                                                            <div class="card-body">
+                                                                <h6 class="card-subtitle mb-2 text-muted">@room.Title</h6>
+                                                                <p class="card-text">No video found from room creator @(room.Creator.Username).</p>
+                                                            </div>
+                                                        </div>
+                                                    }
                                                     foreach (var connection in room.Creator.Connections)
                                                     {
                                                         BlazorVideoStatusType status = BlazorVideoStatusType.Offline;
                                                         var broadcastingConnections = room.Creator.Connections.Where(c => c.Cams.Any(cam => cam.Status == ChatHubCamStatus.Broadcasting.ToString())).ToList();
 
-                                                        if(broadcastingConnections.Any(item => item.ConnectionId == connection.ConnectionId))
+                                                        if (broadcastingConnections.Any(item => item.ConnectionId == connection.ConnectionId))
                                                         {
                                                             status = BlazorVideoStatusType.Live;
                                                         }
@@ -897,7 +906,7 @@
                 <div class="jumbotron jumbotron-fluid bg-white py-1 mt-3 mb-0">
                     <div class="container">
 
-                        <img src="@string.Format("{0}/modules/oqtane.chathubs/wasmchatlogo.png", NavigationManager.BaseUri)" class="img-fluid my-2 mb-sm-5" style="max-width: 420px;" />
+                        <img src="@string.Format("{0}/modules/oqtane.chathubs/wasmchatlogo.png", NavigationManager.BaseUri)" class="img-fluid my-2 mb-sm-5" style="width: 420px;" />
 
                         <h4>Videostream chat rules so far</h4>
                         <ul>

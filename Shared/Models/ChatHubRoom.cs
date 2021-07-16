@@ -32,6 +32,7 @@ namespace Oqtane.ChatHubs.Models
         [NotMapped] public ICollection<ChatHubWaitingRoomItem> WaitingRoomItems { get; set; } = new List<ChatHubWaitingRoomItem>();
         [NotMapped] public virtual ChatHubUser Creator { get; set; }
         [NotMapped] public virtual ICollection<ChatHubCam> Cams { get; set; }
+        [NotMapped] public virtual ICollection<ChatHubViewer> Viewers { get; set; }
 
     }
 }

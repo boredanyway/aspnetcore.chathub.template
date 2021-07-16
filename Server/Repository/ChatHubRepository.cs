@@ -361,28 +361,36 @@ namespace Oqtane.ChatHubs.Repository
                 throw;
             }
         }
-        public IQueryable<ChatHubCam> GetChatHubCams(ChatHubRoom ChatHubRoom)
+        public IQueryable<ChatHubCam> GetChatHubCams(int roomId, int connectonId)
+        {
+            return db.ChatHubCam.Where(cam => cam.ChatHubRoomId == roomId && cam.ChatHubConnectionId == connectonId);
+        }
+        public IQueryable<ChatHubCam> GetChatHubCamsByRoomId(int roomId)
         {
             try
             {
-                return db.ChatHubCam.Where(item => item.ChatHubRoomId == ChatHubRoom.Id);
+                return db.ChatHubCam.Where(item => item.ChatHubRoomId == roomId);
             }
             catch
             {
                 throw;
             }
         }
-
-        public IQueryable<ChatHubCam> GetChatHubCams(ChatHubConnection ChatHubConnection)
+        public IQueryable<ChatHubCam> GetChatHubCamsByConnectionId(int connectionId)
         {
             try
             {
-                return db.ChatHubCam.Where(item => item.ChatHubConnectionId == ChatHubConnection.Id);
+                return db.ChatHubCam.Where(item => item.ChatHubConnectionId == connectionId);
             }
             catch
             {
                 throw;
             }
+        }
+        public IQueryable<ChatHubUser> GetChatHubViewsersByRoomId(int roomId)
+        {
+            var connectionIds = this.GetChatHubCamsByRoomId(roomId).Where(cam => cam.Status == ChatHubCamStatus.Streaming.ToString()).Include(cam => cam.Connection).Select(connection => connection.Id);
+            return this.db.ChatHubUser.Where(user => user.Connections.Where(connection => connection.Status == ChatHubConnectionStatus.Active.ToString()).Any(connection => connectionIds.Contains(connection.Id)));
         }
 
         #endregion

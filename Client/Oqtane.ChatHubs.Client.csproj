@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
-    <Version>4.0.2004-delta1</Version>
+    <Version>4.0.2005-delta1</Version>
     <Authors>ben wasm</Authors>
     <Company>ben wasm</Company>
     <Description>Just another ChatHub Module for the Oqtane Framework</Description>

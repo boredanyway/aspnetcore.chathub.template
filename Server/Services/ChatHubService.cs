@@ -43,8 +43,11 @@ namespace Oqtane.ChatHubs.Services
             IQueryable<ChatHubBlacklistUser> blacklistUsersQuery = this.chatHubRepository.GetChatHubBlacklistUsers(room);
             IList<ChatHubBlacklistUser> blacklistUsersList = await blacklistUsersQuery.ToListAsync();
 
-            IQueryable<ChatHubCam> camsQuery = this.chatHubRepository.GetChatHubCams(room);
+            IQueryable<ChatHubCam> camsQuery = this.chatHubRepository.GetChatHubCamsByRoomId(room.Id);
             IList<ChatHubCam> camsList = await camsQuery.ToListAsync();
+
+            IList<ChatHubUser> roomViewers = await this.chatHubRepository.GetChatHubViewsersByRoomId(room.Id).ToListAsync();
+            IList<ChatHubViewer> viewerList = roomViewers.Select(user => this.CreateChatHubViewerClientModel(user)).ToList();
 
             ChatHubUser creator = await this.chatHubRepository.GetUserByIdAsync(room.CreatorId);
             ChatHubUser creatorClientModel = this.CreateChatHubUserClientModel(creator);
@@ -68,6 +71,7 @@ namespace Oqtane.ChatHubs.Services
                 WhitelistUsers = whitelistUsersList,
                 BlacklistUsers = blacklistUsersList,
                 Cams = camsList,
+                Viewers = viewerList,
                 CreatedOn = room.CreatedOn,
                 CreatedBy = room.CreatedBy,
                 ModifiedBy = room.ModifiedBy,
@@ -119,7 +123,7 @@ namespace Oqtane.ChatHubs.Services
         }
         public ChatHubConnection CreateChatHubConnectionClientModel(ChatHubConnection connection)
         {
-            var cams = this.chatHubRepository.GetChatHubCams(connection).ToList();
+            var cams = this.chatHubRepository.GetChatHubCamsByConnectionId(connection.Id).ToList();
             cams = cams != null ? cams.Select(cam => this.CreateChatHubCamClientModel(cam)).ToList() : null;
 
             return new ChatHubConnection()
@@ -202,6 +206,14 @@ namespace Oqtane.ChatHubs.Services
                 Id = blacklistUser.Id,
                 BlacklistUserDisplayName = blacklistUser.BlacklistUserDisplayName,
                 ChatHubUserId = blacklistUser.ChatHubUserId,
+            };
+        }
+        public ChatHubViewer CreateChatHubViewerClientModel(ChatHubUser user)
+        {
+            return new ChatHubViewer()
+            {
+                UserId = user.UserId,
+                Username = user.Username,
             };
         }
 

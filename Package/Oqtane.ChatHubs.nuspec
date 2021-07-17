@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Oqtane.ChatHubs</id>
-    <version>4.0.2005-delta1</version>
+    <version>4.0.2006-delta1</version>
     <authors>ben wasm</authors>
     <owners>ben wasm</owners>
     <title>ChatHubs</title>

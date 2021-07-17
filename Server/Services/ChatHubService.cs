@@ -46,8 +46,7 @@ namespace Oqtane.ChatHubs.Services
             IQueryable<ChatHubCam> camsQuery = this.chatHubRepository.GetChatHubCamsByRoomId(room.Id);
             IList<ChatHubCam> camsList = await camsQuery.ToListAsync();
 
-            IList<ChatHubUser> roomViewers = await this.chatHubRepository.GetChatHubViewsersByRoomId(room.Id).ToListAsync();
-            IList<ChatHubViewer> viewerList = roomViewers.Select(user => this.CreateChatHubViewerClientModel(user)).ToList();
+            IList<ChatHubViewer> viewerList = this.chatHubRepository.GetChatHubViewersByRoomId(room.Id);
 
             ChatHubUser creator = await this.chatHubRepository.GetUserByIdAsync(room.CreatorId);
             ChatHubUser creatorClientModel = this.CreateChatHubUserClientModel(creator);
@@ -206,14 +205,6 @@ namespace Oqtane.ChatHubs.Services
                 Id = blacklistUser.Id,
                 BlacklistUserDisplayName = blacklistUser.BlacklistUserDisplayName,
                 ChatHubUserId = blacklistUser.ChatHubUserId,
-            };
-        }
-        public ChatHubViewer CreateChatHubViewerClientModel(ChatHubUser user)
-        {
-            return new ChatHubViewer()
-            {
-                UserId = user.UserId,
-                Username = user.Username,
             };
         }
 

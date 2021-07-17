@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Oqtane.Models;
 using Oqtane.ChatHubs.Models;
 using Oqtane.ChatHubs.Enums;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Oqtane.ChatHubs.Repository
 {
@@ -14,10 +15,14 @@ namespace Oqtane.ChatHubs.Repository
     {
 
         private readonly ChatHubContext db;
+        private const string key_room_viewers = "room_viewers";
 
-        public ChatHubRepository(ChatHubContext dbContext)
+        private IMemoryCache cache { get; set; }
+
+        public ChatHubRepository(ChatHubContext dbContext, IMemoryCache memoryCache)
         {
             this.db = dbContext;
+            this.cache = memoryCache;
         }
 
         #region GET
@@ -387,10 +392,18 @@ namespace Oqtane.ChatHubs.Repository
                 throw;
             }
         }
-        public IQueryable<ChatHubUser> GetChatHubViewsersByRoomId(int roomId)
+        public IList<ChatHubViewer> GetChatHubViewersByRoomId(int roomId)
         {
-            var connectionIds = this.GetChatHubCamsByRoomId(roomId).Where(cam => cam.Status == ChatHubCamStatus.Streaming.ToString()).Include(cam => cam.Connection).Select(connection => connection.Id);
-            return this.db.ChatHubUser.Where(user => user.Connections.Where(connection => connection.Status == ChatHubConnectionStatus.Active.ToString()).Any(connection => connectionIds.Contains(connection.Id)));
+            IList<ChatHubViewer> cachedItems = this.cache.Get<IList<ChatHubViewer>>(ChatHubRepository.key_room_viewers);
+            if (cachedItems == null)
+            {
+                var connectionIds = this.GetChatHubCamsByRoomId(roomId).Where(cam => cam.Status == ChatHubCamStatus.Streaming.ToString()).Include(cam => cam.Connection).Select(connection => connection.Id);
+                var users = this.db.ChatHubUser.Where(user => user.Connections.Where(connection => connection.Status == ChatHubConnectionStatus.Active.ToString()).Any(connection => connectionIds.Contains(connection.Id))).ToList();
+                IList<ChatHubViewer> viewers = users.Select(user => new ChatHubViewer() { UserId = user.UserId, Username = user.Username }).ToList();
+                cachedItems = this.cache.Set<IList<ChatHubViewer>>(ChatHubRepository.key_room_viewers, viewers, DateTimeOffset.UtcNow.AddSeconds(30));
+            }
+
+            return cachedItems;
         }
 
         #endregion

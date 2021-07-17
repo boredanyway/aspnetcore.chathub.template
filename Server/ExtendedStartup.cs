@@ -25,6 +25,8 @@ namespace Oqtane
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
+            services.AddMemoryCache();
+
             services.AddScoped<BlazorAlertsService, BlazorAlertsService>();
             services.AddScoped<BlazorDraggableListService, BlazorDraggableListService>();
             services.AddScoped<BlazorFileUploadService, BlazorFileUploadService>();

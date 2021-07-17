@@ -15,7 +15,7 @@ namespace Oqtane.ChatHubs.Repository
     {
 
         private readonly ChatHubContext db;
-        private const string key_room_viewers = "room_viewers";
+        private const string key_room_viewer_prefix = "room_viewers_";
 
         private IMemoryCache cache { get; set; }
 
@@ -394,13 +394,13 @@ namespace Oqtane.ChatHubs.Repository
         }
         public IList<ChatHubViewer> GetChatHubViewersByRoomId(int roomId)
         {
-            IList<ChatHubViewer> cachedItems = this.cache.Get<IList<ChatHubViewer>>(ChatHubRepository.key_room_viewers);
+            IList<ChatHubViewer> cachedItems = this.cache.Get<IList<ChatHubViewer>>(ChatHubRepository.key_room_viewer_prefix + roomId);
             if (cachedItems == null)
             {
                 var connectionIds = this.GetChatHubCamsByRoomId(roomId).Where(cam => cam.Status == ChatHubCamStatus.Streaming.ToString()).Include(cam => cam.Connection).Select(connection => connection.Id);
                 var users = this.db.ChatHubUser.Where(user => user.Connections.Where(connection => connection.Status == ChatHubConnectionStatus.Active.ToString()).Any(connection => connectionIds.Contains(connection.Id))).ToList();
                 IList<ChatHubViewer> viewers = users.Select(user => new ChatHubViewer() { UserId = user.UserId, Username = user.Username }).ToList();
-                cachedItems = this.cache.Set<IList<ChatHubViewer>>(ChatHubRepository.key_room_viewers, viewers, DateTimeOffset.UtcNow.AddSeconds(30));
+                cachedItems = this.cache.Set<IList<ChatHubViewer>>(ChatHubRepository.key_room_viewer_prefix + roomId, viewers, DateTimeOffset.UtcNow.AddSeconds(30));
             }
 
             return cachedItems;

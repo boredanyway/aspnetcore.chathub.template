@@ -46,7 +46,7 @@ namespace Oqtane.ChatHubs.Services
             IQueryable<ChatHubCam> camsQuery = this.chatHubRepository.GetChatHubCamsByRoomId(room.Id);
             IList<ChatHubCam> camsList = await camsQuery.ToListAsync();
 
-            IList<ChatHubViewer> viewerList = this.chatHubRepository.GetChatHubViewersByRoomId(room.Id);
+            IList<ChatHubViewer> viewerList = await this.chatHubRepository.GetChatHubViewersByRoomIdAsync(room.Id);
 
             ChatHubUser creator = await this.chatHubRepository.GetUserByIdAsync(room.CreatorId);
             ChatHubUser creatorClientModel = this.CreateChatHubUserClientModel(creator);

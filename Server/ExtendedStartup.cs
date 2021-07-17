@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Oqtane.ChatHubs.Caching;
 using Oqtane.ChatHubs.Hubs;
 using Oqtane.Extensions;
 using Oqtane.Infrastructure;
@@ -26,6 +27,7 @@ namespace Oqtane
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             services.AddMemoryCache();
+            services.AddSingleton<ChatHubCachingService, ChatHubCachingService>();
 
             services.AddScoped<BlazorAlertsService, BlazorAlertsService>();
             services.AddScoped<BlazorDraggableListService, BlazorDraggableListService>();

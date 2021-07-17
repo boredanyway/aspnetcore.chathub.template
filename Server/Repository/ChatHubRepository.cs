@@ -8,6 +8,7 @@ using Oqtane.Models;
 using Oqtane.ChatHubs.Models;
 using Oqtane.ChatHubs.Enums;
 using Microsoft.Extensions.Caching.Memory;
+using Oqtane.ChatHubs.Caching;
 
 namespace Oqtane.ChatHubs.Repository
 {
@@ -15,14 +16,14 @@ namespace Oqtane.ChatHubs.Repository
     {
 
         private readonly ChatHubContext db;
-        private const string key_room_viewer_prefix = "room_viewers_";
+        private readonly string key_room_viewer_prefix = "room_viewers_";
 
-        private IMemoryCache cache { get; set; }
+        private ChatHubCachingService cacheService { get; set; }
 
-        public ChatHubRepository(ChatHubContext dbContext, IMemoryCache memoryCache)
+        public ChatHubRepository(ChatHubContext dbContext, ChatHubCachingService cacheService)
         {
             this.db = dbContext;
-            this.cache = memoryCache;
+            this.cacheService = cacheService;
         }
 
         #region GET
@@ -392,18 +393,21 @@ namespace Oqtane.ChatHubs.Repository
                 throw;
             }
         }
-        public IList<ChatHubViewer> GetChatHubViewersByRoomId(int roomId)
+        public async Task<IList<ChatHubViewer>> GetChatHubViewersByRoomIdAsync(int roomId)
         {
-            IList<ChatHubViewer> cachedItems = this.cache.Get<IList<ChatHubViewer>>(ChatHubRepository.key_room_viewer_prefix + roomId.ToString());
-            if (cachedItems == null)
+            var key = this.key_room_viewer_prefix + roomId;
+            IList<ChatHubViewer> cachedViewersList;
+            if (!this.cacheService.ChatHubMemoryCache.TryGetValue<IList<ChatHubViewer>>(key, out cachedViewersList))
             {
-                var connectionIds = this.GetChatHubCamsByRoomId(roomId).Where(cam => cam.Status == ChatHubCamStatus.Streaming.ToString()).Include(cam => cam.Connection).Select(connection => connection.Id);
-                var users = this.db.ChatHubUser.Where(user => user.Connections.Where(connection => connection.Status == ChatHubConnectionStatus.Active.ToString()).Any(connection => connectionIds.Contains(connection.Id))).ToList();
-                IList<ChatHubViewer> viewers = users.Select(user => new ChatHubViewer() { UserId = user.UserId, Username = user.Username }).ToList();
-                cachedItems = this.cache.Set<IList<ChatHubViewer>>(ChatHubRepository.key_room_viewer_prefix + roomId.ToString(), viewers, DateTimeOffset.UtcNow.AddSeconds(30));
+                var streamingCamsConnectionIds = await this.GetChatHubCamsByRoomId(roomId).Where(cam => cam.Status == ChatHubCamStatus.Streaming.ToString()).Select(cam => cam.ChatHubConnectionId).ToListAsync();
+                var streamingUsers = await db.ChatHubUser.Include(user => user.Connections).Where(user => user.Connections.Any(connection => streamingCamsConnectionIds.Contains(connection.Id))).ToListAsync();
+                var viewers = streamingUsers.Select(user => new ChatHubViewer() { UserId = user.UserId, Username = user.Username }).ToList();
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(4));
+                cachedViewersList = this.cacheService.ChatHubMemoryCache.Set<IList<ChatHubViewer>>(key, viewers, cacheEntryOptions);
             }
 
-            return cachedItems;
+            return cachedViewersList;
         }
 
         #endregion

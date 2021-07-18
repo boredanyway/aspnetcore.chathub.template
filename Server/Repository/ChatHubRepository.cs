@@ -19,10 +19,10 @@ namespace Oqtane.ChatHubs.Repository
 
         private IMemoryCache cache { get; set; }
 
-        public ChatHubRepository(ChatHubContext dbContext, IMemoryCache cacheService)
+        public ChatHubRepository(ChatHubContext dbContext, IMemoryCache memoryCache)
         {
             this.db = dbContext;
-            this.cache = cacheService;
+            this.cache = memoryCache;
         }
 
         #region GET
@@ -402,7 +402,7 @@ namespace Oqtane.ChatHubs.Repository
                 var streamingUsers = await db.ChatHubUser.Include(user => user.Connections).Where(user => user.Connections.Any(connection => streamingCamsConnectionIds.Contains(connection.Id))).ToListAsync();
                 var viewers = streamingUsers.Select(user => new ChatHubViewer() { UserId = user.UserId, Username = user.Username }).ToList();
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(4));
+                var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(10));
                 cachedViewersList = this.cache.Set<IList<ChatHubViewer>>(key, viewers, cacheEntryOptions);
             }
 

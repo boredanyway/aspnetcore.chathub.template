@@ -230,11 +230,19 @@ namespace Oqtane.ChatHubs.Hubs
         {
             string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
+            ChatHubConnection connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
 
             var exceptConnectionIds = this.chatHubService.GetAllExceptConnectionIds(user);
             var rooms = await chatHubRepository.GetChatHubRoomsByUser(user).Enabled().ToListAsync();
             foreach (var room in rooms)
-            {
+            {                
+                ChatHubCam cam = this.chatHubRepository.GetChatHubCam(room.Id, connection.Id);
+                if (cam != null)
+                {
+                    cam.Status = ChatHubCamStatus.Inactive.ToString();
+                    this.chatHubRepository.UpdateChatHubCam(cam);
+                }
+
                 if (user.Connections.Active().Count() == 1)
                 {
                     var clientModel = this.chatHubService.CreateChatHubUserClientModel(user);
@@ -255,7 +263,6 @@ namespace Oqtane.ChatHubs.Hubs
                 }
             }
 
-            var connection = await this.chatHubRepository.GetConnectionByConnectionId(Context.ConnectionId);
             connection.Status = Enum.GetName(typeof(ChatHubConnectionStatus), ChatHubConnectionStatus.Inactive);
             chatHubRepository.UpdateChatHubConnection(connection);
 

@@ -160,6 +160,7 @@
                                             <span class="badge bg-secondary">@context.Type</span>
                                             <span class="badge bg-secondary">@context.Users.Count() Users Online</span>
                                             <span class="badge bg-secondary">@context.Status</span>
+                                            <span class="badge bg-secondary">@context.Viewers.Count() Viewers</span>
                                         </div>
                                         <div>
                                             <small class="text-muted">
@@ -171,8 +172,6 @@
                                                 @context.Creator.DisplayName <span class="oi oi-check"></span>
 
                                             </small>
-                                            <br />
-                                            <small class="text-muted">Viewers total @context.Viewers.Count() <span class="oi oi-eye"></span></small>
                                             <br />
                                             <small class="text-muted">Posted on @context.CreatedOn.ToShortDateString() <span class="oi oi-clock"></span></small>
                                         </div>

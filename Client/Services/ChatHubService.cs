@@ -281,6 +281,22 @@ namespace Oqtane.ChatHubs.Services
                 this.RunUpdateUI();
             }
         }
+        public async Task GetChatHubViewers()
+        {
+            List<int> roomIds = this.Rooms.Select(item => item.Id).ToList<int>();
+            await this.Connection.InvokeAsync<IList<ChatHubViewer>[]>("GetChatHubViewers", roomIds).ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                    IList<ChatHubViewer>[] result = task.Result;
+                    foreach(var item in this.Rooms.Select((room, index) => new { room = room, index = index }))
+                    {
+                        item.room.Viewers = result[item.index];
+                    }
+                }
+            });
+        }
 
         public async Task<ChatHubRoom> GetRoom(int roomId, int moduleId)
         {
@@ -693,6 +709,7 @@ namespace Oqtane.ChatHubs.Services
         private async void OnGetLobbyRoomsTimerElapsed(object source, ElapsedEventArgs e)
         {
             await this.GetLobbyRooms(this.ModuleId);
+            await this.GetChatHubViewers();
         }
 
         public async void OnAlertConfirmedExecute(object sender, dynamic obj)

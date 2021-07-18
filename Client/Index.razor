@@ -159,8 +159,8 @@
                                         <div>
                                             <span class="badge bg-secondary">@context.Type</span>
                                             <span class="badge bg-secondary">@context.Users.Count() Users Online</span>
-                                            <span class="badge bg-secondary">@context.Status</span>
                                             <span class="badge bg-secondary">@context.Viewers.Count() Viewers</span>
+                                            <span class="badge bg-secondary">@context.Status</span>
                                         </div>
                                         <div>
                                             <small class="text-muted">
@@ -233,6 +233,8 @@
 
                                         </WindowTitle>
                                         <WindowLivestream>
+
+                                            <div class="text-danger p-1 badge bg-white" style="position: absolute; z-index: 1; top: 10px; right: 10px;">@room.Viewers.Count() <span class="oi oi-camera-slr"></span></div>
 
                                             @if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
                                             {

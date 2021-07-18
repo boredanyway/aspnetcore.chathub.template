@@ -5,7 +5,7 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <AssemblyName>Oqtane.ChatHubs.Shared.Oqtane</AssemblyName>
     <OutputType>Library</OutputType>
-    <Version>4.0.2006-delta1</Version>
+    <Version>4.0.2007-delta1</Version>
     <Product>Oqtane.ChatHubs</Product>
     <Authors>ben wasm</Authors>
     <Company>ben wasm</Company>

@@ -395,7 +395,7 @@ namespace Oqtane.ChatHubs.Repository
         public async Task<IList<ChatHubViewer>> GetChatHubViewersByRoomIdAsync(int roomId)
         {
             var key = this.key_room_viewer_prefix + roomId;
-            IList<ChatHubViewer> cachedViewersList;
+            IList<ChatHubViewer> cachedViewersList = new List<ChatHubViewer>();
             if (!this.cache.TryGetValue<IList<ChatHubViewer>>(key, out cachedViewersList))
             {
                 var streamingCamsConnectionIds = await this.GetChatHubCamsByRoomId(roomId).Where(cam => cam.Status == ChatHubCamStatus.Streaming.ToString()).Select(cam => cam.ChatHubConnectionId).ToListAsync();

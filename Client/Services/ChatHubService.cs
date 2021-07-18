@@ -283,19 +283,22 @@ namespace Oqtane.ChatHubs.Services
         }
         public async Task GetChatHubViewers()
         {
-            List<int> roomIds = this.Rooms.Select(item => item.Id).ToList<int>();
-            await this.Connection.InvokeAsync<IList<ChatHubViewer>[]>("GetChatHubViewers", roomIds).ContinueWith((task) =>
+            if (this.Rooms != null && this.Rooms.Any())
             {
-                if (task.IsCompleted)
+                List<int> roomIds = this.Rooms.Select(item => item.Id).ToList<int>();
+                await this.Connection.InvokeAsync<IList<ChatHubViewer>[]>("GetChatHubViewers", roomIds).ContinueWith((task) =>
                 {
-                    this.HandleException(task);
-                    IList<ChatHubViewer>[] result = task.Result;
-                    foreach(var item in this.Rooms.Select((room, index) => new { room = room, index = index }))
+                    if (task.IsCompleted)
                     {
-                        item.room.Viewers = result[item.index];
+                        this.HandleException(task);
+                        IList<ChatHubViewer>[] result = task.Result;
+                        foreach (var item in this.Rooms.Select((room, index) => new { room = room, index = index }))
+                        {
+                            item.room.Viewers = result[item.index];
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         public async Task<ChatHubRoom> GetRoom(int roomId, int moduleId)

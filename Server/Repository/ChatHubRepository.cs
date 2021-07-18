@@ -8,7 +8,6 @@ using Oqtane.Models;
 using Oqtane.ChatHubs.Models;
 using Oqtane.ChatHubs.Enums;
 using Microsoft.Extensions.Caching.Memory;
-using Oqtane.ChatHubs.Caching;
 
 namespace Oqtane.ChatHubs.Repository
 {
@@ -18,12 +17,12 @@ namespace Oqtane.ChatHubs.Repository
         private readonly ChatHubContext db;
         private readonly string key_room_viewer_prefix = "room_viewers_";
 
-        private ChatHubCachingService cacheService { get; set; }
+        private IMemoryCache cache { get; set; }
 
-        public ChatHubRepository(ChatHubContext dbContext, ChatHubCachingService cacheService)
+        public ChatHubRepository(ChatHubContext dbContext, IMemoryCache cacheService)
         {
             this.db = dbContext;
-            this.cacheService = cacheService;
+            this.cache = cacheService;
         }
 
         #region GET
@@ -397,14 +396,14 @@ namespace Oqtane.ChatHubs.Repository
         {
             var key = this.key_room_viewer_prefix + roomId;
             IList<ChatHubViewer> cachedViewersList;
-            if (!this.cacheService.ChatHubMemoryCache.TryGetValue<IList<ChatHubViewer>>(key, out cachedViewersList))
+            if (!this.cache.TryGetValue<IList<ChatHubViewer>>(key, out cachedViewersList))
             {
                 var streamingCamsConnectionIds = await this.GetChatHubCamsByRoomId(roomId).Where(cam => cam.Status == ChatHubCamStatus.Streaming.ToString()).Select(cam => cam.ChatHubConnectionId).ToListAsync();
                 var streamingUsers = await db.ChatHubUser.Include(user => user.Connections).Where(user => user.Connections.Any(connection => streamingCamsConnectionIds.Contains(connection.Id))).ToListAsync();
                 var viewers = streamingUsers.Select(user => new ChatHubViewer() { UserId = user.UserId, Username = user.Username }).ToList();
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(4));
-                cachedViewersList = this.cacheService.ChatHubMemoryCache.Set<IList<ChatHubViewer>>(key, viewers, cacheEntryOptions);
+                var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(4));
+                cachedViewersList = this.cache.Set<IList<ChatHubViewer>>(key, viewers, cacheEntryOptions);
             }
 
             return cachedViewersList;

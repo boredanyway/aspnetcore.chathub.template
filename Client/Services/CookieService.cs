@@ -9,21 +9,29 @@ namespace Oqtane.ChatHubs
     public class CookieService : ServiceBase, IService
     {
 
-        private readonly IJSRuntime JSRuntime;
+        private IJSRuntime JSRuntime { get; set; }
+        private IJSObjectReference cookieScriptJsObjRef { get; set; }
+        private IJSObjectReference cookieScriptMap { get; set; }
 
         public CookieService(HttpClient httpClient, IJSRuntime JSRuntime) : base(httpClient)
         {
             this.JSRuntime = JSRuntime;
         }
 
+        public async Task InitCookieService()
+        {
+            this.cookieScriptJsObjRef = await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", "/Modules/Oqtane.ChatHubs/cookiejsinterop.js");
+            this.cookieScriptMap = await this.cookieScriptJsObjRef.InvokeAsync<IJSObjectReference>("initcookie");
+        }
+
         public async Task<string> GetCookieAsync(string cookieName)
         {
-            return await this.JSRuntime.InvokeAsync<string>("cookies.getCookie", cookieName);
+            return await this.cookieScriptMap.InvokeAsync<string>("getCookie", cookieName);
         }
 
         public async Task SetCookie(string cookieName, string cookieValue, int expirationDays)
         {
-            await this.JSRuntime.InvokeVoidAsync("cookies.setCookie", cookieName);
+            await this.cookieScriptJsObjRef.InvokeVoidAsync("setCookie", cookieName);
         }
 
     }

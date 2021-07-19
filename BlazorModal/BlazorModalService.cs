@@ -25,15 +25,9 @@ namespace BlazorModal
         }
         public async Task InitBlazorModal()
         {
-            if(this.Module == null)
+            if(this.Module == null || this.jsobjref == null)
             {
                 this.Module = await this.JsRuntime.InvokeAsync<IJSObjectReference>("import", "/Modules/Oqtane.ChatHubs/blazormodaljsinterop.js");
-            }
-        }
-        public async Task InitBlazorModalMap()
-        {
-            if(this.jsobjref == null)
-            {
                 this.jsobjref = await this.Module.InvokeAsync<IJSObjectReference>("initmodal", this.DotNetObjectRef);
             }
         }

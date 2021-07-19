@@ -6,6 +6,7 @@ using BlazorFileUpload;
 using BlazorModal;
 using BlazorVideo;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +39,11 @@ namespace Oqtane
             services.AddServerSideBlazor()
                 .AddHubOptions(options => options.MaximumReceiveMessageSize = 512 * 1024);
 
+            services.AddCors(option =>
+            {
+                option.AddPolicy("wasmcorspolicy", (builder) => { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
+            });
+
             services.AddSignalR()
                 .AddHubOptions<ChatHub>(options =>
                 {
@@ -60,6 +66,7 @@ namespace Oqtane
             app.UseTenantResolution();
             app.UseBlazorFrameworkFiles();
             app.UseRouting();
+            app.UseCors("wasmcorspolicy");
             app.UseAuthentication();
             app.UseAuthorization();
 

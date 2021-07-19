@@ -22,18 +22,6 @@ new Resource {
 	CrossOrigin = "anonymous" },
 ```
 
-#### Edit _Host.cshtml and paste at the end of body
-```HTML
-<script src="/Modules/Oqtane.ChatHubs/blazorStrap.js"></script>
-<script src="/Modules/Oqtane.ChatHubs/blazorvideojsinterop.js" type="module"></script>
-<script src="/Modules/Oqtane.ChatHubs/browserresizejsinterop.js" type="module"></script>
-<script src="/Modules/Oqtane.ChatHubs/browserresizemap.js" type="module"></script>
-<script src="/Modules/Oqtane.ChatHubs/blazorfileuploadjsinterop.js" type="module"></script>
-<script src="/Modules/Oqtane.ChatHubs/blazordraggablelistjsinterop.js" type="module"></script>
-<script src="/Modules/Oqtane.ChatHubs/blazormodaljsinterop.js" type="module"></script>
-<script src="/Modules/Oqtane.ChatHubs/chat-hub-js-interop.js"></script>
-```
-
 #### Add this to oqtane.server.csproj
 ```C#  
 <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.4" />

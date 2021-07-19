@@ -85,6 +85,9 @@ namespace Oqtane.ChatHubs.Services
         public event EventHandler<int> OnClearHistoryEvent;
         public event EventHandler<ChatHubUser> OnDisconnectEvent;
 
+        public IJSObjectReference chatHubScriptJsObjRef { get; set; }
+        public IJSObjectReference chatHubMap { get; set; }
+
         public ChatHubService(HttpClient httpClient, SiteState siteState, NavigationManager navigationManager, IJSRuntime JSRuntime, ScrollService scrollService, BlazorAlertsService blazorAlertsService, BlazorDraggableListService blazorDraggableListService, BlazorBrowserResizeService browserResizeService, BlazorVideoService blazorVideoService ) : base (httpClient)
         {
             this.HttpClient = httpClient;
@@ -133,6 +136,12 @@ namespace Oqtane.ChatHubs.Services
             GetLobbyRoomsTimer.Elapsed += new ElapsedEventHandler(OnGetLobbyRoomsTimerElapsed);
             GetLobbyRoomsTimer.Interval = 10000;
             GetLobbyRoomsTimer.Enabled = true;
+        }
+
+        public async Task InitChatHubService()
+        {
+            this.chatHubScriptJsObjRef = await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", "/Modules/Oqtane.ChatHubs/chathubjsinterop.js");
+            this.chatHubMap = await this.chatHubScriptJsObjRef.InvokeAsync<IJSObjectReference>("initchathub");
         }
 
         public void BuildGuestConnection(string username, int moduleId)
@@ -814,6 +823,7 @@ namespace Oqtane.ChatHubs.Services
             this.OnAddChatHubCamEvent += OnAddChatHubCamExecute;
             this.OnRemoveChatHubCamEvent += OnRemoveChatHubCamExecute;
             this.OnDownloadBytesEvent -= async (string dataURI, string id, string connectionId, ChatHubUser creator) => await OnDownloadBytesExecuteAsync(dataURI, id, connectionId, creator);
+            this.UpdateRoomCreator -= OnUpdateRoomCreator;
             this.OnRemoveIgnoredByUserEvent -= OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent -= OnClearHistoryExecute;
             this.OnDisconnectEvent -= OnDisconnectExecute;

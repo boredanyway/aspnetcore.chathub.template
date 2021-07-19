@@ -46,8 +46,7 @@ namespace Oqtane.ChatHubs.Services
         public ChatHubUser ConnectedUser { get; set; }
         
         public Cookie IdentityCookie { get; set; }
-        public string ContextRoomId { get; set; }
-        
+        public string ContextRoomId { get; set; }        
 
         public List<ChatHubRoom> Lobbies { get; set; } = new List<ChatHubRoom>();
         public List<ChatHubRoom> Rooms { get; set; } = new List<ChatHubRoom>();
@@ -137,7 +136,6 @@ namespace Oqtane.ChatHubs.Services
             GetLobbyRoomsTimer.Interval = 10000;
             GetLobbyRoomsTimer.Enabled = true;
         }
-
         public async Task InitChatHubService()
         {
             this.chatHubScriptJsObjRef = await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", "/Modules/Oqtane.ChatHubs/chathubjsinterop.js");

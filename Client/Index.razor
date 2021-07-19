@@ -272,7 +272,7 @@
                                         <WindowContent>
 
                                             <div class="d-flex">
-                                                <div class="flex-fill @(room.ShowUserlist ? "d-none" : "d-flex")">
+                                                <div class="@(room.ShowUserlist ? "d-none" : "d-flex flex-fill")">
                                                     <div class="w-100 bg-white p-1 p-sm-3">
 
                                                         <div id="message-window-@ModuleState.ModuleId-@room.Id" style="height: @(string.Format("{0}px", MessageWindowHeight)); overflow: auto;">
@@ -465,7 +465,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="userlist bg-light p-0 p-sm-2 w-100 d-none d-xl-flex @(room.ShowUserlist ? "flex-fill d-flex" : "")" style="min-width: 340px; max-width: 340px">
+                                                <div class="userlist bg-light p-0 p-sm-2 w-100 @(room.ShowUserlist ? "flex-fill d-flex" : "d-none d-xl-flex")" style="min-width: 340px; max-width: 340px">
                                                     <div class="w-100 my-3" style="height: @(string.Format("{0}px", UserlistWindowHeight)); overflow: auto;">
 
                                                         <button type="button" class="btn btn-light input-group-button @(room.ShowUserlist ? "d-block" : "d-none")" @onclick="() => ChatHubService.ToggleUserlist(room)" style="position: relative; float: right;"><span class="oi oi-x"></span></button>

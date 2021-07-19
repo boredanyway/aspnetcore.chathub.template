@@ -181,7 +181,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                             width: { min: 320, ideal: 320, max: 320 },
                             height: { min: 240, ideal: 240, max: 240 },
                             frameRate: { ideal: 24 },
-                            facingMode: { ideal: "user" },
+                            facingMode: { ideal: "environment" },
                         }
                     };
 

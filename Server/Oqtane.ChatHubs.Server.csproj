@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Version>4.0.2010-delta1</Version>
+    <Version>4.0.2</Version>
     <Product>Oqtane.ChatHubs</Product>
     <Authors>ben wasm</Authors>
     <Company>ben wasm</Company>

@@ -5,8 +5,6 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using System.Collections.Generic
 @using System.Linq
-@using Oqtane.ChatHubs.Client
-@using BlazorStrap
 @using System.Web
 @using BlazorAlerts
 @using BlazorModal
@@ -14,7 +12,6 @@
 @using BlazorTabs
 @using BlazorPager
 @using BlazorFileUpload
-@using BlazorAccordion
 @using BlazorVideo
 @using Oqtane.ChatHubs.Models
 @using Oqtane.ChatHubs.Enums
@@ -125,13 +122,13 @@
 
                     @if (ChatHubService.Connection?.State == HubConnectionState.Connected)
                     {
-                        <div class="d-flex justify-content-between bd-highlight my-3">
-                            <div class="flex-fill bd-highlight bg-yellow p-md-3 px-2 py-1 px-md-5 py-md-3">
+                        <div class="d-flex justify-content-between bd-highlight mt-4">
+                            <div class="flex-fill bd-highlight bg-yellow p-md-3 px-2 py-1 px-md-5 py-md-4">
                                 <small style="font-family: Consolas, monospace;">
                                     Connected as @ChatHubService.ConnectedUser?.DisplayName
                                 </small>
                             </div>
-                            <div class="flex-fill bd-highlight bg-light p-1 p-md-3">
+                            <div class="flex-fill bd-highlight bg-light p-1 p-md-4">
                                 <button type="button" @onclick="@(() => EditRoomModalRef.OpenCreateRoomModal())" class="btn btn-sm btn-link w-100 bg-transparent">Add new post</button>
                             </div>
                         </div>
@@ -225,7 +222,7 @@
                                         <WindowTitle>
 
                                             @room.Title&nbsp;
-                                            <BSBadge Color="Color.Warning" Class="@(room.UnreadMessages != 0 ? "" : "d-none")">@room.UnreadMessages</BSBadge>
+                                            <div class="badge badge-warning @(room.UnreadMessages != 0 ? "" : "d-none")">@room.UnreadMessages</div>
 
                                             <span class="position-absolute" @onclick="async () => await LeaveRoom_Clicked(room.Id, ModuleState.ModuleId)" style="top: 0px; right: 0px;">
                                                 <span class="oi oi-circle-x"></span>
@@ -477,88 +474,88 @@
 
                                                                     <div class="px-sm-0">
 
-                                                                        <div>
+                                                                        <div class="accordion">
                                                                             @foreach (ChatHubUser user in room.Users)
                                                                             {
                                                                                 @if (user.UserId == ChatHubService.ConnectedUser.UserId)
                                                                                 {
-                                                                                    <BSCard CardType="CardType.Card" @key="user">
-                                                                                        <BSCard CardType="CardType.Header">
-                                                                                            <BSButton ButtonType="ButtonType.Button" OnClick="(e) => UserlistItem_Clicked(e, room, user)" Color="Color.None" Class="btn-link">
+                                                                                    <div class="accordion-item" @key="user">
+                                                                                        <div class="accordion-header">
+                                                                                            <button type="button" OnClick="(e) => UserlistItem_Clicked(e, room, user)" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse-@user.UserId" aria-expanded="@user.UserlistItemCollapsed">
                                                                                                 <strong class="align-middle" style="height: 16px;">@user.DisplayName</strong>
-                                                                                            </BSButton>
-                                                                                        </BSCard>
-                                                                                        @if (user.UserlistItemCollapsed)
-                                                                                        {
-                                                                                            <BSCard CardType="CardType.Body">
-                                                                                                <BSCard CardType="CardType.Text">
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div id="collapse-@user.UserId" class="accordion-collapse collapse show">
+                                                                                            <div class="accordion-body">
+                                                                                                <div class="card-text">
                                                                                                     <button type="button" class="btn btn-sm btn-link" @onclick="() => OpenProfile_Clicked(user.UserId, room.Id)">Profile/Settings</button>
-                                                                                                </BSCard>
-                                                                                            </BSCard>
-                                                                                        }
-                                                                                    </BSCard>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    <BSCard CardType="CardType.Card" @key="user">
-                                                                                        <BSCard CardType="CardType.Header">
-                                                                                            <BSButton ButtonType="ButtonType.Button" OnClick="(e) => UserlistItem_Clicked(e, room, user)" Color="Color.None" Class="btn-link">
+                                                                                    <div class="accordion-item" @key="user">
+                                                                                        <div class="accordion-header">
+                                                                                            <button type="button" OnClick="(e) => UserlistItem_Clicked(e, room, user)" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse-@user.UserId" aria-expanded="@user.UserlistItemCollapsed">
                                                                                                 <span class="align-middle" style="height: 16px;">@user.DisplayName</span>
-                                                                                            </BSButton>
-                                                                                        </BSCard>
-                                                                                        @if (user.UserlistItemCollapsed)
-                                                                                        {
-                                                                                            <BSCard CardType="CardType.Body">
+                                                                                            </button>
+                                                                                        </div>
+
+                                                                                        <div id="collapse-@user.UserId" class="accordion-collapse collapse show">
+                                                                                            <div class="accordion-body">
 
                                                                                                 @if (!ChatHubService.IgnoredUsers.Any(item => item.UserId == user.UserId))
                                                                                                 {
-                                                                                                    <BSCard CardType="CardType.Text">
+                                                                                                    <div>
                                                                                                         <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.IgnoreUser_Clicked(user.UserId, room.Id, user.Username)">Ignore User</button>
-                                                                                                    </BSCard>
+                                                                                                    </div>
                                                                                                 }
 
                                                                                                 @if (!room.Moderators.Any(item => item.ChatHubUserId == user.UserId))
                                                                                                 {
-                                                                                                    <BSCard CardType="CardType.Text">
+                                                                                                    <div>
                                                                                                         <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddModerator_Clicked(user.UserId, room.Id)">Add Modi</button>
-                                                                                                    </BSCard>
+                                                                                                    </div>
                                                                                                 }
                                                                                                 else
                                                                                                 {
-                                                                                                    <BSCard CardType="CardType.Text">
+                                                                                                    <div>
                                                                                                         <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveModerator_Clicked(user.UserId, room.Id)">Delete Modi</button>
-                                                                                                    </BSCard>
+                                                                                                    </div>
                                                                                                 }
 
                                                                                                 @if (!room.WhitelistUsers.Any(item => item.ChatHubUserId == user.UserId))
                                                                                                 {
-                                                                                                    <BSCard CardType="CardType.Text">
+                                                                                                    <div>
                                                                                                         <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddWhitelistUser_Clicked(user.UserId, room.Id)">Add Whitelist User</button>
-                                                                                                    </BSCard>
+                                                                                                    </div>
                                                                                                 }
                                                                                                 else
                                                                                                 {
-                                                                                                    <BSCard CardType="CardType.Text">
+                                                                                                    <div>
                                                                                                         <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveWhitelistUser_Clicked(user.UserId, room.Id)">Delete Whitelist User</button>
-                                                                                                    </BSCard>
+                                                                                                    </div>
                                                                                                 }
 
                                                                                                 @if (!room.BlacklistUsers.Any(item => item.ChatHubUserId == user.UserId))
                                                                                                 {
-                                                                                                    <BSCard CardType="CardType.Text">
+                                                                                                    <div>
                                                                                                         <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddBlacklistUser_Clicked(user.UserId, room.Id)">Add Blacklist User</button>
-                                                                                                    </BSCard>
+                                                                                                    </div>
                                                                                                 }
                                                                                                 else
                                                                                                 {
-                                                                                                    <BSCard CardType="CardType.Text">
+                                                                                                    <div>
                                                                                                         <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveBlacklistUser_Clicked(user.UserId, room.Id)">Delete Blacklist User</button>
-                                                                                                    </BSCard>
+                                                                                                    </div>
                                                                                                 }
+                                                                                            </div>
 
-                                                                                            </BSCard>
-                                                                                        }
-                                                                                    </BSCard>
+                                                                                        </div>
+
+                                                                                    </div>
                                                                                 }
                                                                             }
                                                                         </div>

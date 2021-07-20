@@ -7,7 +7,7 @@ html {
 }
 
 body {
-    background-color: #dcf4dc !important;
+    background-color: #dcf4dc;
 }
 
     body::-webkit-scrollbar {
@@ -58,8 +58,7 @@ body {
 
 .chathubs-container {
     min-height: 1000px;
-    background-color: #ffffff;
-    border: 1px solid #dddddd;
+    background-color: white;
     opacity: 0;
 }
 

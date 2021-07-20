@@ -22,25 +22,6 @@ new Resource {
 	CrossOrigin = "anonymous" },
 ```
 
-#### Add this to oqtane.server.csproj
-```C#  
-<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.4" />
-<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.4" />
-<PackageReference Include="BlazorStrap" Version="1.3.3" />
-<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-<PackageReference Include="Microsoft.Composition" Version="1.0.31" />
-```
-
-#### And add this to oqtane.client.csproj
-```C#  
-<PackageReference Include="System.Drawing.Common" Version="5.0.2" />
-<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.4" />
-<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.4" />
-<PackageReference Include="BlazorStrap" Version="1.3.3" />
-<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-<PackageReference Include="Microsoft.Composition" Version="1.0.31" />
-```
-
 #### Example Screenshots
 
 <div class="float-left">

@@ -251,7 +251,7 @@
                                                     {
                                                         BlazorVideoStatusType status = BlazorVideoStatusType.Offline;
                                                         var broadcastingCams = connection.Cams.Where(cam => cam.Status == ChatHubCamStatus.Broadcasting.ToString()).ToList();
-                                                        if (broadcastingCams.Any())
+                                                        if (room.Cams.Any(cam => broadcastingCams.Any(item => cam.Id == item.Id)))
                                                         {
                                                             status = BlazorVideoStatusType.Live;
                                                         }

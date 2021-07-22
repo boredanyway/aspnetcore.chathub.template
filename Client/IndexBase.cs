@@ -218,12 +218,13 @@ namespace Oqtane.ChatHubs
                  || this.ChatHubService.Connection?.State == HubConnectionState.Connecting
                  || this.ChatHubService.Connection?.State == HubConnectionState.Reconnecting)
                 {
-                    this.BlazorAlertsService.NewBlazorAlert($"The client is already connected. Trying establish new connection with guest name { this.GuestUsername }.");
+                    this.BlazorAlertsService.NewBlazorAlert($"The client is already connected. Trying establish new connection with guest name { this.GuestUsername }.", "Javascript Application", PositionType.Fixed);
                 }
 
                 this.ChatHubService.BuildHubConnection(GuestUsername, ModuleState.ModuleId);
                 this.ChatHubService.RegisterHubConnectionHandlers();
                 await this.ChatHubService.ConnectAsync();
+                this.GuestUsername = string.Empty;
             }
             catch (Exception ex)
             {

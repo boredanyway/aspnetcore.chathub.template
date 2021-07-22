@@ -120,12 +120,12 @@ namespace Oqtane.ChatHubs
                 var cookievalue = await this.CookieService.GetCookieAsync(".AspNetCore.Identity.Application");
                 this.ChatHubService.IdentityCookie = new Cookie(".AspNetCore.Identity.Application", cookievalue, "/", hostname);                
 
+                await this.ConnectToChat();
+                await this.ChatHubService.chatHubMap.InvokeVoidAsync("showchathubscontainer");
+                await this.ChatHubService.GetLobbyRooms();
+
                 await this.BrowserResizeService.RegisterWindowResizeCallback();
                 await BrowserHasResized();
-
-                await this.ConnectToChat();
-                await this.ChatHubService.GetLobbyRooms();
-                await this.ChatHubService.chatHubMap.InvokeVoidAsync("showchathubscontainer");
             }
 
             await base.OnAfterRenderAsync(firstRender);

@@ -108,7 +108,7 @@ namespace Oqtane.ChatHubs.Hubs
 
             if (string.IsNullOrEmpty(guestname) || !this.IsValidGuestUsername(guestname))
             {
-                throw new HubException("No valid username.");
+                guestname = "guest";
             }
 
             string username = this.CreateUsername(guestname);

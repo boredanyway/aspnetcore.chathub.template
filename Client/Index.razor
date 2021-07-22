@@ -274,7 +274,7 @@
 
                                                         <div id="message-window-@ModuleState.ModuleId-@room.Id" style="height: @(string.Format("{0}px", MessageWindowHeight)); overflow: auto;">
 
-                                                            <h3>@room.Content</h3>
+                                                            <h3>@room.Title</h3>
                                                             <br />
 
                                                             <MessageTemplate Messages="@room.Messages.OrderBy(item => item.ModifiedOn).ThenBy(item => item.Id)" Context="item">
@@ -573,7 +573,7 @@
                                                                         <h5>Share your pics <span class="badge bg-success">FREE</span></h5>
 
                                                                         @{
-                                                                            var url = string.Concat(NavigationManager.BaseUri.Substring(0, NavigationManager.BaseUri.LastIndexOf('/')), this.ChatHubService.apiurl, "/PostImageUpload");
+                                                                            var url = string.Concat(NavigationManager.BaseUri.Substring(0, NavigationManager.BaseUri.LastIndexOf('/')), this.ChatHubService.ChatHubControllerApiUrl, "/PostImageUpload");
 
                                                                             Dictionary<string, string> headers = new Dictionary<string, string>();
                                                                             headers.Add("connectionId", ChatHubService.Connection?.ConnectionId);

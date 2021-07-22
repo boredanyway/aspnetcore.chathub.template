@@ -48,7 +48,7 @@ namespace Oqtane.ChatHubs
 
         public int MessageWindowHeight { get; set; }
         public int UserlistWindowHeight { get; set; }
-
+        
         public string GuestUsername { get; set; } = string.Empty;
         public ChatHubRoom contextRoom { get; set; }
 
@@ -78,9 +78,8 @@ namespace Oqtane.ChatHubs
         {
             this.BrowserResizeService.BrowserResizeServiceExtension.OnResize += BrowserHasResized;
             this.BlazorDraggableListService.BlazorDraggableListServiceExtension.OnDropEvent += OnDraggableListDropEventExecute;
-
             this.ChatHubService.OnUpdateUI += (object sender, EventArgs e) => UpdateUIStateHasChanged();
-
+                        
             await base.OnInitializedAsync();
         }
 
@@ -95,11 +94,7 @@ namespace Oqtane.ChatHubs
 
                 if (PageState.QueryString.ContainsKey("moduleid") && PageState.QueryString.ContainsKey("roomid") && int.Parse(PageState.QueryString["moduleid"]) == ModuleState.ModuleId)
                 {
-                    this.contextRoom = await this.ChatHubService.GetChatHubRoomAsync(int.Parse(PageState.QueryString["roomid"]), ModuleState.ModuleId);
-                }
-                else
-                {
-                    await this.ChatHubService.GetLobbyRooms(ModuleState.ModuleId);
+                    this.contextRoom = await this.ChatHubService.GetRoom(int.Parse(PageState.QueryString["roomid"]), ModuleState.ModuleId);
                 }
             }
             catch (Exception ex)
@@ -122,14 +117,15 @@ namespace Oqtane.ChatHubs
                 await this.BlazorModalService.InitBlazorModal();
 
                 string hostname = new Uri(NavigationManager.BaseUri).Host;
-
-                var cookie = await this.CookieService.GetCookieAsync(".AspNetCore.Identity.Application");
-                this.ChatHubService.IdentityCookie = new Cookie(".AspNetCore.Identity.Application", cookie, "/", hostname);
-
-                await this.ChatHubService.chatHubMap.InvokeVoidAsync("showchathubscontainer");
+                var cookievalue = await this.CookieService.GetCookieAsync(".AspNetCore.Identity.Application");
+                this.ChatHubService.IdentityCookie = new Cookie(".AspNetCore.Identity.Application", cookievalue, "/", hostname);                
 
                 await this.BrowserResizeService.RegisterWindowResizeCallback();
                 await BrowserHasResized();
+
+                await this.ConnectToChat();
+                await this.ChatHubService.GetLobbyRooms();
+                await this.ChatHubService.chatHubMap.InvokeVoidAsync("showchathubscontainer");
             }
 
             await base.OnAfterRenderAsync(firstRender);
@@ -188,7 +184,7 @@ namespace Oqtane.ChatHubs
                     room.Status = ChatHubRoomStatus.Archived.ToString();
                 }
 
-                await ChatHubService.UpdateChatHubRoomAsync(room);
+                await ChatHubService.UpdateRoom(room);
                 await logger.LogInformation("Room Archived {ChatHubRoom}", room);
                 NavigationManager.NavigateTo(NavigateUrl());
             }
@@ -225,7 +221,7 @@ namespace Oqtane.ChatHubs
                     this.BlazorAlertsService.NewBlazorAlert("The client is already connected.");
                 }
 
-                this.ChatHubService.BuildGuestConnection(GuestUsername, ModuleState.ModuleId);
+                this.ChatHubService.BuildHubConnection(GuestUsername, ModuleState.ModuleId);
                 this.ChatHubService.RegisterHubConnectionHandlers();
                 await this.ChatHubService.ConnectAsync();
             }
@@ -353,7 +349,7 @@ namespace Oqtane.ChatHubs
             });
         }
 
-        public async void OpenProfile_Clicked(int userId, int roomId)
+        public void OpenProfile_Clicked(int userId, int roomId)
         {
             this.SettingsModalRef.OpenDialogAsync();
         }

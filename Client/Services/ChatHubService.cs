@@ -20,7 +20,6 @@ using System.Net;
 using BlazorDraggableList;
 using BlazorVideo;
 using BlazorBrowserResize;
-using System.Net.Http.Json;
 using Oqtane.ChatHubs.Models;
 using Oqtane.ChatHubs.Extensions;
 using Oqtane.ChatHubs.Enums;
@@ -142,7 +141,7 @@ namespace Oqtane.ChatHubs.Services
             this.chatHubMap = await this.chatHubScriptJsObjRef.InvokeAsync<IJSObjectReference>("initchathub");
         }
 
-        public void BuildGuestConnection(string username, int moduleId)
+        public void BuildHubConnection(string username, int moduleId)
         {
             StringBuilder urlBuilder = new StringBuilder();
             var chatHubConnection = this.NavigationManager.BaseUri + "chathub";
@@ -414,11 +413,11 @@ namespace Oqtane.ChatHubs.Services
                 }
             });
         }
-        public async Task GetLobbyRooms(int moduleId)
+        public async Task GetLobbyRooms()
         {
             try
             {
-                this.Lobbies = await this.GetChatHubRoomsByModuleIdAsync(moduleId);
+                this.Lobbies = await this.GetRoomsByModuleId(this.ModuleId);
                 if(this.Lobbies != null && this.Lobbies.Any())
                 {
                     this.SortLobbyRooms();
@@ -718,7 +717,7 @@ namespace Oqtane.ChatHubs.Services
 
         private async void OnGetLobbyRoomsTimerElapsed(object source, ElapsedEventArgs e)
         {
-            await this.GetLobbyRooms(this.ModuleId);
+            await this.GetLobbyRooms();
             await this.GetChatHubViewers();
         }
 
@@ -834,39 +833,14 @@ namespace Oqtane.ChatHubs.Services
             this.OnUpdateUI.Invoke(this, EventArgs.Empty);
         }
 
-        public string apiurl
+        public string ChatHubControllerApiUrl
         {
-            //get { return NavigationManager.BaseUri + "api/ChatHub"; }
-            get { return CreateApiUrl(SiteState.Alias, "ChatHub"); }
+            get { return NavigationManager.BaseUri + "api/ChatHub"; }
         }
-        public async Task<List<ChatHubRoom>> GetChatHubRoomsByModuleIdAsync(int ModuleId)
-        {
-            return await HttpClient.GetFromJsonAsync<List<ChatHubRoom>>(apiurl + "/getchathubroomsbymoduleid?entityid=" + ModuleId);
-        }
-        public async Task<ChatHubRoom> GetChatHubRoomAsync(int ChatHubRoomId, int ModuleId)
-        {
-            return await HttpClient.GetFromJsonAsync<ChatHubRoom>(apiurl + "/getchathubroom/" + ChatHubRoomId + "?entityid=" + ModuleId);
-        }
-        public async Task<ChatHubRoom> AddChatHubRoomAsync(ChatHubRoom ChatHubRoom)
-        {
-            var response = await HttpClient.PostAsJsonAsync(apiurl + "/addchathubroom" + "?entityid=" + ChatHubRoom.ModuleId, ChatHubRoom);
-            return await response.Content.ReadFromJsonAsync<ChatHubRoom>();
-        }
-        public async Task UpdateChatHubRoomAsync(ChatHubRoom ChatHubRoom)
-        {
-            await HttpClient.PutAsJsonAsync(apiurl + "/updatechathubroom/" + ChatHubRoom.Id + "?entityid=" + ChatHubRoom.ModuleId, ChatHubRoom);
-        }
-        public async Task DeleteChatHubRoomAsync(int ChatHubRoomId, int ModuleId)
-        {
-            await HttpClient.DeleteAsync(apiurl + "/deletechathubroom/" + ChatHubRoomId + "?entityid=" + ModuleId);
-        }
-        public async Task DeleteRoomImageAsync(int ChatHubRoomId, int ModuleId)
-        {
-            await HttpClient.DeleteAsync(apiurl + "/deleteroomimage/" + ChatHubRoomId + "?entityid=" + ModuleId);
-        }
+
         public async Task FixCorruptConnections(int ModuleId)
         {
-            await HttpClient.DeleteAsync(apiurl + "/fixcorruptconnections" + "?entityid=" + ModuleId);
+            await HttpClient.DeleteAsync(ChatHubControllerApiUrl + "/fixcorruptconnections" + "?entityid=" + ModuleId);
         }
         
     }

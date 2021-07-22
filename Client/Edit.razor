@@ -54,7 +54,7 @@
                 Dictionary<string, string> headers = new Dictionary<string, string>();
                 headers.Add("roomid", this.roomId.ToString());
 
-                var url = string.Concat(NavigationManager.BaseUri.Substring(0, NavigationManager.BaseUri.LastIndexOf('/')), this.ChatHubService.apiurl, "/postroomimageupload");
+                var url = string.Concat(NavigationManager.BaseUri.Substring(0, NavigationManager.BaseUri.LastIndexOf('/')), this.ChatHubService.ChatHubControllerApiUrl, "/postroomimageupload");
             }
 
             <BlazorFileUploadComponent ApiUrl="@url" FileUploadHeaders="@headers" InputFileId="@FileUploadInputFileElementId" DropzoneElementId="@FileUploadDropzoneContainerElementId"></BlazorFileUploadComponent>

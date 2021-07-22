@@ -118,7 +118,7 @@ namespace Oqtane.ChatHubs
             try
             {
                 this.roomId = roomId;
-                ChatHubRoom room = await this.ChatHubService.GetChatHubRoomAsync(roomId, ModuleState.ModuleId);
+                ChatHubRoom room = await this.ChatHubService.GetRoom(roomId, ModuleState.ModuleId);
                 if (room != null)
                 {
                     this.title = room.Title;
@@ -142,7 +142,7 @@ namespace Oqtane.ChatHubs
         {
             try
             {
-                ChatHubRoom room = await this.ChatHubService.GetChatHubRoomAsync(roomId, ModuleState.ModuleId);
+                ChatHubRoom room = await this.ChatHubService.GetRoom(roomId, ModuleState.ModuleId);
                 if (room != null)
                 {
                     room.Title = this.title;

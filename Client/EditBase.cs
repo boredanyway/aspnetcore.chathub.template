@@ -100,7 +100,7 @@ namespace Oqtane.ChatHubs
                 if (PageState.QueryString.ContainsKey("roomid"))
                 {
                     this.roomId = Int32.Parse(PageState.QueryString["roomid"]);
-                    ChatHubRoom room = await this.ChatHubService.GetChatHubRoomAsync(roomId, ModuleState.ModuleId);
+                    ChatHubRoom room = await this.ChatHubService.GetRoom(roomId, ModuleState.ModuleId);
                     if (room != null)
                     {
                         this.title = room.Title;
@@ -146,13 +146,13 @@ namespace Oqtane.ChatHubs
                         CreatorId = ChatHubService.ConnectedUser.UserId,
                     };
 
-                    room = await this.ChatHubService.AddChatHubRoomAsync(room);
+                    room = await this.ChatHubService.CreateRoom(room);
                     await logger.LogInformation("Room Added {ChatHubRoom}", room);
                     NavigationManager.NavigateTo(NavigateUrl());
                 }
                 else
                 {                    
-                    ChatHubRoom room = await this.ChatHubService.GetChatHubRoomAsync(roomId, ModuleState.ModuleId);
+                    ChatHubRoom room = await this.ChatHubService.GetRoom(roomId, ModuleState.ModuleId);
                     if (room != null)
                     {
                         room.Title = this.title;
@@ -160,7 +160,7 @@ namespace Oqtane.ChatHubs
                         room.BackgroundColor = this.backgroundcolor;
                         room.Type = this.type;
 
-                        await this.ChatHubService.UpdateChatHubRoomAsync(room);
+                        await this.ChatHubService.UpdateRoom(room);
 
                         await logger.LogInformation("Room Updated {ChatHubRoom}", room);
                         NavigationManager.NavigateTo(NavigateUrl());

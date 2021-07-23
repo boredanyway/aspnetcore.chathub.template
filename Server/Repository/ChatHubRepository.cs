@@ -29,14 +29,7 @@ namespace Oqtane.ChatHubs.Repository
 
         public IQueryable<ChatHubRoom> GetChatHubRooms()
         {
-            try
-            {
-                return db.ChatHubRoom.Select(item => item);
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubRoom.Select(item => item);
         }
         public IQueryable<ChatHubRoom> GetChatHubRoomsByUser(ChatHubUser user)
         {
@@ -56,25 +49,11 @@ namespace Oqtane.ChatHubs.Repository
         }
         public ChatHubRoom GetChatHubRoom(int ChatHubRoomId)
         {
-            try
-            {
-                return db.ChatHubRoom.FirstOrDefault(room => room.Id == ChatHubRoomId);
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubRoom.FirstOrDefault(room => room.Id == ChatHubRoomId);
         }
         public ChatHubRoom GetChatHubRoomOneVsOne(string OneVsOneId)
         {
-            try
-            {
-                return db.ChatHubRoom.FirstOrDefault(item => item.OneVsOneId == OneVsOneId);
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubRoom.FirstOrDefault(item => item.OneVsOneId == OneVsOneId);
         }
         public IList<ChatHubMessage> GetChatHubMessages(int roomId, int count)
         {
@@ -91,21 +70,14 @@ namespace Oqtane.ChatHubs.Repository
 
                 return msgs;
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public ChatHubMessage GetChatHubMessage(int ChatHubMessageId)
         {
-            try
-            {
-                return db.ChatHubMessage.Where(item => item.Id == ChatHubMessageId).Include(item => item.User).Include(item => item.Photos).FirstOrDefault();
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubMessage.Where(item => item.Id == ChatHubMessageId).Include(item => item.User).Include(item => item.Photos).FirstOrDefault();
         }
         public IQueryable<ChatHubUser> GetOnlineUsers()
         {
@@ -145,6 +117,10 @@ namespace Oqtane.ChatHubs.Repository
                     .Where(item => item.ChatHubUserId == chatHubUserId)
                     .FirstOrDefault();
         }
+        public List<ChatHubRoomChatHubUser> GetChatHubRoomChatHubUser(int chatHubRoomId)
+        {
+            return db.ChatHubRoomChatHubUser.Where(item => item.ChatHubRoomId == chatHubRoomId).ToList();
+        }
         public ChatHubIgnore GetChatHubIgnore(int callerUserId, int targetUserId)
         {
             return this.db.ChatHubIgnore.FirstOrDefault(item => item.ChatHubUserId == callerUserId && item.ChatHubIgnoredUserId == targetUserId);
@@ -180,25 +156,11 @@ namespace Oqtane.ChatHubs.Repository
         }
         public ChatHubSettings GetChatHubSetting(int ChatHubUserId)
         {
-            try
-            {
-                return db.ChatHubSetting.Include(item => item.User).Where(item => item.ChatHubUserId == ChatHubUserId).FirstOrDefault();
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubSetting.Include(item => item.User).Where(item => item.ChatHubUserId == ChatHubUserId).FirstOrDefault();
         }
         public ChatHubSettings GetChatHubSettingByUser(ChatHubUser user)
         {
-            try
-            {
-                return db.ChatHubSetting.Where(item => item.ChatHubUserId == user.UserId).FirstOrDefault();
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubSetting.Where(item => item.ChatHubUserId == user.UserId).FirstOrDefault();
         }
         public async Task<ChatHubUser> GetUserByIdAsync(int id)
         {
@@ -253,14 +215,7 @@ namespace Oqtane.ChatHubs.Repository
         }
         public ChatHubModerator GetChatHubModerator(int ChatHubUserId)
         {
-            try
-            {
-                return db.ChatHubModerator.FirstOrDefault(item => item.ChatHubUserId == ChatHubUserId);
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubModerator.FirstOrDefault(item => item.ChatHubUserId == ChatHubUserId);
         }
         public IQueryable<ChatHubModerator> GetChatHubModerators(ChatHubRoom ChatHubRoom)
         {
@@ -270,9 +225,9 @@ namespace Oqtane.ChatHubs.Repository
                       .Collection(item => item.RoomModerators)
                       .Query().Select(item => item.Moderator);
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public ChatHubRoomChatHubModerator GetChatHubRoomChatHubModerator(int chatHubRoomId, int chatHubModeratorId)
@@ -284,14 +239,7 @@ namespace Oqtane.ChatHubs.Repository
         }
         public ChatHubWhitelistUser GetChatHubWhitelistUser(int ChatHubUserId)
         {
-            try
-            {
-                return db.ChatHubWhitelistUser.FirstOrDefault(item => item.ChatHubUserId == ChatHubUserId);
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubWhitelistUser.FirstOrDefault(item => item.ChatHubUserId == ChatHubUserId);
         }
         public IQueryable<ChatHubWhitelistUser> GetChatHubWhitelistUsers(ChatHubRoom ChatHubRoom)
         {
@@ -301,9 +249,9 @@ namespace Oqtane.ChatHubs.Repository
                       .Collection(item => item.RoomWhitelistUsers)
                       .Query().Select(item => item.WhitelistUser);
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public ChatHubRoomChatHubWhitelistUser GetChatHubRoomChatHubWhitelistUser(int chatHubRoomId, int chatHubWhitelistUserId)
@@ -315,14 +263,7 @@ namespace Oqtane.ChatHubs.Repository
         }
         public ChatHubBlacklistUser GetChatHubBlacklistUser(int ChatHubUserId)
         {
-            try
-            {
-                return db.ChatHubBlacklistUser.FirstOrDefault(item => item.ChatHubUserId == ChatHubUserId);
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubBlacklistUser.FirstOrDefault(item => item.ChatHubUserId == ChatHubUserId);
         }
         public IQueryable<ChatHubBlacklistUser> GetChatHubBlacklistUsers(ChatHubRoom ChatHubRoom)
         {
@@ -332,9 +273,9 @@ namespace Oqtane.ChatHubs.Repository
                       .Collection(item => item.RoomBlacklistUsers)
                       .Query().Select(item => item.BlacklistUser);
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public ChatHubRoomChatHubBlacklistUser GetChatHubRoomChatHubBlacklistUser(int chatHubRoomId, int chatHubBlacklistUserId)
@@ -346,25 +287,11 @@ namespace Oqtane.ChatHubs.Repository
         }
         public ChatHubCam GetChatHubCamById(int ChatHubCamId)
         {
-            try
-            {
-                return db.ChatHubCam.FirstOrDefault(item => item.Id == ChatHubCamId);
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubCam.FirstOrDefault(item => item.Id == ChatHubCamId);
         }
         public ChatHubCam GetChatHubCam(int roomId, int ChatHubConnectionId)
         {
-            try
-            {
-                return db.ChatHubCam.FirstOrDefault(item => item.ChatHubRoomId == roomId && item.ChatHubConnectionId == ChatHubConnectionId);
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubCam.FirstOrDefault(item => item.ChatHubRoomId == roomId && item.ChatHubConnectionId == ChatHubConnectionId);
         }
         public IQueryable<ChatHubCam> GetChatHubCams(int roomId, int connectonId)
         {
@@ -372,25 +299,11 @@ namespace Oqtane.ChatHubs.Repository
         }
         public IQueryable<ChatHubCam> GetChatHubCamsByRoomId(int roomId)
         {
-            try
-            {
-                return db.ChatHubCam.Where(item => item.ChatHubRoomId == roomId);
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubCam.Where(item => item.ChatHubRoomId == roomId);
         }
         public IQueryable<ChatHubCam> GetChatHubCamsByConnectionId(int connectionId)
         {
-            try
-            {
-                return db.ChatHubCam.Where(item => item.ChatHubConnectionId == connectionId);
-            }
-            catch
-            {
-                throw;
-            }
+            return db.ChatHubCam.Where(item => item.ChatHubConnectionId == connectionId);
         }
         public async Task<IList<ChatHubViewer>> GetChatHubViewersByRoomIdAsync(int roomId)
         {
@@ -415,74 +328,51 @@ namespace Oqtane.ChatHubs.Repository
 
         public ChatHubRoom AddChatHubRoom(ChatHubRoom ChatHubRoom)
         {
-            try
+            if(ChatHubRoom != null)
             {
                 db.ChatHubRoom.Add(ChatHubRoom);
                 db.SaveChanges();
-                return ChatHubRoom;
             }
-            catch
-            {
-                throw;
-            }
+            return ChatHubRoom;
         }
         public ChatHubMessage AddChatHubMessage(ChatHubMessage ChatHubMessage)
         {
-            try
+            if(ChatHubMessage != null)
             {
                 db.ChatHubMessage.Add(ChatHubMessage);
                 db.SaveChanges();
-                return ChatHubMessage;
             }
-            catch
-            {
-                throw;
-            }
+            return ChatHubMessage;
         }
         public ChatHubConnection AddChatHubConnection(ChatHubConnection ChatHubConnection)
         {
-            try
+            if(ChatHubConnection != null)
             {
                 db.ChatHubConnection.Add(ChatHubConnection);
                 db.SaveChanges();
-                return ChatHubConnection;
             }
-            catch
-            {
-                throw;
-            }
+            return ChatHubConnection;
         }
         public ChatHubUser AddChatHubUser(ChatHubUser ChatHubUser)
         {
-            try
+            if(ChatHubUser != null)
             {
                 db.ChatHubUser.Add(ChatHubUser);
                 db.SaveChanges();
-                return ChatHubUser;
-            }
-            catch
-            {
-                throw;
-            }
+            }                
+            return ChatHubUser;
         }
         public ChatHubRoomChatHubUser AddChatHubRoomChatHubUser(ChatHubRoomChatHubUser ChatHubRoomChatHubUser)
         {
-            try
+            var item = this.GetChatHubRoomChatHubUser(ChatHubRoomChatHubUser.ChatHubRoomId, ChatHubRoomChatHubUser.ChatHubUserId);
+            if (item == null)
             {
-                var item = this.GetChatHubRoomChatHubUser(ChatHubRoomChatHubUser.ChatHubRoomId, ChatHubRoomChatHubUser.ChatHubUserId);
-                if (item == null)
-                {
-                    db.ChatHubRoomChatHubUser.Add(ChatHubRoomChatHubUser);
-                    db.SaveChanges();
-                    return ChatHubRoomChatHubUser;
-                }
+                db.ChatHubRoomChatHubUser.Add(ChatHubRoomChatHubUser);
+                db.SaveChanges();
+                return ChatHubRoomChatHubUser;
+            }
 
-                return item;
-            }
-            catch
-            {
-                throw;
-            }
+            return item;
         }
         public ChatHubPhoto AddChatHubPhoto(ChatHubPhoto ChatHubPhoto)
         {
@@ -495,9 +385,9 @@ namespace Oqtane.ChatHubs.Repository
                 db.SaveChanges();
                 return ChatHubPhoto;
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public ChatHubIgnore AddChatHubIgnore(ChatHubIgnore chatHubIgnore)
@@ -511,55 +401,40 @@ namespace Oqtane.ChatHubs.Repository
                 db.SaveChanges();
                 return chatHubIgnore;
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public ChatHubSettings AddChatHubSetting(ChatHubSettings ChatHubSetting)
         {
-            try
+            if(ChatHubSetting != null)
             {
                 db.ChatHubSetting.Add(ChatHubSetting);
                 db.SaveChanges();
-                return ChatHubSetting;
-            }
-            catch
-            {
-                throw;
-            }
+            }                
+            return ChatHubSetting;
         }
         public ChatHubModerator AddChatHubModerator(ChatHubModerator ChatHubModerator)
         {
-            try
+            if(ChatHubModerator != null)
             {
                 db.ChatHubModerator.Add(ChatHubModerator);
                 db.SaveChanges();
-                return ChatHubModerator;
-            }
-            catch
-            {
-                throw;
-            }
+            }                
+            return ChatHubModerator;
         }
         public ChatHubRoomChatHubModerator AddChatHubRoomChatHubModerator(ChatHubRoomChatHubModerator ChatHubRoomChatHubModerator)
         {
-            try
+            var item = this.GetChatHubRoomChatHubModerator(ChatHubRoomChatHubModerator.ChatHubRoomId, ChatHubRoomChatHubModerator.ChatHubModeratorId);
+            if (item == null)
             {
-                var item = this.GetChatHubRoomChatHubModerator(ChatHubRoomChatHubModerator.ChatHubRoomId, ChatHubRoomChatHubModerator.ChatHubModeratorId);
-                if (item == null)
-                {
-                    db.ChatHubRoomChatHubModerator.Add(ChatHubRoomChatHubModerator);
-                    db.SaveChanges();
-                    return ChatHubRoomChatHubModerator;
-                }
+                db.ChatHubRoomChatHubModerator.Add(ChatHubRoomChatHubModerator);
+                db.SaveChanges();
+                return ChatHubRoomChatHubModerator;
+            }
 
-                return item;
-            }
-            catch
-            {
-                throw;
-            }
+            return item;
         }
         public ChatHubWhitelistUser AddChatHubWhitelistUser(ChatHubUser targetUser)
         {
@@ -579,29 +454,22 @@ namespace Oqtane.ChatHubs.Repository
                 }
                 return ChatHubWhitelistUser;
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public ChatHubRoomChatHubWhitelistUser AddChatHubRoomChatHubWhitelistUser(ChatHubRoomChatHubWhitelistUser ChatHubRoomChatHubWhitelistUser)
         {
-            try
+            var item = this.GetChatHubRoomChatHubWhitelistUser(ChatHubRoomChatHubWhitelistUser.ChatHubRoomId, ChatHubRoomChatHubWhitelistUser.ChatHubWhitelistUserId);
+            if (item == null)
             {
-                var item = this.GetChatHubRoomChatHubWhitelistUser(ChatHubRoomChatHubWhitelistUser.ChatHubRoomId, ChatHubRoomChatHubWhitelistUser.ChatHubWhitelistUserId);
-                if (item == null)
-                {
-                    db.ChatHubRoomChatHubWhitelistUser.Add(ChatHubRoomChatHubWhitelistUser);
-                    db.SaveChanges();
-                    return ChatHubRoomChatHubWhitelistUser;
-                }
+                db.ChatHubRoomChatHubWhitelistUser.Add(ChatHubRoomChatHubWhitelistUser);
+                db.SaveChanges();
+                return ChatHubRoomChatHubWhitelistUser;
+            }
 
-                return item;
-            }
-            catch
-            {
-                throw;
-            }
+            return item;
         }
         public ChatHubBlacklistUser AddChatHubBlacklistUser(ChatHubUser targetUser)
         {
@@ -621,42 +489,31 @@ namespace Oqtane.ChatHubs.Repository
                 }
                 return ChatHubBlacklistUser;
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public ChatHubRoomChatHubBlacklistUser AddChatHubRoomChatHubBlacklistUser(ChatHubRoomChatHubBlacklistUser ChatHubRoomChatHubBlacklistUser)
         {
-            try
+            var item = this.GetChatHubRoomChatHubBlacklistUser(ChatHubRoomChatHubBlacklistUser.ChatHubRoomId, ChatHubRoomChatHubBlacklistUser.ChatHubBlacklistUserId);
+            if (item == null)
             {
-                var item = this.GetChatHubRoomChatHubBlacklistUser(ChatHubRoomChatHubBlacklistUser.ChatHubRoomId, ChatHubRoomChatHubBlacklistUser.ChatHubBlacklistUserId);
-                if (item == null)
-                {
-                    db.ChatHubRoomChatHubBlacklistUser.Add(ChatHubRoomChatHubBlacklistUser);
-                    db.SaveChanges();
-                    return ChatHubRoomChatHubBlacklistUser;
-                }
+                db.ChatHubRoomChatHubBlacklistUser.Add(ChatHubRoomChatHubBlacklistUser);
+                db.SaveChanges();
+                return ChatHubRoomChatHubBlacklistUser;
+            }
 
-                return item;
-            }
-            catch
-            {
-                throw;
-            }
+            return item;
         }
         public ChatHubCam AddChatHubCam(ChatHubCam ChatHubCam)
         {
-            try
+            if(ChatHubCam != null)
             {
                 db.ChatHubCam.Add(ChatHubCam);
                 db.SaveChanges();
-                return ChatHubCam;
             }
-            catch
-            {
-                throw;
-            }
+            return ChatHubCam;
         }
 
         #endregion
@@ -669,28 +526,20 @@ namespace Oqtane.ChatHubs.Repository
 
         public void DeleteChatHubUser(int UserId)
         {
-            try
+            ChatHubUser ChatHubUser = db.ChatHubUser.Where(item => item.UserId == UserId).FirstOrDefault();
+            if(ChatHubUser != null)
             {
-                ChatHubUser ChatHubUser = db.ChatHubUser.Where(item => item.UserId == UserId).FirstOrDefault();
                 db.ChatHubUser.Remove(ChatHubUser);
                 db.SaveChanges();
-            }
-            catch
-            {
-                throw;
             }
         }
         public void DeleteChatHubRoom(int ChatHubRoomId)
         {
-            try
+            ChatHubRoom ChatHubRoom = db.ChatHubRoom.Where(item => item.Id == ChatHubRoomId).FirstOrDefault();
+            if(ChatHubRoom != null)
             {
-                ChatHubRoom ChatHubRoom = db.ChatHubRoom.Where(item => item.Id == ChatHubRoomId).FirstOrDefault();
                 db.ChatHubRoom.Remove(ChatHubRoom);
                 db.SaveChanges();
-            }
-            catch
-            {
-                throw;
             }
         }
         public void DeleteChatHubRooms(int userId, int ModuleId)
@@ -702,9 +551,9 @@ namespace Oqtane.ChatHubs.Repository
                 db.ChatHubRoom.RemoveRange(rooms);
                 db.SaveChanges();
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public void DeleteChatHubMessage(int ChatHubMessageId, int ChatHubRoomId)
@@ -716,36 +565,29 @@ namespace Oqtane.ChatHubs.Repository
                 db.ChatHubMessage.Remove(ChatHubMessage);
                 db.SaveChanges();
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public void DeleteChatHubMessages(int userId)
         {
-            try
+            IQueryable<ChatHubMessage> messages = db.ChatHubMessage.Where(item => item.ChatHubUserId == userId);
+            if(messages != null)
             {
-                IQueryable<ChatHubMessage> messages = db.ChatHubMessage.Where(item => item.ChatHubUserId == userId);
                 db.ChatHubMessage.RemoveRange(messages);
                 db.SaveChanges();
-            }
-            catch
-            {
-                throw;
             }
         }
         public void DeleteChatHubConnection(int ChatHubConnectionId, int ChatHubUserId)
         {
-            try
+            ChatHubConnection ChatHubConnection = db.ChatHubConnection.Where(item => item.Id == ChatHubConnectionId)
+                .Where(item => item.ChatHubUserId == ChatHubUserId).FirstOrDefault();
+
+            if(ChatHubConnection != null)
             {
-                ChatHubConnection ChatHubConnection = db.ChatHubConnection.Where(item => item.Id == ChatHubConnectionId)
-                    .Where(item => item.ChatHubUserId == ChatHubUserId).FirstOrDefault();
                 db.ChatHubConnection.Remove(ChatHubConnection);
                 db.SaveChanges();
-            }
-            catch
-            {
-                throw;
             }
         }
         public void DeleteChatHubConnections(int userId)
@@ -756,139 +598,99 @@ namespace Oqtane.ChatHubs.Repository
                 db.ChatHubConnection.RemoveRange(connections);
                 db.SaveChanges();
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
         public void DeleteChatHubRoomChatHubUser(int ChatHubRoomId, int ChatHubUserId)
         {
-            try
+            ChatHubRoomChatHubUser item = this.GetChatHubRoomChatHubUser(ChatHubRoomId, ChatHubUserId);
+            if (item != null)
             {
-                ChatHubRoomChatHubUser item = this.GetChatHubRoomChatHubUser(ChatHubRoomId, ChatHubUserId);
-
-                if (item != null)
-                {
-                    db.ChatHubRoomChatHubUser.Remove(item);
-                    db.SaveChanges();
-                }
+                db.ChatHubRoomChatHubUser.Remove(item);
+                db.SaveChanges();
             }
-            catch
+        }
+        public void DeleteChatHubRoomChatHubUser(int ChatHubRoomId)
+        {
+            List<ChatHubRoomChatHubUser> items = this.GetChatHubRoomChatHubUser(ChatHubRoomId);
+            if (items != null)
             {
-                throw;
+                db.ChatHubRoomChatHubUser.RemoveRange(items);
+                db.SaveChanges();
             }
         }
         public void DeleteChatHubIgnore(ChatHubIgnore chatHubIgnore)
         {
-            try
+            if(chatHubIgnore != null)
             {
                 db.ChatHubIgnore.Remove(chatHubIgnore);
                 db.SaveChanges();
             }
-            catch
-            {
-                throw;
-            }
         }
         public void DeleteChatHubModerator(int ModeratorId)
         {
-            try
+            ChatHubModerator ChatHubModerator = db.ChatHubModerator.Where(item => item.Id == ModeratorId).FirstOrDefault();
+            if(ChatHubModerator != null)
             {
-                ChatHubModerator ChatHubModerator = db.ChatHubModerator.Where(item => item.Id == ModeratorId).FirstOrDefault();
                 db.ChatHubModerator.Remove(ChatHubModerator);
                 db.SaveChanges();
-            }
-            catch
-            {
-                throw;
             }
         }
         public void DeleteChatHubRoomChatHubModerator(int ChatHubRoomId, int ChatHubModeratorId)
         {
-            try
+            ChatHubRoomChatHubModerator item = this.GetChatHubRoomChatHubModerator(ChatHubRoomId, ChatHubModeratorId);
+            if (item != null)
             {
-                ChatHubRoomChatHubModerator item = this.GetChatHubRoomChatHubModerator(ChatHubRoomId, ChatHubModeratorId);
-                if (item != null)
-                {
-                    db.ChatHubRoomChatHubModerator.Remove(item);
-                    db.SaveChanges();
-                }
-            }
-            catch
-            {
-                throw;
+                db.ChatHubRoomChatHubModerator.Remove(item);
+                db.SaveChanges();
             }
         }
         public void DeleteChatHubWhitelistUser(int WhitelistUserId)
         {
-            try
+            ChatHubWhitelistUser ChatHubWhitelistUser = db.ChatHubWhitelistUser.Where(item => item.Id == WhitelistUserId).FirstOrDefault();
+            if(ChatHubWhitelistUser != null)
             {
-                ChatHubWhitelistUser ChatHubWhitelistUser = db.ChatHubWhitelistUser.Where(item => item.Id == WhitelistUserId).FirstOrDefault();
                 db.ChatHubWhitelistUser.Remove(ChatHubWhitelistUser);
                 db.SaveChanges();
-            }
-            catch
-            {
-                throw;
             }
         }
         public void DeleteChatHubRoomChatHubWhitelistUser(int ChatHubRoomId, int ChatHubWhitelistUserId)
         {
-            try
+            ChatHubRoomChatHubWhitelistUser item = this.GetChatHubRoomChatHubWhitelistUser(ChatHubRoomId, ChatHubWhitelistUserId);
+            if (item != null)
             {
-                ChatHubRoomChatHubWhitelistUser item = this.GetChatHubRoomChatHubWhitelistUser(ChatHubRoomId, ChatHubWhitelistUserId);
-                if (item != null)
-                {
-                    db.ChatHubRoomChatHubWhitelistUser.Remove(item);
-                    db.SaveChanges();
-                }
-            }
-            catch
-            {
-                throw;
+                db.ChatHubRoomChatHubWhitelistUser.Remove(item);
+                db.SaveChanges();
             }
         }
         public void DeleteChatHubBlacklistUser(int BlacklistUserId)
         {
-            try
+            ChatHubBlacklistUser ChatHubBlacklistUser = db.ChatHubBlacklistUser.Where(item => item.Id == BlacklistUserId).FirstOrDefault();
+            if(ChatHubBlacklistUser != null)
             {
-                ChatHubBlacklistUser ChatHubBlacklistUser = db.ChatHubBlacklistUser.Where(item => item.Id == BlacklistUserId).FirstOrDefault();
                 db.ChatHubBlacklistUser.Remove(ChatHubBlacklistUser);
                 db.SaveChanges();
-            }
-            catch
-            {
-                throw;
             }
         }
         public void DeleteChatHubRoomChatHubBlacklistUser(int ChatHubRoomId, int ChatHubBlacklistUserId)
         {
-            try
+            ChatHubRoomChatHubBlacklistUser item = this.GetChatHubRoomChatHubBlacklistUser(ChatHubRoomId, ChatHubBlacklistUserId);
+            if (item != null)
             {
-                ChatHubRoomChatHubBlacklistUser item = this.GetChatHubRoomChatHubBlacklistUser(ChatHubRoomId, ChatHubBlacklistUserId);
-                if (item != null)
-                {
-                    db.ChatHubRoomChatHubBlacklistUser.Remove(item);
-                    db.SaveChanges();
-                }
-            }
-            catch
-            {
-                throw;
+                db.ChatHubRoomChatHubBlacklistUser.Remove(item);
+                db.SaveChanges();
             }
         }
         public void DeleteChatHubCam(int ChatHubCamId)
         {
-            try
+            ChatHubCam ChatHubCam = db.ChatHubCam.Where(item => item.Id == ChatHubCamId).FirstOrDefault();
+            if(ChatHubCam != null)
             {
-                ChatHubCam ChatHubCam = db.ChatHubCam.Where(item => item.Id == ChatHubCamId).FirstOrDefault();
                 db.ChatHubCam.Remove(ChatHubCam);
                 db.SaveChanges();
-            }
-            catch
-            {
-                throw;
-            }
+            }            
         }
 
         #endregion
@@ -901,9 +703,9 @@ namespace Oqtane.ChatHubs.Repository
             {
                 await db.Database.ExecuteSqlRawAsync($"IF COL_LENGTH('dbo.User', 'UserType') IS NULL BEGIN ALTER TABLE [dbo].[User] ADD [UserType] [nvarchar](256) NULL END");
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
 
@@ -913,9 +715,9 @@ namespace Oqtane.ChatHubs.Repository
             {
                 await db.Database.ExecuteSqlRawAsync($"UPDATE [dbo].[User] SET UserType='ChatHubUser' WHERE UserId={user.UserId}");
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                throw new Exception(exception.Message);
             }
         }
 
@@ -925,81 +727,57 @@ namespace Oqtane.ChatHubs.Repository
 
         public ChatHubRoom UpdateChatHubRoom(ChatHubRoom ChatHubRoom)
         {
-            try
+            if(ChatHubRoom != null)
             {
                 db.Entry(ChatHubRoom).State = EntityState.Modified;
                 db.SaveChanges();
-                return ChatHubRoom;
             }
-            catch
-            {
-                throw;
-            }
+            return ChatHubRoom;
         }
         public ChatHubMessage UpdateChatHubMessage(ChatHubMessage ChatHubMessage)
         {
-            try
+            if(ChatHubMessage != null)
             {
                 db.Entry(ChatHubMessage).State = EntityState.Modified;
                 db.SaveChanges();
-                return ChatHubMessage;
-            }
-            catch
-            {
-                throw;
-            }
+            }            
+            return ChatHubMessage;
         }
         public ChatHubConnection UpdateChatHubConnection(ChatHubConnection ChatHubConnection)
         {
-            try
+            if(ChatHubConnection != null)
             {
                 db.Entry(ChatHubConnection).State = EntityState.Modified;
                 db.SaveChanges();
-                return ChatHubConnection;
-            }
-            catch
-            {
-                throw;
-            }
+            }            
+            return ChatHubConnection;
         }
         public ChatHubIgnore UpdateChatHubIgnore(ChatHubIgnore chatHubIgnore)
         {
-            try
+            if(chatHubIgnore != null)
             {
                 db.Entry(chatHubIgnore).State = EntityState.Modified;
                 db.SaveChanges();
-                return chatHubIgnore;
-            }
-            catch
-            {
-                throw;
-            }
+            }            
+            return chatHubIgnore;
         }
         public ChatHubSettings UpdateChatHubSetting(ChatHubSettings ChatHubSetting)
         {
-            try
+            if(ChatHubSetting != null)
             {
                 db.Entry(ChatHubSetting).State = EntityState.Modified;
                 db.SaveChanges();
-                return ChatHubSetting;
-            }
-            catch
-            {
-                throw;
-            }
+            }            
+            return ChatHubSetting;
         }
         public ChatHubCam UpdateChatHubCam(ChatHubCam ChatHubCam)
         {
-            try
+            if(ChatHubCam != null)
             {
                 db.Entry(ChatHubCam).State = EntityState.Modified;
                 db.SaveChanges();
-                return ChatHubCam;
-            }
-            catch
-            {
-                throw;
-            }
+            }            
+            return ChatHubCam;
         }
 
         #endregion

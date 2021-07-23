@@ -1032,9 +1032,10 @@ namespace Oqtane.ChatHubs.Hubs
 
             try
             {
-                if (room.CreatorId == user.UserId)
+                if (room.CreatorId == user.UserId || Context.User.HasClaim(ClaimTypes.Role, RoleNames.Admin))
                 {
-                    chatHubRepository.DeleteChatHubRoom(room.Id);
+                    this.chatHubRepository.DeleteChatHubRoomChatHubUser(roomId);
+                    this.chatHubRepository.DeleteChatHubRoom(room.Id);
                 }
             }
             catch

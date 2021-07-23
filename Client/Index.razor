@@ -233,7 +233,7 @@
 
                                             @if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
                                             {
-                                                <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(c => room.Cams.Any(cam => cam.ChatHubConnectionId == c.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)"></BlazorVideoComponent>
+                                                <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(c => room.Cams.Any(cam => cam.ChatHubConnectionId == c.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)" Framerate="@framerate" VideoBitsPerSecond="@videoBitsPerSecond" AudioBitsPerSecond="@audioBitsPerSecond"></BlazorVideoComponent>
                                             }
                                             else
                                             {

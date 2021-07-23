@@ -52,7 +52,10 @@ namespace Oqtane.ChatHubs
         public string GuestUsername { get; set; } = string.Empty;
         public ChatHubRoom contextRoom { get; set; }
 
-        public int maxUserNameCharacters;
+        public int maxUserNameCharacters { get; set; }
+        public int framerate { get; set; }
+        public int videoBitsPerSecond { get; set; }
+        public int audioBitsPerSecond { get; set; }
 
         public int InnerHeight = 0;
         public int InnerWidth = 0;
@@ -77,15 +80,17 @@ namespace Oqtane.ChatHubs
                         
             await base.OnInitializedAsync();
         }
-
         protected override async Task OnParametersSetAsync()
         {
             try
             {
-                this.ChatHubService.ModuleId = ModuleState.ModuleId;
+                Dictionary<string, string> settings = await this.SettingService.GetModuleSettingsAsync(ModuleState.ModuleId);
+                this.maxUserNameCharacters = Int32.Parse(this.SettingService.GetSetting(settings, "MaxUserNameCharacters", "20"));
+                this.framerate = Int32.Parse(this.SettingService.GetSetting(settings, "Framerate", "30"));
+                this.videoBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "240000"));
+                this.audioBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "100000"));
 
-                this.settings = await this.SettingService.GetModuleSettingsAsync(ModuleState.ModuleId);
-                maxUserNameCharacters = int.Parse(this.SettingService.GetSetting(settings, "MaxUserNameCharacters", "500"));
+                this.ChatHubService.ModuleId = ModuleState.ModuleId;
 
                 if (PageState.QueryString.ContainsKey("moduleid") && PageState.QueryString.ContainsKey("roomid") && int.Parse(PageState.QueryString["moduleid"]) == ModuleState.ModuleId)
                 {
@@ -99,8 +104,7 @@ namespace Oqtane.ChatHubs
             }
 
             await base.OnParametersSetAsync();
-        }
-        
+        }        
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
@@ -227,7 +231,6 @@ namespace Oqtane.ChatHubs
                 ModuleInstance.AddModuleMessage("Error Connecting To ChatHub", MessageType.Error);
             }
         }
-
         public async Task EnterRoom_Clicked(int roomId, int moduleid)
         {
             if(!this.ChatHubService.Rooms.Any(item => item.Id == roomId) && ChatHubService.Connection?.State == HubConnectionState.Connected)
@@ -235,7 +238,6 @@ namespace Oqtane.ChatHubs
                 await this.ChatHubService.EnterChatRoom(roomId);
             }
         }
-
         public async Task LeaveRoom_Clicked(int roomId, int moduleId)
         {
             await this.ChatHubService.LeaveChatRoom(roomId);

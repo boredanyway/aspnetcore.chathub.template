@@ -1,8 +1,8 @@
-export function initblazorvideo(dotnetobjref, id, connectionid, type) {
+export function initblazorvideo(dotnetobjref, id, connectionid, type, framerate, videoBitsPerSecond, audioBitsPerSecond) {
 
     var __obj = {
 
-        blazorvideomap: function (dotnetobjref, id, connectionid, type) {
+        blazorvideomap: function (dotnetobjref, id, connectionid, type, framerate, videoBitsPerSecond, audioBitsPerSecond) {
             
             var __selfblazorvideomap = this;
 
@@ -180,7 +180,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
                         video: {
                             width: { min: 320, ideal: 320, max: 320 },
                             height: { min: 240, ideal: 240, max: 240 },
-                            frameRate: { ideal: 24 },
+                            frameRate: { ideal: framerate },
                             facingMode: { ideal: "environment" },
                         }
                     };
@@ -196,7 +196,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
 
                             __selflocallivestream.vElement.srcObject = mediastream;
 
-                            __selfgetstream.options = { mimeType: __selfblazorvideomap.videomimetypeobject.mimetype, audioBitsPerSecond: 100000, videoBitsPerSecond: 240000, ignoreMutedMedia: true };
+                            __selfgetstream.options = { mimeType: __selfblazorvideomap.videomimetypeobject.mimetype, audioBitsPerSecond: audioBitsPerSecond, videoBitsPerSecond: videoBitsPerSecond, ignoreMutedMedia: true };
                             __selfgetstream.recorder = new MediaRecorder(mediastream, __selfgetstream.options);
 
                             __selfgetstream.recorder.start();
@@ -594,5 +594,5 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type) {
         }
     }
 
-    return new __obj.blazorvideomap(dotnetobjref, id, connectionid, type);
+    return new __obj.blazorvideomap(dotnetobjref, id, connectionid, type, framerate, videoBitsPerSecond, audioBitsPerSecond);
 };

@@ -69,11 +69,6 @@ namespace Oqtane.ChatHubs
         protected readonly string FileUploadDropzoneContainerElementId = "FileUploadDropzoneContainer";
         protected readonly string FileUploadInputFileElementId = "FileUploadInputFileContainer";
 
-        public IndexBase()
-        {
-            
-        }
-
         protected override async Task OnInitializedAsync()
         {
             this.BrowserResizeService.BrowserResizeServiceExtension.OnResize += BrowserHasResized;

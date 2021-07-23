@@ -1,10 +1,6 @@
 ﻿@namespace Oqtane.ChatHubs
-@inherits ModuleBase
+@inherits SettingsBase
 @using System.Text.RegularExpressions
-
-@inject NavigationManager NavigationManager
-@inject HttpClient http
-@inject ISettingService SettingService
 
 <div class="mb-3">
     <label for="maxUsernameChars" class="form-label">Maximum username characters</label>
@@ -12,11 +8,29 @@
 </div>
 
 <div class="mb-3">
+    <label for="framerate" class="form-label">Video Framerate</label>
+    <input type="text" class="form-control" id="framerate" @bind="framerate">
+</div>
+
+<div class="mb-3">
+    <label for="videoBitsPerSecond" class="form-label">Video Bits Per Second</label>
+    <input type="text" class="form-control" id="videoBitsPerSecond" @bind="videoBitsPerSecond">
+</div>
+
+<div class="mb-3">
+    <label for="audioBitsPerSecond" class="form-label">Audio Bits Per Second</label>
+    <input type="text" class="form-control" id="audioBitsPerSecond" @bind="audioBitsPerSecond">
+</div>
+
+<div class="mb-3">
+
+    <label class="form-label">Regular Expressions</label>
+
     @foreach (var item in regularExpressions)
     {
         <div class="d-flex flex-row">
             <div><small><strong>@item</strong></small></div>
-            <div><button type="button" class="btn btn-link" @onclick="@(() => RemoveRegularExpression_ClickedAsync(item))">Remove</button></div>        
+            <div><button type="button" class="btn btn-link" @onclick="@(() => RemoveRegularExpression_ClickedAsync(item))">Remove</button></div>
         </div>
     }
 </div>
@@ -30,66 +44,5 @@
 </div>
 
 @code {
-
-    public string maxUserNameCharacters;
-    public string regularExpression;
-    public List<string> regularExpressions = new List<string>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            Dictionary<string, string> settings = await SettingService.GetModuleSettingsAsync(ModuleState.ModuleId);
-
-            maxUserNameCharacters = SettingService.GetSetting(settings, "MaxUserNameCharacters", "20");
-            regularExpressions = SettingService.GetSetting(settings, "RegularExpression", "").Split(";delimiter;", StringSplitOptions.RemoveEmptyEntries).ToList();
-        }
-        catch (Exception ex)
-        {
-            ModuleInstance.AddModuleMessage(ex.Message, MessageType.Error);
-        }
-    }
-
-    public async Task UpdateSettings()
-    {
-        try
-        {
-            Dictionary<string, string> settings = await SettingService.GetModuleSettingsAsync(ModuleState.ModuleId);
-
-            SettingService.SetSetting(settings, "MaxUserNameCharacters", maxUserNameCharacters);
-            await SettingService.UpdateModuleSettingsAsync(settings, ModuleState.ModuleId);
-
-            SettingService.SetSetting(settings, "RegularExpression", string.Join(";delimiter;", regularExpressions));
-            await SettingService.UpdateModuleSettingsAsync(settings, ModuleState.ModuleId);
-        }
-        catch (Exception ex)
-        {
-            ModuleInstance.AddModuleMessage(ex.Message, MessageType.Error);
-        }
-    }
-
-    public void AddRegularExpression_ClickedAsync()
-    {
-        try
-        {
-            this.regularExpressions.Add(regularExpression);
-            this.regularExpression = string.Empty;
-        }
-        catch (Exception ex)
-        {
-            ModuleInstance.AddModuleMessage(ex.Message, MessageType.Error);
-        }
-    }
-
-    public void RemoveRegularExpression_ClickedAsync(string item)
-    {
-        try
-        {
-            this.regularExpressions.Remove(item);
-        }
-        catch (Exception ex)
-        {
-            ModuleInstance.AddModuleMessage(ex.Message, MessageType.Error);
-        }
-    }
+    
 }

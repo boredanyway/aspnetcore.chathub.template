@@ -3,7 +3,7 @@
 @inherits ImageModalBase
 
 @using BlazorModal
-
+@using Oqtane.ChatHubs.Constants
 
 <BlazorModalComponent ElementId="@ImageModalElementId">
 
@@ -21,15 +21,11 @@
                 <b>Posted by</b> @Message.User?.DisplayName <b>on</b> @Message.CreatedOn.ToShortTimeString()
             </div>
 
-            <div>
+            <div class="bg-light py-sm-4 px-sm-1">
                 @foreach (var photo in Message.Photos)
                 {
-                    <img class="img-fluid" src="@string.Format("{0}/modules/oqtane.chathubs/images/uploads/{1}", NavigationManager.BaseUri, photo.Source)" />
+                    <img class="img-fluid" src="@string.Format("{0}/{1}/{2}", NavigationManager.BaseUri, ChatHubConstants.UploadImagesPath, photo.Source)" />
                 }
-            </div>
-
-            <div class="px-1 py-3">
-                <h6>Posted by @Message.User.Username</h6>
             </div>
 
         }

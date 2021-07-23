@@ -15,6 +15,7 @@
 @using BlazorVideo
 @using Oqtane.ChatHubs.Models
 @using Oqtane.ChatHubs.Enums
+@using Oqtane.ChatHubs.Constants
 
 <link href="/Modules/Oqtane.ChatHubs/blazoralerts.min.css" rel="stylesheet" />
 <link href="/Modules/Oqtane.ChatHubs/chat-hub-stylesheets.css" rel="stylesheet" />
@@ -138,8 +139,8 @@
                             <div class="d-flex flex-wrap flex-sm-nowrap align-items-center w-100 py-2" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff; border-top: 1px solid red;" : "background-color: #fff; border-top: 1px solid #bb99ff")">
 
                                 <div class="px-1">
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/images/{1}", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
-                                    <img src="@string.Format("{0}/modules/oqtane.chathubs/chat-room-image.png", NavigationManager.BaseUri, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
+                                    <img src="@string.Format("{0}/{1}/{2}", NavigationManager.BaseUri, ChatHubConstants.RoomImagesPath, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
+                                    <img src="@string.Format("{0}/{1}/chat-room-image.png", NavigationManager.BaseUri, ChatHubConstants.ModulePath)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
                                 </div>
 
                                 <div class="px-1 py-2">
@@ -903,7 +904,7 @@
                 <div class="jumbotron jumbotron-fluid bg-white py-1 mt-3 mb-0">
                     <div class="container">
 
-                        <img src="@string.Format("{0}/modules/oqtane.chathubs/wasmchatlogo.png", NavigationManager.BaseUri)" class="img-fluid my-2 mb-sm-5" style="width: 420px;" />
+                        <img src="@string.Format("{0}/{1}/wasmchatlogo.png", NavigationManager.BaseUri, ChatHubConstants.ModulePath)" class="img-fluid my-2 mb-sm-5" style="width: 420px;" />
 
                         <h4>Videostream chat rules so far</h4>
                         <ul>

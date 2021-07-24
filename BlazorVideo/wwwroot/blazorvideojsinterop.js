@@ -469,10 +469,13 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type, framerate,
                 this.mediasource.addEventListener('sourceclose', function (event) { console.log("on media source close"); });
 
                 this.video = this.getvideoelement();
-                this.video.controls = true;
+                this.video.controls = false;
                 this.video.autoplay = true;
                 this.video.preload = 'auto';
                 this.video.muted = true;
+
+                this.video.addEventListener('mouseover', e => { this.video.setAttribute("controls", "controls"); });
+                this.video.addEventListener('mouseout', e => { this.video.removeAttribute("controls"); });
 
                 try {
                     this.video.srcObject = this.mediasource;

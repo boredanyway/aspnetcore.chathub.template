@@ -492,20 +492,10 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type, framerate,
                         reader.onloadend = function (event) {
 
                             var timeDiff = __selfremotelivestream.sourcebuffer.timestampOffset - __selfremotelivestream.video.currentTime;
-                            if (timeDiff < 1) {
+                            if (timeDiff > 2) {
 
-                                if (__selfremotelivestream.video.paused) {
-
-                                    __selfremotelivestream.video.pause();
-                                    window.setTimeout(function () {
-
-                                        __selfremotelivestream.video.play();
-                                    },
-                                        1240
-                                    );
-                                }
-                            }
-                            console.log('time diff: ' + timeDiff);
+                                __selfremotelivestream.currentTime = __selfremotelivestream.currentTime - 2;
+                            }                          
 
                             __selfremotelivestream.remotemediasequences.push(reader.result);
 

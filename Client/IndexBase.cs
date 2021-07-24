@@ -56,6 +56,7 @@ namespace Oqtane.ChatHubs
         public int framerate { get; set; }
         public int videoBitsPerSecond { get; set; }
         public int audioBitsPerSecond { get; set; }
+        public int videoSegmentsLength { get; set; }
 
         public int InnerHeight = 0;
         public int InnerWidth = 0;
@@ -89,6 +90,7 @@ namespace Oqtane.ChatHubs
                 this.framerate = Int32.Parse(this.SettingService.GetSetting(settings, "Framerate", "30"));
                 this.videoBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "240000"));
                 this.audioBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "100000"));
+                this.videoSegmentsLength = Int32.Parse(this.SettingService.GetSetting(settings, "VideoSegmentsLength", "420"));
 
                 this.ChatHubService.ModuleId = ModuleState.ModuleId;
 

@@ -25,6 +25,8 @@ namespace BlazorVideo
         public Dictionary<Guid, dynamic> LocalStreamTasks { get; set; } = new Dictionary<Guid, dynamic>();
         public Dictionary<Guid, dynamic> RemoteStreamTasks { get; set; } = new Dictionary<Guid, dynamic>();
 
+        private int VideoSegmentsLength { get; set; }
+
         public BlazorVideoService(IJSRuntime jsRuntime)
         {
             this.JsRuntime = jsRuntime;
@@ -38,8 +40,9 @@ namespace BlazorVideo
                 this.Module = await this.JsRuntime.InvokeAsync<IJSObjectReference>("import", "/Modules/Oqtane.ChatHubs/blazorvideojsinterop.js");
             }
         }
-        public async Task InitBlazorVideoMap(string id, string connectionId, BlazorVideoType type, int framerate, int videoBitsPerSecond, int audioBitsPerSecond)
+        public async Task InitBlazorVideoMap(string id, string connectionId, BlazorVideoType type, int framerate, int videoBitsPerSecond, int audioBitsPerSecond, int videoSegmentsLength)
         {
+            this.VideoSegmentsLength = videoSegmentsLength;
             IJSObjectReference jsobjref = await this.Module.InvokeAsync<IJSObjectReference>("initblazorvideo", this.DotNetObjectRef, id, connectionId, type.ToString().ToLower(), framerate, videoBitsPerSecond, audioBitsPerSecond);
             this.AddBlazorVideoMap(id, connectionId, type, jsobjref);
         }
@@ -241,7 +244,7 @@ namespace BlazorVideo
                     await this.StopSequenceLocalLivestream(roomId, connectionId);
                     await this.StartSequenceLocalLivestream(roomId, connectionId);
 
-                    await Task.Delay(2400);
+                    await Task.Delay(this.VideoSegmentsLength);
                 }
                 catch (Exception ex)
                 {

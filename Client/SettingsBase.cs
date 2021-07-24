@@ -20,6 +20,7 @@ namespace Oqtane.ChatHubs
         public string framerate { get; set; }
         public string videoBitsPerSecond { get; set; }
         public string audioBitsPerSecond { get; set; }
+        public string videoSegmentsLength { get; set; }
         public string regularExpression { get; set; }
 
         public List<string> regularExpressions = new List<string>();
@@ -33,6 +34,7 @@ namespace Oqtane.ChatHubs
                 this.framerate = this.SettingService.GetSetting(settings, "Framerate", "30");
                 this.videoBitsPerSecond = this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "240000");
                 this.audioBitsPerSecond = this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "100000");
+                this.videoSegmentsLength = this.SettingService.GetSetting(settings, "VideoSegmentsLength", "420");
                 this.regularExpressions = this.SettingService.GetSetting(settings, "RegularExpression", "").Split(";delimiter;", StringSplitOptions.RemoveEmptyEntries).ToList();
             }
             catch (Exception ex)
@@ -57,6 +59,9 @@ namespace Oqtane.ChatHubs
                 await this.SettingService.UpdateModuleSettingsAsync(settings, ModuleState.ModuleId);
 
                 this.SettingService.SetSetting(settings, "AudioBitsPerSecond", this.audioBitsPerSecond);
+                await this.SettingService.UpdateModuleSettingsAsync(settings, ModuleState.ModuleId);
+
+                this.SettingService.SetSetting(settings, "VideoSegmentsLength", this.videoSegmentsLength);
                 await this.SettingService.UpdateModuleSettingsAsync(settings, ModuleState.ModuleId);
 
                 this.SettingService.SetSetting(settings, "RegularExpression", string.Join(";delimiter;", regularExpressions));

@@ -17,13 +17,14 @@ namespace BlazorVideo
         [Parameter] public int Framerate { get; set; }
         [Parameter] public int VideoBitsPerSecond { get; set; }
         [Parameter] public int AudioBitsPerSecond { get; set; }
+        [Parameter] public int VideoSegmentsLength { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             this.BlazorVideoService.RunUpdateUI += UpdateUIStateHasChanged;
 
             await this.BlazorVideoService.InitBlazorVideo();
-            await this.BlazorVideoService.InitBlazorVideoMap(this.Id, this.ConnectionId, this.Type, this.Framerate, this.VideoBitsPerSecond, this.AudioBitsPerSecond);
+            await this.BlazorVideoService.InitBlazorVideoMap(this.Id, this.ConnectionId, this.Type, this.Framerate, this.VideoBitsPerSecond, this.AudioBitsPerSecond, this.VideoSegmentsLength);
 
             await base.OnInitializedAsync();
         }

@@ -18,11 +18,6 @@ namespace BlazorAlerts
 
         public List<BlazorAlertsModel> BlazorAlerts { get; set; } = new List<BlazorAlertsModel>();
 
-        public BlazorAlertsService()
-        {
-
-        }
-
         public void NewBlazorAlert(string message, string heading = "[Javascript Application]", PositionType position = PositionType.Absolute, bool confirmDialog = false, string id = null)
         {
             this.OnAlert?.Invoke(message, heading, position, confirmDialog, id);

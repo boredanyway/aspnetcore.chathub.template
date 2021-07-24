@@ -11,8 +11,8 @@ namespace BlazorVideo
         [Parameter] public string Id { get; set; }
         [Parameter] public string ConnectionId { get; set; }
         [Parameter] public string Name { get; set; }
-        [Parameter] public BlazorVideoType Type { get; set; }
         [Parameter] public string BackgroundColor { get; set; }
+        [Parameter] public BlazorVideoType Type { get; set; }
         [Parameter] public BlazorVideoStatusType Status { get; set; }
         [Parameter] public int Framerate { get; set; }
         [Parameter] public int VideoBitsPerSecond { get; set; }

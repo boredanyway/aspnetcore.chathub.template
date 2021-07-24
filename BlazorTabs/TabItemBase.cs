@@ -8,13 +8,9 @@ namespace BlazorTabs
     {
 
         [CascadingParameter] public TabContainer TabContainer { get; set; }
-
         [Parameter] public RenderFragment TabTitle { get; set; }
-
         [Parameter] public RenderFragment TabContent { get; set; }
-
         [Parameter] public int Id { get; set; }
-
         [Parameter] public bool InitialSelection { get; set; }
 
         protected override async Task OnInitializedAsync()

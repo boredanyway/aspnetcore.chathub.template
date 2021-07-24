@@ -7,9 +7,7 @@ namespace BlazorSelect
     {
 
         [Parameter] public HashSet<string> SelectionItems { get; set; }
-
         [Parameter] public string SelectedItem { get; set; }
-
         [Parameter] public EventCallback<BlazorSelectEvent> SelectEvent { get; set; }
 
         public void OnSelectionChange(ChangeEventArgs e)

@@ -17,11 +17,19 @@ namespace BlazorDraggableList
         [Parameter] public RenderFragment<TItemGeneric> BlazorDraggableListItem { get; set; }
 
         protected override async Task OnInitializedAsync()
-        {
-            await this.BlazorDraggableListService.InitDraggableList(this.Id);
+        {            
             this.BlazorDraggableListService.BlazorDraggableListServiceExtension.OnDropEvent += OnDropEventExecute;
-
             await base.OnInitializedAsync();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if(firstRender)
+            {
+                await this.BlazorDraggableListService.InitDraggableList(this.Id);
+            }
+
+            await base.OnAfterRenderAsync(firstRender);
         }
 
         private void OnDropEventExecute(object sender, BlazorDraggableListEvent e)

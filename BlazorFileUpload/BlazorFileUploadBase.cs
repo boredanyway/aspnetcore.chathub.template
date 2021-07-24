@@ -30,12 +30,20 @@ namespace BlazorFileUpload
 
         protected override async Task OnInitializedAsync()
         {
-            await this.BlazorFileUploadService.InitFileUploadDropzone(this.InputFileId, this.DropzoneElementId);
-
             this.BlazorFileUploadService.BlazorFileUploadServiceExtension.OnDropEvent += OnFileUploadDropEventExecute;
             this.OnUploadImagesEvent += OnUploadImagesExecute;
 
             await base.OnInitializedAsync();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if(firstRender)
+            {
+                await this.BlazorFileUploadService.InitFileUploadDropzone(this.InputFileId, this.DropzoneElementId);
+            }
+
+            await base.OnAfterRenderAsync(firstRender);
         }
 
         public async Task OnBlazorFileUploadChange(InputFileChangeEventArgs e)

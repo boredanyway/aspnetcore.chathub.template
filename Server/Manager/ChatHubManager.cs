@@ -5,7 +5,6 @@ using Oqtane.Modules;
 using Oqtane.Models;
 using Oqtane.Infrastructure;
 using Oqtane.Repository;
-using Oqtane.Shared;
 using Oqtane.Migrations.Framework;
 using Oqtane.Enums;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +33,7 @@ namespace Oqtane.ChatHubs.Manager
         {
             if (tenant.DBType == Oqtane.Shared.Constants.DefaultDBType)
             {
-                if (version == "4.1.1")
+                if (version == "4.1.2")
                 {
                     // version 1.0.0 used SQL scripts rather than migrations, so we need to seed the migration history table
                     _sql.ExecuteNonQuery(tenant, MigrationUtils.BuildInsertScript("ChatHub.01.00.00.00"));

@@ -75,9 +75,18 @@ namespace Oqtane.ChatHubs
 
         protected override async Task OnInitializedAsync()
         {
+            this.ChatHubService.ModuleId = ModuleState.ModuleId;
+
+            Dictionary<string, string> settings = await this.SettingService.GetModuleSettingsAsync(ModuleState.ModuleId);
+            this.maxUserNameCharacters = Int32.Parse(this.SettingService.GetSetting(settings, "MaxUserNameCharacters", "20"));
+            this.framerate = Int32.Parse(this.SettingService.GetSetting(settings, "Framerate", "30"));
+            this.videoBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "240000"));
+            this.audioBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "100000"));
+            this.videoSegmentsLength = Int32.Parse(this.SettingService.GetSetting(settings, "VideoSegmentsLength", "420"));
+
             this.BrowserResizeService.BrowserResizeServiceExtension.OnResize += BrowserHasResized;
             this.BlazorDraggableListService.BlazorDraggableListServiceExtension.OnDropEvent += OnDraggableListDropEventExecute;
-            this.ChatHubService.OnUpdateUI += (object sender, EventArgs e) => UpdateUIStateHasChanged();
+            this.ChatHubService.OnUpdateUI += (object sender, EventArgs e) => UpdateUI();
                         
             await base.OnInitializedAsync();
         }
@@ -85,15 +94,6 @@ namespace Oqtane.ChatHubs
         {
             try
             {
-                Dictionary<string, string> settings = await this.SettingService.GetModuleSettingsAsync(ModuleState.ModuleId);
-                this.maxUserNameCharacters = Int32.Parse(this.SettingService.GetSetting(settings, "MaxUserNameCharacters", "20"));
-                this.framerate = Int32.Parse(this.SettingService.GetSetting(settings, "Framerate", "30"));
-                this.videoBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "240000"));
-                this.audioBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "100000"));
-                this.videoSegmentsLength = Int32.Parse(this.SettingService.GetSetting(settings, "VideoSegmentsLength", "420"));
-
-                this.ChatHubService.ModuleId = ModuleState.ModuleId;
-
                 if (PageState.QueryString.ContainsKey("moduleid") && PageState.QueryString.ContainsKey("roomid") && int.Parse(PageState.QueryString["moduleid"]) == ModuleState.ModuleId)
                 {
                     this.contextRoom = await this.ChatHubService.GetRoom(int.Parse(PageState.QueryString["roomid"]), ModuleState.ModuleId);
@@ -119,7 +119,7 @@ namespace Oqtane.ChatHubs
 
                 string hostname = new Uri(NavigationManager.BaseUri).Host;
                 var cookievalue = await this.CookieService.GetCookieAsync(".AspNetCore.Identity.Application");
-                this.ChatHubService.IdentityCookie = new Cookie(".AspNetCore.Identity.Application", cookievalue, "/", hostname);                
+                this.ChatHubService.IdentityCookie = new Cookie(".AspNetCore.Identity.Application", cookievalue, "/", hostname);
 
                 await this.ConnectToChat();
                 await this.ChatHubService.chatHubMap.InvokeVoidAsync("showchathubscontainer");
@@ -163,7 +163,7 @@ namespace Oqtane.ChatHubs
                         }
                     }
 
-                    this.UpdateUIStateHasChanged();
+                    this.UpdateUI();
                 }
             }
             catch (Exception ex)
@@ -294,7 +294,7 @@ namespace Oqtane.ChatHubs
                         this._cachedMsgInputCounter++;
                     }
 
-                    this.UpdateUIStateHasChanged();
+                    this.UpdateUI();
                 }
             }
         }
@@ -404,7 +404,7 @@ namespace Oqtane.ChatHubs
             return message;
         }
 
-        private void UpdateUIStateHasChanged()
+        private void UpdateUI()
         {
             InvokeAsync(() =>
             {
@@ -470,7 +470,7 @@ namespace Oqtane.ChatHubs
         {
             this.BlazorDraggableListService.BlazorDraggableListServiceExtension.OnDropEvent -= OnDraggableListDropEventExecute;
             this.BrowserResizeService.BrowserResizeServiceExtension.OnResize -= BrowserHasResized;
-            this.ChatHubService.OnUpdateUI -= (object sender, EventArgs e) => UpdateUIStateHasChanged();
+            this.ChatHubService.OnUpdateUI -= (object sender, EventArgs e) => UpdateUI();
 
             if(ChatHubService.Connection != null)
             {

@@ -9,14 +9,10 @@ namespace BlazorAlerts
         [Inject]
         public BlazorAlertsService BlazorAlertsService { get; set; }
 
-        public BlazorAlertsBase() 
-        {
-            
-        }
-
         protected override void OnInitialized()
         {
             this.BlazorAlertsService.OnAlert += OnAlertExecute;
+            base.OnInitialized();
         }
 
         public async void OnAlertExecute(string message, string heading, PositionType position, bool confirmDialog, string id)

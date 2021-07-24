@@ -32,9 +32,9 @@ namespace Oqtane.ChatHubs
                 Dictionary<string, string> settings = await this.SettingService.GetModuleSettingsAsync(ModuleState.ModuleId);
                 this.maxUserNameCharacters = this.SettingService.GetSetting(settings, "MaxUserNameCharacters", "20");
                 this.framerate = this.SettingService.GetSetting(settings, "Framerate", "30");
-                this.videoBitsPerSecond = this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "1000000");
-                this.audioBitsPerSecond = this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "400000");
-                this.videoSegmentsLength = this.SettingService.GetSetting(settings, "VideoSegmentsLength", "240");
+                this.videoBitsPerSecond = this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "300000");
+                this.audioBitsPerSecond = this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "128000");
+                this.videoSegmentsLength = this.SettingService.GetSetting(settings, "VideoSegmentsLength", "800");
                 this.regularExpressions = this.SettingService.GetSetting(settings, "RegularExpression", "").Split(";delimiter;", StringSplitOptions.RemoveEmptyEntries).ToList();
             }
             catch (Exception ex)

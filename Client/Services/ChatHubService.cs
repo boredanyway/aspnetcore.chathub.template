@@ -81,7 +81,6 @@ namespace Oqtane.ChatHubs.Services
         public event Action<string, string, string, ChatHubUser> OnDownloadBytesEvent;
         public event Action<int, ChatHubUser> UpdateRoomCreator;
         public event EventHandler<int> OnClearHistoryEvent;
-        public event EventHandler<ChatHubUser> OnDisconnectEvent;
 
         public IJSObjectReference chatHubScriptJsObjRef { get; set; }
         public IJSObjectReference chatHubMap { get; set; }
@@ -129,7 +128,6 @@ namespace Oqtane.ChatHubs.Services
             this.UpdateRoomCreator += OnUpdateRoomCreator;
             this.OnRemoveIgnoredByUserEvent += OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent += OnClearHistoryExecute;
-            this.OnDisconnectEvent += OnDisconnectExecute;
 
             GetLobbyRoomsTimer.Elapsed += new ElapsedEventHandler(OnGetLobbyRoomsTimerElapsed);
             GetLobbyRoomsTimer.Interval = 10000;
@@ -164,31 +162,16 @@ namespace Oqtane.ChatHubs.Services
         }
         public void RegisterHubConnectionHandlers()
         {
-            Connection.Reconnecting += (ex) =>
+            this.Connection.Reconnecting += (ex) =>
             {
-                if (ex != null)
-                {
-                    this.HandleException(new Exception(ex.Message, ex));
-                }
-
                 return Task.CompletedTask;
             };
-            Connection.Reconnected += (msg) =>
+            this.Connection.Reconnected += (msg) =>
             {
-                if (msg != null)
-                {
-                    this.HandleException(new Exception(msg));
-                }
-
                 return Task.CompletedTask;
             };
-            Connection.Closed += (ex) =>
+            this.Connection.Closed += (ex) =>
             {
-                if (ex != null)
-                {
-                    this.HandleException(new Exception(ex.Message, ex));
-                }
-
                 this.Rooms.Clear();
                 this.RunUpdateUI();
                 return Task.CompletedTask;
@@ -219,7 +202,6 @@ namespace Oqtane.ChatHubs.Services
             this.Connection.On("AddCam", (ChatHubCam cam, int roomId) => OnAddChatHubCamEvent(cam, roomId));
             this.Connection.On("RemoveCam", (ChatHubCam cam, int roomId) => OnRemoveChatHubCamEvent(cam, roomId));
             this.Connection.On("ClearHistory", (int roomId) => OnClearHistoryEvent(this, roomId));
-            this.Connection.On("Disconnect", (ChatHubUser user) => OnDisconnectEvent(this, user));
         }
         public async Task ConnectAsync()
         {
@@ -581,13 +563,6 @@ namespace Oqtane.ChatHubs.Services
             this.Rooms.FirstOrDefault(item => item.Id == waitingRoomItem.RoomId).WaitingRoomItems.Remove(waitingRoomItem);
             this.RunUpdateUI();
         }
-        public async Task DisconnectAsync()
-        {
-            if (Connection.State != HubConnectionState.Disconnected)
-            {
-                await Connection.StopAsync();
-            }
-        }
 
         private void OnAddChatHubRoomExecute(object sender, ChatHubRoom room)
         {
@@ -710,10 +685,6 @@ namespace Oqtane.ChatHubs.Services
             this.ConnectedUser = user;
             this.RunUpdateUI();
         }
-        private async void OnDisconnectExecute(object sender, ChatHubUser user)
-        {
-            await this.DisconnectAsync();
-        }
 
         private async void OnGetLobbyRoomsTimerElapsed(object source, ElapsedEventArgs e)
         {
@@ -732,6 +703,13 @@ namespace Oqtane.ChatHubs.Services
             }
         }
 
+        public async Task DisconnectAsync()
+        {
+            if (this.Connection != null && this.Connection.State != HubConnectionState.Disconnected)
+            {
+                await this.Connection.StopAsync();
+            }
+        }
         public void ClearHistory(int roomId)
         {
             var room = this.Rooms.FirstOrDefault(x => x.Id == roomId);
@@ -823,7 +801,6 @@ namespace Oqtane.ChatHubs.Services
             this.UpdateRoomCreator -= OnUpdateRoomCreator;
             this.OnRemoveIgnoredByUserEvent -= OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent -= OnClearHistoryExecute;
-            this.OnDisconnectEvent -= OnDisconnectExecute;
 
             GetLobbyRoomsTimer.Elapsed -= new ElapsedEventHandler(OnGetLobbyRoomsTimerElapsed);            
         }

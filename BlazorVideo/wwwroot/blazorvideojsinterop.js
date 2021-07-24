@@ -491,11 +491,11 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type, framerate,
                         var reader = new FileReader();
                         reader.onloadend = function (event) {
 
-                            var timeDiff = __selfremotelivestream.sourcebuffer.timestampOffset - __selfremotelivestream.video.currentTime;
-                            if (timeDiff > 2) {
+                            var timeDiff = __selfremotelivestream.video.currentTime - __selfremotelivestream.sourcebuffer.timestampOffset;
+                            if (timeDiff > 1.4) {
 
-                                __selfremotelivestream.currentTime = __selfremotelivestream.currentTime - 2;
-                            }                          
+                                __selfremotelivestream.currentTime = __selfremotelivestream.currentTime - 1.4;
+                            }
 
                             __selfremotelivestream.remotemediasequences.push(reader.result);
 

@@ -43,7 +43,7 @@ namespace BlazorVideo
         public async Task InitBlazorVideoMap(string id, string connectionId, BlazorVideoType type, int framerate, int videoBitsPerSecond, int audioBitsPerSecond, int videoSegmentsLength)
         {
             this.VideoSegmentsLength = videoSegmentsLength;
-            IJSObjectReference jsobjref = await this.Module.InvokeAsync<IJSObjectReference>("initblazorvideo", this.DotNetObjectRef, id, connectionId, type.ToString().ToLower(), framerate, videoBitsPerSecond, audioBitsPerSecond);
+            IJSObjectReference jsobjref = await this.Module.InvokeAsync<IJSObjectReference>("initblazorvideo", this.DotNetObjectRef, id, connectionId, type.ToString().ToLower(), framerate, videoBitsPerSecond, audioBitsPerSecond, videoSegmentsLength);
             this.AddBlazorVideoMap(id, connectionId, type, jsobjref);
         }
         

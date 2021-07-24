@@ -2,7 +2,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type, framerate,
 
     var __obj = {
 
-        blazorvideomap: function (dotnetobjref, id, connectionid, type, framerate, videoBitsPerSecond, audioBitsPerSecond) {
+        blazorvideomap: function (dotnetobjref, id, connectionid, type, framerate, videoBitsPerSecond, audioBitsPerSecond, videoSegmentsLength, syncVideoTimeDifference = 1.4) {
             
             var __selfblazorvideomap = this;
 
@@ -492,9 +492,17 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type, framerate,
                         reader.onloadend = function (event) {
 
                             var timeDiff = __selfremotelivestream.video.currentTime - __selfremotelivestream.sourcebuffer.timestampOffset;
-                            if (timeDiff > 1.4) {
+                            if (syncVideoTimeDifference - timeDiff > 0.2) {
 
-                                __selfremotelivestream.currentTime = __selfremotelivestream.currentTime + (timeDiff - 1.4);
+                                __selfremotelivestream.video.pause();
+                                setTimeout(function () {
+
+                                    __selfremotelivestream.video.play();
+                                }, videoSegmentsLength + 200);
+                            }
+                            if (timeDiff > syncVideoTimeDifference) {
+
+                                __selfremotelivestream.currentTime = __selfremotelivestream.currentTime + (timeDiff - syncVideoTimeDifference);
                             }
 
                             __selfremotelivestream.remotemediasequences.push(reader.result);

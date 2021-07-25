@@ -1,8 +1,6 @@
 ﻿@namespace BlazorVideo
 @inherits BlazorVideoComponentBase
 
-@using System
-
 <style type="text/css">
 
     .video-item-@(Id + ConnectionId) {
@@ -43,12 +41,16 @@
 
 </style>
 
+@{ 
+    var IsVideoOverlay = BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId && item.Value.VideoOverlay == true);
+}
+
 <div class="video-item-@(Id + ConnectionId) p-1">
 
     @if (Type == BlazorVideoType.LocalLivestream)
     {
-        if(BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId && item.Value.VideoOverlay == false)) {
-
+        if (!IsVideoOverlay)
+        {
             <style type="text/css">
                 .video-item-@(Id + ConnectionId):hover .video-item-devices {
                     display: block;
@@ -56,9 +58,15 @@
             </style>
         }
 
+        <div class="text-danger p-1 badge bg-white position-absolute" style="z-index: 1; top: 10px; left: 10px;">@Viewers <span class="oi oi-camera-slr"></span></div>
+        if (!IsVideoOverlay)
+        {
+            <button type="button" class="text-danger p-1 badge bg-white position-absolute" style="z-index: 1; top: 34px; left: 10px;" @onclick="async () => await BlazorVideoService.StopVideoChat(Id, ConnectionId)"><span class="oi oi-media-pause"></span><span class="video-item-ellipsis"> [loc.] @Name</span></button>
+        }
+
         <div>
             <div class="video-item-resize-container-@(Id + ConnectionId) position-relative">
-                <div class="align-items-center justify-content-center px-3 h-100 @(BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId && item.Value.VideoOverlay == true) ? "d-flex" : "d-none")">
+                <div class="align-items-center justify-content-center px-3 h-100 @(IsVideoOverlay == true ? "d-flex" : "d-none")">
                     <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id, ConnectionId)">
 
                         ▷ @Name
@@ -67,13 +75,10 @@
                 </div>
 
                 <div class="w-100 h-100 @(!BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId) ? "d-none" : "d-block")">
-                    
-                    <div class="text-white px-2 py-2 mb-0 position-absolute video-item-ellipsis">
-                        <small>[loc.] @Name</small>
-                    </div>
+
                     <video id="local-livestream-element-id-@(Id + ConnectionId)" class="blazor-video-item mb-0 w-100 h-100" controls></video>
 
-                    <div class="position-absolute video-item-devices bg-white p-1" style="z-index: 2; right: 0px; top: 0px;">
+                    <div class="position-absolute video-item-devices bg-white p-1" style="z-index: 2; top: 0px; right: 0px;">
                         <div class="input-group" style="padding: 0.125rem 0.25rem 0.1rem 0.25rem">
                             <select id="local-livestream-micro-source-@(Id + ConnectionId)" class="border-0 custom-select custom-select-sm" style="width: 120px !important;"></select>
                         </div>
@@ -92,10 +97,17 @@
 
     @if (Type == BlazorVideoType.RemoteLivestream)
     {
+
+        <div class="text-danger p-1 badge bg-white position-absolute" style="z-index: 1; top: 10px; left: 10px;">@Viewers <span class="oi oi-camera-slr"></span></div>
+        if (!IsVideoOverlay)
+        {
+            <button type="button" class="text-danger p-1 badge bg-white position-absolute" style="z-index: 1; top: 34px; left: 10px;" @onclick="async () => await BlazorVideoService.StopVideoChat(Id, ConnectionId)"><span class="oi oi-media-pause"></span><span class="video-item-ellipsis"> [rem.] @Name</span></button>
+        }
+
         <div>
             <div class="video-item-resize-container-@(Id + ConnectionId) position-relative">
 
-                <div class="align-items-center justify-content-center px-3 h-100 @(BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId && item.Value.VideoOverlay == true) ? "d-flex" : "d-none")">
+                <div class="align-items-center justify-content-center px-3 h-100 @(IsVideoOverlay == true ? "d-flex" : "d-none")">
                     <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id, ConnectionId)">
 
                         @if (Status == BlazorVideoStatusType.Live)
@@ -111,10 +123,9 @@
                 </div>
 
                 <div class="w-100 h-100 @(!BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId) ? "d-none" : "d-block")">
-                    <div class="text-white px-2 py-2 mb-0 position-absolute video-item-ellipsis">
-                        <small>[rem.] @Name</small>
-                    </div>
+
                     <video id="remote-livestream-element-id-@(Id + ConnectionId)" class="remote-livestream blazor-video-item mb-0 w-100 h-100" controls></video>
+
                 </div>
 
             </div>

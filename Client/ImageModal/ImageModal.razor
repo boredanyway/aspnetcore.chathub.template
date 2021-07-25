@@ -17,14 +17,15 @@
         @if (Message != null && Message.Photos != null)
         {
 
-            <div class="dialog-title">
-                <b>Posted by</b> @Message.User?.DisplayName <b>on</b> @Message.CreatedOn.ToShortTimeString()
-            </div>
-
             <div class="bg-light py-sm-4 px-sm-1">
                 @foreach (var photo in Message.Photos)
                 {
-                    <img class="img-fluid" src="@string.Format("{0}/{1}/{2}", NavigationManager.BaseUri, ChatHubConstants.UploadImagesPath, photo.Source)" />
+                    <div class="position-relative">
+                        <div class="position-absolute" style="top: 10px; right: 10px;">
+                            <strong>Posted by @Message.User?.DisplayName on @Message.CreatedOn.ToShortTimeString()</strong>
+                        </div>
+                        <img class="img-fluid" src="@string.Format("{0}/{1}/{2}", NavigationManager.BaseUri, ChatHubConstants.UploadImagesPath, photo.Source)" />
+                    </div>
                 }
             </div>
 

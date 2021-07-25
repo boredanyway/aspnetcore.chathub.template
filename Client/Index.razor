@@ -229,11 +229,9 @@
                                         </WindowTitle>
                                         <WindowLivestream>
 
-                                            <div class="text-danger p-1 badge bg-white" style="position: absolute; z-index: 1; top: 10px; right: 10px;">@room.Viewers.Count() <span class="oi oi-camera-slr"></span></div>
-
                                             @if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
                                             {
-                                                <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(c => room.Cams.Any(cam => cam.ChatHubConnectionId == c.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)" Framerate="@framerate" VideoBitsPerSecond="@videoBitsPerSecond" AudioBitsPerSecond="@audioBitsPerSecond" VideoSegmentsLength="@videoSegmentsLength"></BlazorVideoComponent>
+                                                <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(c => room.Cams.Any(cam => cam.ChatHubConnectionId == c.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)" Viewers="@room.Viewers.Count()" Framerate="@framerate" VideoBitsPerSecond="@videoBitsPerSecond" AudioBitsPerSecond="@audioBitsPerSecond" VideoSegmentsLength="@videoSegmentsLength"></BlazorVideoComponent>
                                             }
                                             else
                                             {
@@ -257,7 +255,7 @@
                                                             status = BlazorVideoStatusType.Live;
                                                         }
 
-                                                        <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@connection.ConnectionId" Type="@BlazorVideoType.RemoteLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@status" Framerate="@framerate" VideoBitsPerSecond="@videoBitsPerSecond" AudioBitsPerSecond="@audioBitsPerSecond" VideoSegmentsLength="@videoSegmentsLength"></BlazorVideoComponent>
+                                                        <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@connection.ConnectionId" Type="@BlazorVideoType.RemoteLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@status" Viewers="@room.Viewers.Count()" Framerate="@framerate" VideoBitsPerSecond="@videoBitsPerSecond" AudioBitsPerSecond="@audioBitsPerSecond" VideoSegmentsLength="@videoSegmentsLength"></BlazorVideoComponent>
                                                     }
                                                 }
                                             }

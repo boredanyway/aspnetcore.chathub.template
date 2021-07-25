@@ -14,6 +14,7 @@ namespace BlazorVideo
         [Parameter] public string BackgroundColor { get; set; }
         [Parameter] public BlazorVideoType Type { get; set; }
         [Parameter] public BlazorVideoStatusType Status { get; set; }
+        [Parameter] public int Viewers { get; set; }
         [Parameter] public int Framerate { get; set; }
         [Parameter] public int VideoBitsPerSecond { get; set; }
         [Parameter] public int AudioBitsPerSecond { get; set; }
@@ -28,7 +29,6 @@ namespace BlazorVideo
 
             await base.OnInitializedAsync();
         }
-
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)

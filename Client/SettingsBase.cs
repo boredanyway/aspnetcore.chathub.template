@@ -34,7 +34,7 @@ namespace Oqtane.ChatHubs
                 this.framerate = this.SettingService.GetSetting(settings, "Framerate", "30");
                 this.videoBitsPerSecond = this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "300000");
                 this.audioBitsPerSecond = this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "128000");
-                this.videoSegmentsLength = this.SettingService.GetSetting(settings, "VideoSegmentsLength", "800");
+                this.videoSegmentsLength = this.SettingService.GetSetting(settings, "VideoSegmentsLength", "2000");
                 this.regularExpressions = this.SettingService.GetSetting(settings, "RegularExpression", "").Split(";delimiter;", StringSplitOptions.RemoveEmptyEntries).ToList();
             }
             catch (Exception ex)

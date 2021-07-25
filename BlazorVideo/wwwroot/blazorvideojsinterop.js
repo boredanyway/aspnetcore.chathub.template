@@ -2,7 +2,7 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type, framerate,
 
     var __obj = {
 
-        blazorvideomap: function (dotnetobjref, id, connectionid, type, framerate, videoBitsPerSecond, audioBitsPerSecond, videoSegmentsLength, syncVideoTimeDifference = 1.4) {
+        blazorvideomap: function (dotnetobjref, id, connectionid, type, framerate, videoBitsPerSecond, audioBitsPerSecond, videoSegmentsLength, syncVideoTimeDifference = 1.6) {
             
             var __selfblazorvideomap = this;
 
@@ -488,37 +488,19 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type, framerate,
 
                     try {
 
-                        console.log(base64str);
                         var blob = __selfblazorvideomap.base64toblob(base64str);
 
                         var reader = new FileReader();
                         reader.onloadend = function (event) {
 
                             var timeDiff = __selfremotelivestream.video.currentTime - __selfremotelivestream.sourcebuffer.timestampOffset;
-                            if (syncVideoTimeDifference - timeDiff > 0.2) {
-
-                                __selfremotelivestream.video.pause();
-                                setTimeout(function () {
-
-                                    __selfremotelivestream.video.play();
-                                }, videoSegmentsLength + 200);
-                            }
                             if (timeDiff > syncVideoTimeDifference) {
-
                                 __selfremotelivestream.currentTime = __selfremotelivestream.currentTime + (timeDiff - syncVideoTimeDifference);
-                            }
-
-                            __selfremotelivestream.remotemediasequences.push(reader.result);
-
-                            if (__selfremotelivestream.remotemediasequences.length >= 2) {
-
-                                __selfremotelivestream.remotemediasequences.shift();
                             }
 
                             if (!__selfremotelivestream.sourcebuffer.updating && __selfremotelivestream.mediasource.readyState === 'open') {
 
-                                var item = __selfremotelivestream.remotemediasequences.shift();
-                                __selfremotelivestream.sourcebuffer.appendBuffer(new Uint8Array(item));
+                                __selfremotelivestream.sourcebuffer.appendBuffer(new Uint8Array(reader.result));
                             }
                         }
                         reader.readAsArrayBuffer(blob);

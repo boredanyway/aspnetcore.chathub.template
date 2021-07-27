@@ -716,9 +716,13 @@ namespace Oqtane.ChatHubs.Services
             room.Messages.Clear();
             this.RunUpdateUI();
         }
-        public void ToggleUserlist(ChatHubRoom room)
+        public void ToggleUserlist(int roomId)
         {
-            room.ShowUserlist = !room.ShowUserlist;
+            var room = this.Rooms.FirstOrDefault(item => item.Id == roomId);
+            if(room != null)
+            {
+                room.ShowUserlist = !room.ShowUserlist;
+            }
         }
         public string AutocompleteUsername(string msgInput, int roomId, int autocompleteCounter, string pressedKey)
         {
@@ -812,9 +816,8 @@ namespace Oqtane.ChatHubs.Services
 
         public string ChatHubControllerApiUrl
         {
-            get { return CreateApiUrl(SiteState.Alias, "ChatHub"); }
+            get { return CreateApiUrl("ChatHub", SiteState.Alias, ControllerRoutes.ApiRoute); }
         }
-
         public async Task FixCorruptConnections(int ModuleId)
         {
             await HttpClient.DeleteAsync(ChatHubControllerApiUrl + "/fixcorruptconnections" + "?entityid=" + ModuleId);

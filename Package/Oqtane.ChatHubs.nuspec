@@ -89,8 +89,10 @@
     <file src="..\BlazorVideo\bin\Release\net5.0\BlazorVideo.dll" target="lib\net5.0" />
     <file src="..\BlazorVideo\bin\Release\net5.0\BlazorVideo.pdb" target="lib\net5.0" />
     <file src="..\BlazorBrowserResize\bin\Release\net5.0\BlazorBrowserResize.dll" target="lib\net5.0" />
-    <file src="..\BlazorBrowserResize\bin\Release\net5.0\BlazorBrowserResize.pdb" target="lib\net5.0" />    
-    
+    <file src="..\BlazorBrowserResize\bin\Release\net5.0\BlazorBrowserResize.pdb" target="lib\net5.0" />
+    <file src="..\BlazorDropdown\bin\Release\net5.0\BlazorDropdown.dll" target="lib\net5.0" />
+    <file src="..\BlazorDropdown\bin\Release\net5.0\BlazorDropdown.pdb" target="lib\net5.0" />
+
     <file src="..\BlazorAccordion\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
     <file src="..\BlazorAlerts\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />
     <file src="..\BlazorBrowserResize\wwwroot\*" target="wwwroot/Modules/Oqtane.ChatHubs" />

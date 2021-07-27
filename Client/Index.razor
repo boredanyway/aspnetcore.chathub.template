@@ -16,6 +16,7 @@
 @using Oqtane.ChatHubs.Models
 @using Oqtane.ChatHubs.Enums
 @using Oqtane.ChatHubs.Constants
+@using BlazorDropdown
 
 <link href="/Modules/Oqtane.ChatHubs/blazoralerts.min.css" rel="stylesheet" />
 <link href="/Modules/Oqtane.ChatHubs/chat-hub-stylesheets.css" rel="stylesheet" />
@@ -447,7 +448,17 @@
 
                                                                 <button type="button" class="btn btn-primary mr-0 mr-sm-4" @onclick="async () => await SendMessage_Clicked(room.MessageInput, room)"><span class="oi oi-envelope-open"></span></button>
                                                                 <button type="button" class="btn btn-info d-none d-sm-inline-block" @onclick="() => ChatHubService.ClearHistory(room.Id)"><span class="oi oi-trash"></span></button>
-                                                                <button type="button" class="btn btn-dark d-inline-block d-xl-none" @onclick="() => ChatHubService.ToggleUserlist(room)"><span class="oi oi-list"></span></button>
+
+                                                                @{
+                                                                    List<BlazorDropdownItem> dropdownItems = new List<BlazorDropdownItem>();
+                                                                    dropdownItems.Add(new BlazorDropdownItem() { Id = room.Id, Name = "Room Settings" });
+                                                                }
+                                                                <div class="position-fixed d-md-none" style="top: 65px; right: 10px; z-index: 1040;">
+                                                                    <BlazorDropdownComponent DropdownItemClicked="@SettingsDropdown_Clicked" DropdownItemModels="@dropdownItems"></BlazorDropdownComponent>
+                                                                </div>
+
+                                                                <button type="button" class="btn btn-dark d-inline-block d-xl-none" @onclick="() => ChatHubService.ToggleUserlist(room.Id)"><span class="oi oi-list"></span></button>
+
                                                                 <button type="button" class="btn btn-danger d-none d-sm-inline-block" @onclick="async () => await ChatHubService.DisconnectAsync()"><span class="oi oi-power-standby"></span></button>
 
                                                             </div>
@@ -460,7 +471,7 @@
                                                 <div class="userlist bg-light p-0 p-sm-2 w-100 @(room.ShowUserlist ? "flex-fill d-flex" : "d-none d-xl-flex")" style="min-width: 340px; max-width: 340px">
                                                     <div class="w-100 my-3" style="height: @(string.Format("{0}px", UserlistWindowHeight)); overflow: auto;">
 
-                                                        <button type="button" class="btn btn-light input-group-button @(room.ShowUserlist ? "d-block" : "d-none")" @onclick="() => ChatHubService.ToggleUserlist(room)" style="position: relative; float: right;"><span class="oi oi-x"></span></button>
+                                                        <button type="button" class="btn btn-light input-group-button @(room.ShowUserlist ? "d-block" : "d-none")" @onclick="() => ChatHubService.ToggleUserlist(room.Id)" style="position: relative; float: right;"><span class="oi oi-x"></span></button>
 
                                                         <WindowContainer>
                                                             <WindowItem>

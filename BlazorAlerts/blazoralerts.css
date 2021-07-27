@@ -5,7 +5,7 @@
 .blazoralerts-item {
     position: absolute;
     position: fixed;
-    z-index: 1000;
+    z-index: 1400;
     width: 400px;
     height: 250px;
     top: 0;

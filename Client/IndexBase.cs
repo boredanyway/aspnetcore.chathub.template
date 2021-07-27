@@ -25,6 +25,7 @@ using Oqtane.ChatHubs.Enums;
 using Oqtane.ChatHubs.Extensions;
 using BlazorModal;
 using Oqtane.Models;
+using BlazorDropdown;
 
 namespace Oqtane.ChatHubs
 {
@@ -354,6 +355,11 @@ namespace Oqtane.ChatHubs
             this.SettingsModalRef.OpenDialogAsync();
         }
 
+        public void SettingsDropdown_Clicked(BlazorDropdownEvent e)
+        {
+            this.ChatHubService.ToggleUserlist(e.ClickedDropdownItem.Id);
+        }
+
         public async Task FixCorruptConnections_ClickedAsync()
         {
             try
@@ -464,6 +470,7 @@ namespace Oqtane.ChatHubs
         {
             new Resource { ResourceType = ResourceType.Script, Bundle = "jQuery", Url = "https://code.jquery.com/jquery-3.2.1.slim.min.js", Integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
             new Resource { ResourceType = ResourceType.Script, Bundle = "IoButtons", Url = "https://buttons.github.io/buttons.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
+            new Resource { ResourceType = ResourceType.Script, Bundle = "IoButtons", Url = "https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js", Integrity = "sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
         };
 
         public void Dispose()

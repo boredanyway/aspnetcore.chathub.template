@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Components
 
 <div class="dropdown">
-    <button type="button" @onclick="@(() => ToggleDropdown())" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
         <span class="oi oi-menu"></span>
     </button>
     <ul class="dropdown-menu dropdown-menu-end @(ShowDropdown ? DisplayDropdownClass : "")">
@@ -32,9 +32,12 @@
 
     public string DisplayDropdownClass { get; set; } = "show";
 
-    public void ToggleDropdown()
+    public async Task ToggleDropdown()
     {
-        this.ShowDropdown = !this.ShowDropdown;
+        await Task.Run(() =>
+        {
+            this.ShowDropdown = !this.ShowDropdown;
+        });
     }
 
 }

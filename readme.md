@@ -22,4 +22,4 @@ new Resource {
 
 #### Demo Site
 
-Demo website link [here](https://www.wasmchat.com/).
+Demo website link [here](https://wasmchat.com/).

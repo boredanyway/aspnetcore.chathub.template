@@ -83,7 +83,7 @@ namespace Oqtane.ChatHubs
             this.framerate = Int32.Parse(this.SettingService.GetSetting(settings, "Framerate", "30"));
             this.videoBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "240000"));
             this.audioBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "100000"));
-            this.videoSegmentsLength = Int32.Parse(this.SettingService.GetSetting(settings, "VideoSegmentsLength", "420"));
+            this.videoSegmentsLength = Int32.Parse(this.SettingService.GetSetting(settings, "VideoSegmentsLength", "2000"));
 
             this.BrowserResizeService.BrowserResizeServiceExtension.OnResize += BrowserHasResized;
             this.BlazorDraggableListService.BlazorDraggableListServiceExtension.OnDropEvent += OnDraggableListDropEventExecute;

@@ -22,7 +22,10 @@ namespace BlazorWindows
         protected override async Task OnInitializedAsync()
         {
             this.WindowContainer.AddWindowItem(this);
-
+            await base.OnInitializedAsync();
+        }
+        protected override void OnParametersSet()
+        {
             if (!this.WindowContainer.InitialSelection)
             {
                 this.WindowContainer.ActiveWindow = this;
@@ -33,7 +36,7 @@ namespace BlazorWindows
                 this.WindowContainer.ActiveWindow = this;
             }
 
-            await base.OnInitializedAsync();
+            base.OnParametersSet();
         }
 
         public string TitleCssClass => this.WindowContainer.ActiveWindow == this ? "active" : null;

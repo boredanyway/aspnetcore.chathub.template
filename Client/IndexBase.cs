@@ -357,6 +357,7 @@ namespace Oqtane.ChatHubs
 
         public void SettingsDropdown_Clicked(BlazorDropdownEvent e)
         {
+            this.ChatHubService.ContextRoomId = e.ClickedDropdownItem.Id.ToString();
             this.ChatHubService.ToggleUserlist(e.ClickedDropdownItem.Id);
         }
 

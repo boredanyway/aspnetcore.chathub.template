@@ -23,24 +23,6 @@
 
 <div id="chathub-module-@ModuleState.ModuleId" class="chathubs-container p-sm-3 mb-4" style="opacity: 0;">
 
-    <BlazorModalComponent ElementId="CustomBlazorModal">
-
-        <BlazorModalHeader>
-            <h5 class="modal-title">Check out from Github</h5>
-        </BlazorModalHeader>
-        <BlazorModalBody>
-
-            <p>Try out the asp.net core blazor signalr entityframework video chat hub template on github.</p>
-
-        </BlazorModalBody>
-        <BlazorModalFooter>
-
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Oki thank you</button>
-
-        </BlazorModalFooter>
-
-    </BlazorModalComponent>
-
     <TabContainer>
 
         <TabItem>
@@ -107,7 +89,7 @@
                                             </div>
                                             <div class="p-0 p-sm-1">
                                                 <button type="button" class="btn btn-sm btn-link bg-white border border-light" @onclick="@(async () => await ConnectToChat())">Establish new connection</button>
-                                            </div>                                            
+                                            </div>
 
                                         </NotAuthorized>
                                     </AuthorizeView>
@@ -204,582 +186,579 @@
                 </TabTitle>
                 <TabContent>
 
-                    @if (ChatHubService.Lobbies.Any())
+                    @if (ChatHubService.Rooms.Any())
                     {
 
-                        if (ChatHubService.Rooms.Any())
+                        List<BlazorDropdownItem> dropdownItems = new List<BlazorDropdownItem>();
+                        foreach (var room in ChatHubService.Rooms)
                         {
-                            <WindowContainer RenderLivestreams="@true" DraggableLivestreamContainerElementId="@DraggableLivestreamsContainerElementId" ShowEvent="@ShowWindow" HideEvent="@HideWindow" ShownEvent="@ShownWindow" HiddenEvent="@HiddenWindow" AddedEvent="@AddedWindow" RemovedEvent="@RemovedWindow">
+                            dropdownItems.Add(new BlazorDropdownItem() { Id = room.Id, Name = $"{room.Title} Settings" });
+                        }
+                       
+                        <div class="position-fixed d-md-none" style="top: 65px; right: 10px; z-index: 1040;">
+                            <BlazorDropdownComponent DropdownItemClicked="@SettingsDropdown_Clicked" DropdownItemModels="@dropdownItems"></BlazorDropdownComponent>
+                        </div>
 
-                                @foreach (var item in ChatHubService.Rooms.Where(item => item.ModuleId == ModuleState.ModuleId).Select((value, i) => new { value, i }))
-                                {
+                        <WindowContainer RenderLivestreams="@true" DraggableLivestreamContainerElementId="@DraggableLivestreamsContainerElementId" ShowEvent="@ShowWindow" HideEvent="@HideWindow" ShownEvent="@ShownWindow" HiddenEvent="@HiddenWindow" AddedEvent="@AddedWindow" RemovedEvent="@RemovedWindow">
 
-                                    ChatHubRoom room = item.value;
-                                    int room_index = item.i;
+                            @foreach (var item in ChatHubService.Rooms.Where(item => item.ModuleId == ModuleState.ModuleId).Select((value, i) => new { value, i }))
+                            {
 
-                                    <WindowItem @key="room" Id="@room.Id" InitialSelection="@(ChatHubService.ContextRoomId == room.Id.ToString())">
-                                        <WindowTitle>
+                                ChatHubRoom room = item.value;
+                                int room_index = item.i;
 
-                                            @room.Title&nbsp;
-                                            <div class="badge badge-warning @(room.UnreadMessages != 0 ? "" : "d-none")">@room.UnreadMessages</div>
+                                <WindowItem @key="room" Id="@room.Id" InitialSelection="@(ChatHubService.ContextRoomId == room.Id.ToString())">
+                                    <WindowTitle>
 
-                                            <span class="position-absolute" @onclick="async () => await LeaveRoom_Clicked(room.Id, ModuleState.ModuleId)" style="top: 0px; right: 0px;">
-                                                <span class="oi oi-circle-x"></span>
-                                            </span>
+                                        @room.Title&nbsp;
+                                        <div class="badge badge-warning @(room.UnreadMessages != 0 ? "" : "d-none")">@room.UnreadMessages</div>
 
-                                        </WindowTitle>
-                                        <WindowLivestream>
+                                        <span class="position-absolute" @onclick="async () => await LeaveRoom_Clicked(room.Id, ModuleState.ModuleId)" style="top: 0px; right: 0px;">
+                                            <span class="oi oi-circle-x"></span>
+                                        </span>
 
-                                            @if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
+                                    </WindowTitle>
+                                    <WindowLivestream>
+
+                                        @if (ChatHubService.ConnectedUser?.UserId == room.CreatorId)
+                                        {
+                                            <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(c => room.Cams.Any(cam => cam.ChatHubConnectionId == c.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)" Viewers="@room.Viewers.Count()" Framerate="@framerate" VideoBitsPerSecond="@videoBitsPerSecond" AudioBitsPerSecond="@audioBitsPerSecond" VideoSegmentsLength="@videoSegmentsLength"></BlazorVideoComponent>
+                                        }
+                                        else
+                                        {
+                                            if (room.Creator != null)
                                             {
-                                                <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@ChatHubService.Connection?.ConnectionId" Type="@BlazorVideoType.LocalLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@(room.Creator.Connections.Any(c => room.Cams.Any(cam => cam.ChatHubConnectionId == c.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())) ? BlazorVideoStatusType.Live : BlazorVideoStatusType.Offline)" Viewers="@room.Viewers.Count()" Framerate="@framerate" VideoBitsPerSecond="@videoBitsPerSecond" AudioBitsPerSecond="@audioBitsPerSecond" VideoSegmentsLength="@videoSegmentsLength"></BlazorVideoComponent>
-                                            }
-                                            else
-                                            {
-                                                if (room.Creator != null)
+                                                if (!room.Creator.Connections.Any())
                                                 {
-                                                    if (!room.Creator.Connections.Any())
-                                                    {
-                                                        <div class="card bg-light" style="width: 240px; height: 180px;">
-                                                            <div class="card-body">
-                                                                <h6 class="card-subtitle mb-2 text-muted">@room.Title</h6>
-                                                                <p class="card-text">No video found from room creator @(room.Creator.Username).</p>
-                                                            </div>
+                                                    <div class="card bg-light" style="width: 240px; height: 180px;">
+                                                        <div class="card-body">
+                                                            <h6 class="card-subtitle mb-2 text-muted">@room.Title</h6>
+                                                            <p class="card-text">No video found from room creator @(room.Creator.Username).</p>
                                                         </div>
-                                                    }
-                                                    foreach (var connection in room.Creator.Connections)
+                                                    </div>
+                                                }
+                                                foreach (var connection in room.Creator.Connections)
+                                                {
+                                                    BlazorVideoStatusType status = BlazorVideoStatusType.Offline;
+                                                    var broadcastingCams = connection.Cams.Where(cam => cam.Status == ChatHubCamStatus.Broadcasting.ToString()).ToList();
+                                                    if (room.Cams.Any(cam => broadcastingCams.Any(item => cam.Id == item.Id)))
                                                     {
-                                                        BlazorVideoStatusType status = BlazorVideoStatusType.Offline;
-                                                        var broadcastingCams = connection.Cams.Where(cam => cam.Status == ChatHubCamStatus.Broadcasting.ToString()).ToList();
-                                                        if (room.Cams.Any(cam => broadcastingCams.Any(item => cam.Id == item.Id)))
-                                                        {
-                                                            status = BlazorVideoStatusType.Live;
-                                                        }
-
-                                                        <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@connection.ConnectionId" Type="@BlazorVideoType.RemoteLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@status" Viewers="@room.Viewers.Count()" Framerate="@framerate" VideoBitsPerSecond="@videoBitsPerSecond" AudioBitsPerSecond="@audioBitsPerSecond" VideoSegmentsLength="@videoSegmentsLength"></BlazorVideoComponent>
+                                                        status = BlazorVideoStatusType.Live;
                                                     }
+
+                                                    <BlazorVideoComponent Id="@room.Id.ToString()" ConnectionId="@connection.ConnectionId" Type="@BlazorVideoType.RemoteLivestream" BackgroundColor="@room.BackgroundColor" Name="@room.Title" Status="@status" Viewers="@room.Viewers.Count()" Framerate="@framerate" VideoBitsPerSecond="@videoBitsPerSecond" AudioBitsPerSecond="@audioBitsPerSecond" VideoSegmentsLength="@videoSegmentsLength"></BlazorVideoComponent>
                                                 }
                                             }
+                                        }
 
-                                        </WindowLivestream>
-                                        <WindowContent>
+                                    </WindowLivestream>
+                                    <WindowContent>
 
-                                            <div class="d-flex">
-                                                <div class="@(room.ShowUserlist ? "d-none" : "d-flex flex-fill")">
-                                                    <div class="w-100 bg-white p-1 p-sm-3">
+                                        <div class="d-flex">
+                                            <div class="@(room.ShowUserlist ? "d-none" : "d-flex flex-fill")">
+                                                <div class="w-100 bg-white p-1 p-sm-3">
 
-                                                        <div id="message-window-@ModuleState.ModuleId-@room.Id" style="height: @(string.Format("{0}px", MessageWindowHeight)); overflow: auto;">
+                                                    <div id="message-window-@ModuleState.ModuleId-@room.Id" style="height: @(string.Format("{0}px", MessageWindowHeight)); overflow: auto;">
 
-                                                            <h3>@room.Title</h3>
-                                                            <br />
+                                                        <h3>@room.Title</h3>
+                                                        <br />
 
-                                                            <MessageTemplate Messages="@room.Messages.OrderBy(item => item.ModifiedOn).ThenBy(item => item.Id)" Context="item">
-                                                                <SystemTemplate>
-                                                                    <div>
-                                                                        <span class="text-muted">
-                                                                            @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
-                                                                        </span>
-                                                                        <span>
-                                                                            <strong><span class="bg-danger text-white">System</span>:</strong>
-                                                                        </span>
-                                                                        <span>
-                                                                            @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
-                                                                        </span>
-                                                                    </div>
-                                                                </SystemTemplate>
-                                                                <AdminTemplate>
-                                                                    <div>
-                                                                        <span class="text-muted">
-                                                                            @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
-                                                                        </span>
-                                                                        <span>
-                                                                            <strong>@item.User.DisplayName:</strong>
-                                                                        </span>
-                                                                        <span>
-                                                                            @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
-                                                                        </span>
-                                                                    </div>
-                                                                </AdminTemplate>
-                                                                <UserTemplate>
-                                                                    <div>
-                                                                        <span class="text-muted">
-                                                                            @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
-                                                                        </span>
-                                                                        <span>
-                                                                            <strong>@item.User.DisplayName:</strong>
-                                                                        </span>
-                                                                        <span>
-                                                                            @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
-                                                                        </span>
-                                                                    </div>
-                                                                </UserTemplate>
-                                                                <GuestTemplate>
-                                                                    <div>
-                                                                        <span class="text-muted">
-                                                                            @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
-                                                                        </span>
-                                                                        <span style="color: @item.User.Settings.UsernameColor">
-                                                                            <strong>@item.User.DisplayName:</strong>
-                                                                        </span>
-                                                                        <span style="color: @item.User.Settings.MessageColor">
-                                                                            @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
-                                                                        </span>
-                                                                    </div>
-                                                                </GuestTemplate>
-                                                                <WhisperTemplate>
-                                                                    <div>
-                                                                        <span class="text-muted">
-                                                                            @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
-                                                                        </span>
-                                                                        <span>
-                                                                            <strong><span class="bg-primary text-white">PM @item.User.DisplayName</span>:</strong>
-                                                                        </span>
-                                                                        <span>
-                                                                            @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
-                                                                        </span>
-                                                                    </div>
-                                                                </WhisperTemplate>
-                                                                <MeTemplate>
-                                                                    <div>
-                                                                        <span class="text-muted">
-                                                                            @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
-                                                                        </span>
-                                                                        <span>
-                                                                            <span class="text-muted">@item.User.DisplayName</span>
-                                                                        </span>
-                                                                        <span class="text-muted">
-                                                                            @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
-                                                                        </span>
-                                                                    </div>
-                                                                </MeTemplate>
-                                                                <EnterLeaveTemplate>
-                                                                    <div>
-                                                                        <span class="text-muted">
-                                                                            @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
-                                                                        </span>
-                                                                        <span>
-                                                                            <strong><span class="bg-success text-white">Enter/Leave</span>:</strong>
-                                                                        </span>
-                                                                        <span>
-                                                                            @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
-                                                                        </span>
-                                                                    </div>
-                                                                </EnterLeaveTemplate>
-                                                                <ConnectDisconnectTemplate>
-                                                                    <div>
-                                                                        <span class="text-muted">
-                                                                            @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
-                                                                        </span>
-                                                                        <span>
-                                                                            <strong><span class="bg-warning text-white">Connect/Disconnect</span>:</strong>
-                                                                        </span>
-                                                                        <span>
-                                                                            @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
-                                                                        </span>
-                                                                    </div>
-                                                                </ConnectDisconnectTemplate>
-                                                                <ImageTemplate>
-                                                                    @if (item.Photos != null)
-                                                                    {
+                                                        <MessageTemplate Messages="@room.Messages.OrderBy(item => item.ModifiedOn).ThenBy(item => item.Id)" Context="item">
+                                                            <SystemTemplate>
+                                                                <div>
+                                                                    <span class="text-muted">
+                                                                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                                                                    </span>
+                                                                    <span>
+                                                                        <strong><span class="bg-danger text-white">System</span>:</strong>
+                                                                    </span>
+                                                                    <span>
+                                                                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                                                                    </span>
+                                                                </div>
+                                                            </SystemTemplate>
+                                                            <AdminTemplate>
+                                                                <div>
+                                                                    <span class="text-muted">
+                                                                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                                                                    </span>
+                                                                    <span>
+                                                                        <strong>@item.User.DisplayName:</strong>
+                                                                    </span>
+                                                                    <span>
+                                                                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                                                                    </span>
+                                                                </div>
+                                                            </AdminTemplate>
+                                                            <UserTemplate>
+                                                                <div>
+                                                                    <span class="text-muted">
+                                                                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                                                                    </span>
+                                                                    <span>
+                                                                        <strong>@item.User.DisplayName:</strong>
+                                                                    </span>
+                                                                    <span>
+                                                                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                                                                    </span>
+                                                                </div>
+                                                            </UserTemplate>
+                                                            <GuestTemplate>
+                                                                <div>
+                                                                    <span class="text-muted">
+                                                                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                                                                    </span>
+                                                                    <span style="color: @item.User.Settings.UsernameColor">
+                                                                        <strong>@item.User.DisplayName:</strong>
+                                                                    </span>
+                                                                    <span style="color: @item.User.Settings.MessageColor">
+                                                                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                                                                    </span>
+                                                                </div>
+                                                            </GuestTemplate>
+                                                            <WhisperTemplate>
+                                                                <div>
+                                                                    <span class="text-muted">
+                                                                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                                                                    </span>
+                                                                    <span>
+                                                                        <strong><span class="bg-primary text-white">PM @item.User.DisplayName</span>:</strong>
+                                                                    </span>
+                                                                    <span>
+                                                                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                                                                    </span>
+                                                                </div>
+                                                            </WhisperTemplate>
+                                                            <MeTemplate>
+                                                                <div>
+                                                                    <span class="text-muted">
+                                                                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                                                                    </span>
+                                                                    <span>
+                                                                        <span class="text-muted">@item.User.DisplayName</span>
+                                                                    </span>
+                                                                    <span class="text-muted">
+                                                                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                                                                    </span>
+                                                                </div>
+                                                            </MeTemplate>
+                                                            <EnterLeaveTemplate>
+                                                                <div>
+                                                                    <span class="text-muted">
+                                                                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                                                                    </span>
+                                                                    <span>
+                                                                        <strong><span class="bg-success text-white">Enter/Leave</span>:</strong>
+                                                                    </span>
+                                                                    <span>
+                                                                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                                                                    </span>
+                                                                </div>
+                                                            </EnterLeaveTemplate>
+                                                            <ConnectDisconnectTemplate>
+                                                                <div>
+                                                                    <span class="text-muted">
+                                                                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                                                                    </span>
+                                                                    <span>
+                                                                        <strong><span class="bg-warning text-white">Connect/Disconnect</span>:</strong>
+                                                                    </span>
+                                                                    <span>
+                                                                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                                                                    </span>
+                                                                </div>
+                                                            </ConnectDisconnectTemplate>
+                                                            <ImageTemplate>
+                                                                @if (item.Photos != null)
+                                                                {
 
-                                                                        <div>
-                                                                            <button type="button" class="btn btn-link" @onclick="() => ImageModalRef.OpenDialogAsync(item)">
+                                                                    <div>
+                                                                        <button type="button" class="btn btn-link" @onclick="() => ImageModalRef.OpenDialogAsync(item)">
 
-                                                                                Open Image(s)
+                                                                            Open Image(s)
 
-                                                                                @if (item.Photos != null)
+                                                                            @if (item.Photos != null)
+                                                                            {
+                                                                                @foreach (var photo in item.Photos)
                                                                                 {
-                                                                                    @foreach (var photo in item.Photos)
-                                                                                    {
-                                                                                        <span>@photo.Caption</span>
+                                                                                    <span>@photo.Caption</span>
 
-                                                                                        @if (!photo.Equals(item.Photos.Last()))
-                                                                                        {
-                                                                                            <strong> | </strong>
-                                                                                        }
+                                                                                    @if (!photo.Equals(item.Photos.Last()))
+                                                                                    {
+                                                                                        <strong> | </strong>
                                                                                     }
                                                                                 }
-                                                                            </button>
-                                                                        </div>
-
-                                                                    }
-                                                                </ImageTemplate>
-                                                                <CommandsTemplate>
-
-                                                                    <div>
-                                                                        @if (item.CommandMetaDatas != null && item.CommandMetaDatas.Any())
-                                                                        {
-                                                                            <div class="table-responsive-sm">
-                                                                                <table class="table table-sm chathub-font-size-075rem">
-                                                                                    <thead>
-                                                                                        <tr>
-                                                                                            <th scope="col">Name</th>
-                                                                                            <th scope="col">Roles</th>
-                                                                                            <th scope="col">Usage</th>
-                                                                                            <th scope="col">Arguments</th>
-                                                                                        </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                        @foreach (var command in item.CommandMetaDatas)
-                                                                                        {
-                                                                                            <tr>
-                                                                                                <td>/@command.ResourceName</td>
-                                                                                                <td>@string.Join(" | ", command.Roles)</td>
-                                                                                                <td>@command.Usage</td>
-                                                                                                <td>@command.Arguments</td>
-                                                                                            </tr>
-                                                                                        }
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            </div>
-                                                                        }
+                                                                            }
+                                                                        </button>
                                                                     </div>
 
-                                                                </CommandsTemplate>
-                                                            </MessageTemplate>
-
-                                                        </div>
-
-                                                        <div class="bg-white px-1 py-2" style="height: 50px;">
-
-                                                            <div class="input-group">
-
-                                                                <input type="text" class="form-control" @bind-value="@room.MessageInput" @onkeyup="async (e) => await KeyDown(e, room)" placeholder="Send your msg here or type /help for commands" />
-
-                                                                <button type="button" class="btn btn-primary mr-0 mr-sm-4" @onclick="async () => await SendMessage_Clicked(room.MessageInput, room)"><span class="oi oi-envelope-open"></span></button>
-                                                                <button type="button" class="btn btn-info d-none d-sm-inline-block" @onclick="() => ChatHubService.ClearHistory(room.Id)"><span class="oi oi-trash"></span></button>
-
-                                                                @{
-                                                                    List<BlazorDropdownItem> dropdownItems = new List<BlazorDropdownItem>();
-                                                                    dropdownItems.Add(new BlazorDropdownItem() { Id = room.Id, Name = "Room Settings" });
                                                                 }
-                                                                <div class="position-fixed d-md-none" style="top: 65px; right: 10px; z-index: 1040;">
-                                                                    <BlazorDropdownComponent DropdownItemClicked="@SettingsDropdown_Clicked" DropdownItemModels="@dropdownItems"></BlazorDropdownComponent>
+                                                            </ImageTemplate>
+                                                            <CommandsTemplate>
+
+                                                                <div>
+                                                                    @if (item.CommandMetaDatas != null && item.CommandMetaDatas.Any())
+                                                                    {
+                                                                        <div class="table-responsive-sm">
+                                                                            <table class="table table-sm chathub-font-size-075rem">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th scope="col">Name</th>
+                                                                                        <th scope="col">Roles</th>
+                                                                                        <th scope="col">Usage</th>
+                                                                                        <th scope="col">Arguments</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    @foreach (var command in item.CommandMetaDatas)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td>/@command.ResourceName</td>
+                                                                                            <td>@string.Join(" | ", command.Roles)</td>
+                                                                                            <td>@command.Usage</td>
+                                                                                            <td>@command.Arguments</td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    }
                                                                 </div>
 
-                                                                <button type="button" class="btn btn-dark d-inline-block d-xl-none" @onclick="() => ChatHubService.ToggleUserlist(room.Id)"><span class="oi oi-list"></span></button>
+                                                            </CommandsTemplate>
+                                                        </MessageTemplate>
 
-                                                                <button type="button" class="btn btn-danger d-none d-sm-inline-block" @onclick="async () => await ChatHubService.DisconnectAsync()"><span class="oi oi-power-standby"></span></button>
+                                                    </div>
 
-                                                            </div>
+                                                    <div class="bg-white px-1 py-2" style="height: 50px;">
+
+                                                        <div class="input-group">
+
+                                                            <input type="text" class="form-control" @bind-value="@room.MessageInput" @onkeyup="async (e) => await KeyDown(e, room)" placeholder="Send your msg here or type /help for commands" />
+
+                                                            <button type="button" class="btn btn-primary mr-0 mr-sm-4" @onclick="async () => await SendMessage_Clicked(room.MessageInput, room)"><span class="oi oi-envelope-open"></span></button>
+                                                            <button type="button" class="btn btn-info d-none d-sm-inline-block" @onclick="() => ChatHubService.ClearHistory(room.Id)"><span class="oi oi-trash"></span></button>
+                                                            <button type="button" class="btn btn-dark d-inline-block d-xl-none" @onclick="() => ChatHubService.ToggleUserlist(room.Id)"><span class="oi oi-list"></span></button>
+                                                            <button type="button" class="btn btn-danger d-none d-sm-inline-block" @onclick="async () => await ChatHubService.DisconnectAsync()"><span class="oi oi-power-standby"></span></button>
 
                                                         </div>
 
                                                     </div>
+
                                                 </div>
-
-                                                <div class="userlist bg-light p-0 p-sm-2 w-100 @(room.ShowUserlist ? "flex-fill d-flex" : "d-none d-xl-flex")" style="min-width: 340px; max-width: 340px">
-                                                    <div class="w-100 my-3" style="height: @(string.Format("{0}px", UserlistWindowHeight)); overflow: auto;">
-
-                                                        <button type="button" class="btn btn-light input-group-button @(room.ShowUserlist ? "d-block" : "d-none")" @onclick="() => ChatHubService.ToggleUserlist(room.Id)" style="position: relative; float: right;"><span class="oi oi-x"></span></button>
-
-                                                        <WindowContainer>
-                                                            <WindowItem>
-                                                                <WindowTitle><div><span class="oi oi-people"></span> (@room.Users.Count())</div></WindowTitle>
-                                                                <WindowContent>
-
-                                                                    <div class="px-sm-0">
-
-                                                                        <div class="accordion">
-                                                                            @foreach (ChatHubUser user in room.Users)
-                                                                            {
-                                                                                @if (user.UserId == ChatHubService.ConnectedUser.UserId)
-                                                                                {
-                                                                                    <div class="accordion-item" @key="user">
-                                                                                        <div class="accordion-header">
-                                                                                            <button type="button" OnClick="(e) => UserlistItem_Clicked(e, room, user)" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse-@user.UserId" aria-expanded="@user.UserlistItemCollapsed">
-                                                                                                <strong class="align-middle" style="height: 16px;">@user.DisplayName</strong>
-                                                                                            </button>
-                                                                                        </div>
-                                                                                        <div id="collapse-@user.UserId" class="accordion-collapse collapse show">
-                                                                                            <div class="accordion-body">
-                                                                                                <div class="card-text">
-                                                                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => OpenProfile_Clicked(user.UserId, room.Id)">Profile/Settings</button>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    <div class="accordion-item" @key="user">
-                                                                                        <div class="accordion-header">
-                                                                                            <button type="button" OnClick="(e) => UserlistItem_Clicked(e, room, user)" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse-@user.UserId" aria-expanded="@user.UserlistItemCollapsed">
-                                                                                                <span class="align-middle" style="height: 16px;">@user.DisplayName</span>
-                                                                                            </button>
-                                                                                        </div>
-
-                                                                                        <div id="collapse-@user.UserId" class="accordion-collapse collapse">
-                                                                                            <div class="accordion-body">
-
-                                                                                                @if (!ChatHubService.IgnoredUsers.Any(item => item.UserId == user.UserId))
-                                                                                                {
-                                                                                                    <div>
-                                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.IgnoreUser_Clicked(user.UserId, room.Id, user.Username)">Ignore User</button>
-                                                                                                    </div>
-                                                                                                }
-
-                                                                                                @if (!room.Moderators.Any(item => item.ChatHubUserId == user.UserId))
-                                                                                                {
-                                                                                                    <div>
-                                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddModerator_Clicked(user.UserId, room.Id)">Add Modi</button>
-                                                                                                    </div>
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    <div>
-                                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveModerator_Clicked(user.UserId, room.Id)">Delete Modi</button>
-                                                                                                    </div>
-                                                                                                }
-
-                                                                                                @if (!room.WhitelistUsers.Any(item => item.ChatHubUserId == user.UserId))
-                                                                                                {
-                                                                                                    <div>
-                                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddWhitelistUser_Clicked(user.UserId, room.Id)">Add Whitelist User</button>
-                                                                                                    </div>
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    <div>
-                                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveWhitelistUser_Clicked(user.UserId, room.Id)">Delete Whitelist User</button>
-                                                                                                    </div>
-                                                                                                }
-
-                                                                                                @if (!room.BlacklistUsers.Any(item => item.ChatHubUserId == user.UserId))
-                                                                                                {
-                                                                                                    <div>
-                                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddBlacklistUser_Clicked(user.UserId, room.Id)">Add Blacklist User</button>
-                                                                                                    </div>
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    <div>
-                                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveBlacklistUser_Clicked(user.UserId, room.Id)">Delete Blacklist User</button>
-                                                                                                    </div>
-                                                                                                }
-                                                                                            </div>
-
-                                                                                        </div>
-
-                                                                                    </div>
-                                                                                }
-                                                                            }
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </WindowContent>
-                                                            </WindowItem>
-                                                            <WindowItem>
-                                                                <WindowTitle><div><span class="oi oi-image"></span></div></WindowTitle>
-                                                                <WindowContent>
-
-                                                                    <div class="px-sm-1 py-3">
-
-                                                                        <h5>Share your pics <span class="badge bg-success">FREE</span></h5>
-
-                                                                        @{
-                                                                            var url = string.Concat(NavigationManager.BaseUri.Substring(0, NavigationManager.BaseUri.LastIndexOf('/')), this.ChatHubService.ChatHubControllerApiUrl, "/PostImageUpload");
-
-                                                                            Dictionary<string, string> headers = new Dictionary<string, string>();
-                                                                            headers.Add("connectionId", ChatHubService.Connection?.ConnectionId);
-                                                                            headers.Add("displayName", ChatHubService.ConnectedUser?.DisplayName);
-                                                                            headers.Add("roomId", room.Id.ToString());
-                                                                            headers.Add("moduleId", ModuleState.ModuleId.ToString());
-                                                                        }
-
-                                                                        <BlazorFileUploadComponent ApiUrl="@url" FileUploadHeaders="@headers" InputFileId="@FileUploadInputFileElementId" DropzoneElementId="@FileUploadDropzoneContainerElementId"></BlazorFileUploadComponent>
-
-                                                                    </div>
-
-                                                                </WindowContent>
-                                                            </WindowItem>
-                                                            <WindowItem>
-                                                                <WindowTitle><div><span class="oi oi-camera-slr"></span></div></WindowTitle>
-                                                                <WindowContent>
-
-                                                                    <div class="px-sm-1 py-3">
-
-                                                                        <h5>Webcam Live Streams <span class="badge bg-success">NEW</span></h5>
-
-                                                                        @if (ChatHubService.ConnectedUser.UserId == room.CreatorId)
-                                                                        {
-                                                                            <button type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(room.Id.ToString(), ChatHubService.Connection.ConnectionId)">Start Streaming</button>
-                                                                            <button type="button" @onclick="async () => await BlazorVideoService.StopVideoChat(room.Id.ToString(), ChatHubService.Connection.ConnectionId)">Stop Streaming</button>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            if (room.Creator != null)
-                                                                            {
-
-                                                                                foreach (var connection in room.Creator?.Connections)
-                                                                                {
-                                                                                    <button type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(room.Id.ToString(), connection.ConnectionId)">Start Streaming</button>
-                                                                                    <button type="button" @onclick="async () => await BlazorVideoService.StopVideoChat(room.Id.ToString(), connection.ConnectionId)">Stop Streaming</button>
-                                                                                }
-
-                                                                            }
-                                                                        }
-
-                                                                    </div>
-
-                                                                </WindowContent>
-                                                            </WindowItem>
-                                                            <WindowItem>
-                                                                <WindowTitle><div><span class="oi oi-warning"></span> (@room.Moderators.Count())</div></WindowTitle>
-                                                                <WindowContent>
-
-                                                                    <div class="px-sm-1 py-3">
-
-                                                                        <h5>Moderators <span class="badge bg-success">NEW</span></h5>
-
-                                                                        <table class="table table-sm">
-                                                                            <tbody>
-                                                                                @foreach (var modi in room.Moderators)
-                                                                                {
-                                                                                    <tr>
-                                                                                        <td>@modi.ModeratorDisplayName</td>
-                                                                                        <td>
-                                                                                            <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveModerator_Clicked(modi.ChatHubUserId, room.Id)">
-                                                                                                <span class="oi oi-x"></span>
-                                                                                            </button>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                }
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                        @if (!room.Moderators.Any())
-                                                                        {
-                                                                            <div class="alert alert-warning" role="alert">
-                                                                                No moderators found yet.
-                                                                            </div>
-                                                                        }
-
-                                                                    </div>
-
-                                                                </WindowContent>
-                                                            </WindowItem>
-                                                            <WindowItem>
-                                                                <WindowTitle><div><span class="oi oi-question-mark"></span> (@room.WhitelistUsers.Count())</div></WindowTitle>
-                                                                <WindowContent>
-
-                                                                    <div class="px-sm-1 py-3">
-
-                                                                        <h5>Whitelist Users <span class="badge bg-success">NEW</span></h5>
-
-                                                                        <table class="table table-sm">
-                                                                            <tbody>
-                                                                                @foreach (var whitelistUser in room.WhitelistUsers)
-                                                                                {
-                                                                                    <tr>
-                                                                                        <td>@whitelistUser.WhitelistUserDisplayName</td>
-                                                                                        <td>
-                                                                                            <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveWhitelistUser_Clicked(whitelistUser.ChatHubUserId, room.Id)">
-                                                                                                <span class="oi oi-x"></span>
-                                                                                            </button>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                }
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                        @if (!room.WhitelistUsers.Any())
-                                                                        {
-                                                                            <div class="alert alert-warning" role="alert">
-                                                                                No whitelist users found yet.
-                                                                            </div>
-                                                                        }
-
-                                                                    </div>
-
-                                                                </WindowContent>
-                                                            </WindowItem>
-                                                            <WindowItem>
-                                                                <WindowTitle><div><span class="oi oi-ban"></span> (@room.BlacklistUsers.Count())</div></WindowTitle>
-                                                                <WindowContent>
-
-                                                                    <div class="px-sm-1 py-3">
-
-                                                                        <h5>Blacklist Users <span class="badge bg-success">NEW</span></h5>
-
-                                                                        <table class="table table-sm">
-                                                                            <tbody>
-                                                                                @foreach (var blacklistUser in room.BlacklistUsers)
-                                                                                {
-                                                                                    <tr>
-                                                                                        <td>@blacklistUser.BlacklistUserDisplayName</td>
-                                                                                        <td>
-                                                                                            <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveBlacklistUser_Clicked(blacklistUser.ChatHubUserId, room.Id)">
-                                                                                                <span class="oi oi-x"></span>
-                                                                                            </button>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                }
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                        @if (!room.BlacklistUsers.Any())
-                                                                        {
-                                                                            <div class="alert alert-warning" role="alert">
-                                                                                No blacklist users found yet.
-                                                                            </div>
-                                                                        }
-
-                                                                    </div>
-
-                                                                </WindowContent>
-                                                            </WindowItem>
-                                                            <WindowItem>
-                                                                <WindowTitle><div><span class="oi oi-key"></span> (@room.WaitingRoomItems.Count())</div></WindowTitle>
-                                                                <WindowContent>
-
-                                                                    <div class="px-sm-1 py-3">
-
-                                                                        <h5>Users waiting to become whitelisted <span class="badge bg-success">NEW</span></h5>
-
-                                                                        <table class="table table-sm">
-                                                                            <tbody>
-                                                                                @foreach (var waitingRoomItem in room.WaitingRoomItems)
-                                                                                {
-                                                                                    <tr>
-                                                                                        <td>@waitingRoomItem.DisplayName</td>
-                                                                                        <td>
-                                                                                            <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveWaitingRoomItem_Clicked(waitingRoomItem)">
-                                                                                                <span class="oi oi-check"></span>
-                                                                                            </button>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                }
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                        @if (!room.WaitingRoomItems.Any())
-                                                                        {
-                                                                            <div class="alert alert-warning" role="alert">
-                                                                                No waiting room users found yet.
-                                                                            </div>
-                                                                        }
-
-                                                                    </div>
-
-                                                                </WindowContent>
-                                                            </WindowItem>
-
-                                                        </WindowContainer>
-
-                                                    </div>
-                                                </div>
-
                                             </div>
 
-                                        </WindowContent>
-                                    </WindowItem>
+                                            <div class="userlist bg-light p-0 p-sm-2 w-100 @(room.ShowUserlist ? "flex-fill d-flex" : "d-none d-xl-flex")" style="min-width: 340px; max-width: 340px">
+                                                <div class="w-100 my-3" style="height: @(string.Format("{0}px", UserlistWindowHeight)); overflow: auto;">
 
-                                }
-                            </WindowContainer>
+                                                    <button type="button" class="btn btn-light input-group-button @(room.ShowUserlist ? "d-block" : "d-none")" @onclick="() => ChatHubService.ToggleUserlist(room.Id)" style="position: relative; float: right;"><span class="oi oi-x"></span></button>
 
-                        }
+                                                    <WindowContainer>
+                                                        <WindowItem>
+                                                            <WindowTitle><div><span class="oi oi-people"></span> (@room.Users.Count())</div></WindowTitle>
+                                                            <WindowContent>
+
+                                                                <div class="px-sm-0">
+
+                                                                    <div class="accordion">
+                                                                        @foreach (ChatHubUser user in room.Users)
+                                                                        {
+                                                                            @if (user.UserId == ChatHubService.ConnectedUser.UserId)
+                                                                            {
+                                                                                <div class="accordion-item" @key="user">
+                                                                                    <div class="accordion-header">
+                                                                                        <button type="button" OnClick="(e) => UserlistItem_Clicked(e, room, user)" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse-@user.UserId" aria-expanded="@user.UserlistItemCollapsed">
+                                                                                            <strong class="align-middle" style="height: 16px;">@user.DisplayName</strong>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <div id="collapse-@user.UserId" class="accordion-collapse collapse show">
+                                                                                        <div class="accordion-body">
+                                                                                            <div class="card-text">
+                                                                                                <button type="button" class="btn btn-sm btn-link" @onclick="() => OpenProfile_Clicked(user.UserId, room.Id)">Profile/Settings</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div class="accordion-item" @key="user">
+                                                                                    <div class="accordion-header">
+                                                                                        <button type="button" OnClick="(e) => UserlistItem_Clicked(e, room, user)" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse-@user.UserId" aria-expanded="@user.UserlistItemCollapsed">
+                                                                                            <span class="align-middle" style="height: 16px;">@user.DisplayName</span>
+                                                                                        </button>
+                                                                                    </div>
+
+                                                                                    <div id="collapse-@user.UserId" class="accordion-collapse collapse">
+                                                                                        <div class="accordion-body">
+
+                                                                                            @if (!ChatHubService.IgnoredUsers.Any(item => item.UserId == user.UserId))
+                                                                                            {
+                                                                                                <div>
+                                                                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.IgnoreUser_Clicked(user.UserId, room.Id, user.Username)">Ignore User</button>
+                                                                                                </div>
+                                                                                            }
+
+                                                                                            @if (!room.Moderators.Any(item => item.ChatHubUserId == user.UserId))
+                                                                                            {
+                                                                                                <div>
+                                                                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddModerator_Clicked(user.UserId, room.Id)">Add Modi</button>
+                                                                                                </div>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <div>
+                                                                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveModerator_Clicked(user.UserId, room.Id)">Delete Modi</button>
+                                                                                                </div>
+                                                                                            }
+
+                                                                                            @if (!room.WhitelistUsers.Any(item => item.ChatHubUserId == user.UserId))
+                                                                                            {
+                                                                                                <div>
+                                                                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddWhitelistUser_Clicked(user.UserId, room.Id)">Add Whitelist User</button>
+                                                                                                </div>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <div>
+                                                                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveWhitelistUser_Clicked(user.UserId, room.Id)">Delete Whitelist User</button>
+                                                                                                </div>
+                                                                                            }
+
+                                                                                            @if (!room.BlacklistUsers.Any(item => item.ChatHubUserId == user.UserId))
+                                                                                            {
+                                                                                                <div>
+                                                                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddBlacklistUser_Clicked(user.UserId, room.Id)">Add Blacklist User</button>
+                                                                                                </div>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <div>
+                                                                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveBlacklistUser_Clicked(user.UserId, room.Id)">Delete Blacklist User</button>
+                                                                                                </div>
+                                                                                            }
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </WindowContent>
+                                                        </WindowItem>
+                                                        <WindowItem>
+                                                            <WindowTitle><div><span class="oi oi-image"></span></div></WindowTitle>
+                                                            <WindowContent>
+
+                                                                <div class="px-sm-1 py-3">
+
+                                                                    <h5>Share your pics <span class="badge bg-success">FREE</span></h5>
+
+                                                                    @{
+                                                                        var url = string.Concat(NavigationManager.BaseUri.Substring(0, NavigationManager.BaseUri.LastIndexOf('/')), this.ChatHubService.ChatHubControllerApiUrl, "/PostImageUpload");
+
+                                                                        Dictionary<string, string> headers = new Dictionary<string, string>();
+                                                                        headers.Add("connectionId", ChatHubService.Connection?.ConnectionId);
+                                                                        headers.Add("displayName", ChatHubService.ConnectedUser?.DisplayName);
+                                                                        headers.Add("roomId", room.Id.ToString());
+                                                                        headers.Add("moduleId", ModuleState.ModuleId.ToString());
+                                                                    }
+
+                                                                    <BlazorFileUploadComponent ApiUrl="@url" FileUploadHeaders="@headers" InputFileId="@FileUploadInputFileElementId" DropzoneElementId="@FileUploadDropzoneContainerElementId"></BlazorFileUploadComponent>
+
+                                                                </div>
+
+                                                            </WindowContent>
+                                                        </WindowItem>
+                                                        <WindowItem>
+                                                            <WindowTitle><div><span class="oi oi-camera-slr"></span></div></WindowTitle>
+                                                            <WindowContent>
+
+                                                                <div class="px-sm-1 py-3">
+
+                                                                    <h5>Webcam Live Streams <span class="badge bg-success">NEW</span></h5>
+
+                                                                    @if (ChatHubService.ConnectedUser.UserId == room.CreatorId)
+                                                                    {
+                                                                        <button type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(room.Id.ToString(), ChatHubService.Connection.ConnectionId)">Start Streaming</button>
+                                                                        <button type="button" @onclick="async () => await BlazorVideoService.StopVideoChat(room.Id.ToString(), ChatHubService.Connection.ConnectionId)">Stop Streaming</button>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (room.Creator != null)
+                                                                        {
+
+                                                                            foreach (var connection in room.Creator?.Connections)
+                                                                            {
+                                                                                <button type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(room.Id.ToString(), connection.ConnectionId)">Start Streaming</button>
+                                                                                <button type="button" @onclick="async () => await BlazorVideoService.StopVideoChat(room.Id.ToString(), connection.ConnectionId)">Stop Streaming</button>
+                                                                            }
+
+                                                                        }
+                                                                    }
+
+                                                                </div>
+
+                                                            </WindowContent>
+                                                        </WindowItem>
+                                                        <WindowItem>
+                                                            <WindowTitle><div><span class="oi oi-warning"></span> (@room.Moderators.Count())</div></WindowTitle>
+                                                            <WindowContent>
+
+                                                                <div class="px-sm-1 py-3">
+
+                                                                    <h5>Moderators <span class="badge bg-success">NEW</span></h5>
+
+                                                                    <table class="table table-sm">
+                                                                        <tbody>
+                                                                            @foreach (var modi in room.Moderators)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>@modi.ModeratorDisplayName</td>
+                                                                                    <td>
+                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveModerator_Clicked(modi.ChatHubUserId, room.Id)">
+                                                                                            <span class="oi oi-x"></span>
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                    @if (!room.Moderators.Any())
+                                                                    {
+                                                                        <div class="alert alert-warning" role="alert">
+                                                                            No moderators found yet.
+                                                                        </div>
+                                                                    }
+
+                                                                </div>
+
+                                                            </WindowContent>
+                                                        </WindowItem>
+                                                        <WindowItem>
+                                                            <WindowTitle><div><span class="oi oi-question-mark"></span> (@room.WhitelistUsers.Count())</div></WindowTitle>
+                                                            <WindowContent>
+
+                                                                <div class="px-sm-1 py-3">
+
+                                                                    <h5>Whitelist Users <span class="badge bg-success">NEW</span></h5>
+
+                                                                    <table class="table table-sm">
+                                                                        <tbody>
+                                                                            @foreach (var whitelistUser in room.WhitelistUsers)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>@whitelistUser.WhitelistUserDisplayName</td>
+                                                                                    <td>
+                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveWhitelistUser_Clicked(whitelistUser.ChatHubUserId, room.Id)">
+                                                                                            <span class="oi oi-x"></span>
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                    @if (!room.WhitelistUsers.Any())
+                                                                    {
+                                                                        <div class="alert alert-warning" role="alert">
+                                                                            No whitelist users found yet.
+                                                                        </div>
+                                                                    }
+
+                                                                </div>
+
+                                                            </WindowContent>
+                                                        </WindowItem>
+                                                        <WindowItem>
+                                                            <WindowTitle><div><span class="oi oi-ban"></span> (@room.BlacklistUsers.Count())</div></WindowTitle>
+                                                            <WindowContent>
+
+                                                                <div class="px-sm-1 py-3">
+
+                                                                    <h5>Blacklist Users <span class="badge bg-success">NEW</span></h5>
+
+                                                                    <table class="table table-sm">
+                                                                        <tbody>
+                                                                            @foreach (var blacklistUser in room.BlacklistUsers)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>@blacklistUser.BlacklistUserDisplayName</td>
+                                                                                    <td>
+                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveBlacklistUser_Clicked(blacklistUser.ChatHubUserId, room.Id)">
+                                                                                            <span class="oi oi-x"></span>
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                    @if (!room.BlacklistUsers.Any())
+                                                                    {
+                                                                        <div class="alert alert-warning" role="alert">
+                                                                            No blacklist users found yet.
+                                                                        </div>
+                                                                    }
+
+                                                                </div>
+
+                                                            </WindowContent>
+                                                        </WindowItem>
+                                                        <WindowItem>
+                                                            <WindowTitle><div><span class="oi oi-key"></span> (@room.WaitingRoomItems.Count())</div></WindowTitle>
+                                                            <WindowContent>
+
+                                                                <div class="px-sm-1 py-3">
+
+                                                                    <h5>Users waiting to become whitelisted <span class="badge bg-success">NEW</span></h5>
+
+                                                                    <table class="table table-sm">
+                                                                        <tbody>
+                                                                            @foreach (var waitingRoomItem in room.WaitingRoomItems)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>@waitingRoomItem.DisplayName</td>
+                                                                                    <td>
+                                                                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveWaitingRoomItem_Clicked(waitingRoomItem)">
+                                                                                            <span class="oi oi-check"></span>
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                    @if (!room.WaitingRoomItems.Any())
+                                                                    {
+                                                                        <div class="alert alert-warning" role="alert">
+                                                                            No waiting room users found yet.
+                                                                        </div>
+                                                                    }
+
+                                                                </div>
+
+                                                            </WindowContent>
+                                                        </WindowItem>
+
+                                                    </WindowContainer>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </WindowContent>
+                                </WindowItem>
+
+                            }
+                        </WindowContainer>
+
                     }
 
                 </TabContent>

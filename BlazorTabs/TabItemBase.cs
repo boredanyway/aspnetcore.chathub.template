@@ -16,7 +16,10 @@ namespace BlazorTabs
         protected override async Task OnInitializedAsync()
         {
             this.TabContainer.AddTabItem(this);
-
+            await base.OnInitializedAsync();
+        }
+        protected override void OnParametersSet()
+        {
             if (!this.TabContainer.InitialSelection)
             {
                 this.TabContainer.ActiveTab = this;
@@ -27,7 +30,7 @@ namespace BlazorTabs
                 this.TabContainer.ActiveTab = this;
             }
 
-            await base.OnInitializedAsync();
+            base.OnParametersSet();
         }
 
         public string TitleCssClass => this.TabContainer.ActiveTab == this ? "active" : null;

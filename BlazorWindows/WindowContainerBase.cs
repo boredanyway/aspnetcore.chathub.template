@@ -23,8 +23,6 @@ namespace BlazorWindows
         private List<EventCallback<WindowEvent>> WindowEvents { get; set; } = new List<EventCallback<WindowEvent>>();
         private WindowEvent WindowEvent { get; set; }
 
-        public bool InitialSelection { get; set; }
-
         private IWindowItem _activeWindow;
         public IWindowItem ActiveWindow
         {
@@ -55,6 +53,11 @@ namespace BlazorWindows
         {
             if (firstRender)
             {
+                if (this.ActiveWindow == null && this.WindowItems.Any())
+                {
+                    this.ActiveWindow = this.WindowItems.FirstOrDefault();
+                }
+
                 this.HasRendered = true;
             }
 

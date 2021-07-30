@@ -207,7 +207,7 @@
                                 ChatHubRoom room = item.value;
                                 int room_index = item.i;
 
-                                <WindowItem @key="room" Id="@room.Id" InitialSelection="@(ChatHubService.ContextRoomId == room.Id.ToString())">
+                                <WindowItem @key="room" Id="@room.Id" IsActiveWindow="@(ChatHubService.ContextRoomId == room.Id.ToString())">
                                     <WindowTitle>
 
                                         @room.Title&nbsp;

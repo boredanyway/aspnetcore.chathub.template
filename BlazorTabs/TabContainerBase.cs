@@ -9,7 +9,6 @@ namespace BlazorTabs
     public partial class TabContainerBase : ComponentBase
     {
         [Parameter] public RenderFragment ChildContent { get; set; }
-
         [Parameter] public EventCallback<TabEvent> ShowEvent { get; set; }
         [Parameter] public EventCallback<TabEvent> ShownEvent { get; set; }
         [Parameter] public EventCallback<TabEvent> HideEvent { get; set; }
@@ -22,9 +21,7 @@ namespace BlazorTabs
         private List<EventCallback<TabEvent>> TabEvents { get; set; } = new List<EventCallback<TabEvent>>();
         private TabEvent TabEvent { get; set; }
 
-        public bool InitialSelection { get; set; }
-
-        private ITabItem _activeTab;
+        private ITabItem _activeTab { get; set; }
         public ITabItem ActiveTab
         {
             get
@@ -55,6 +52,10 @@ namespace BlazorTabs
         {
             if (firstRender)
             {
+                if(this.ActiveTab == null && this.TabItems.Any())
+                {
+                    this.ActiveTab = this.TabItems.FirstOrDefault();
+                }
                 this.HasRendered = true;
             }
 
@@ -98,6 +99,16 @@ namespace BlazorTabs
 
                     StateHasChanged();
                 });
+            }
+        }
+
+        public void ActivateTabEventExecute(object sender, int id)
+        {
+            var tab = this.TabItems.Find(item => item.Id == id);
+            if (tab != null)
+            {
+                this.ActiveTab = tab;
+                StateHasChanged();
             }
         }
 

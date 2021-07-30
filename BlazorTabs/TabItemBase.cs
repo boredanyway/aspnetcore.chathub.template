@@ -6,26 +6,21 @@ namespace BlazorTabs
 {
     public partial class TabItemBase : ComponentBase, IDisposable, ITabItem
     {
-
         [CascadingParameter] public TabContainer TabContainer { get; set; }
         [Parameter] public RenderFragment TabTitle { get; set; }
         [Parameter] public RenderFragment TabContent { get; set; }
         [Parameter] public int Id { get; set; }
-        [Parameter] public bool InitialSelection { get; set; }
+        [Parameter] public bool IsActiveTab { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             this.TabContainer.AddTabItem(this);
             await base.OnInitializedAsync();
         }
+
         protected override void OnParametersSet()
         {
-            if (!this.TabContainer.InitialSelection)
-            {
-                this.TabContainer.ActiveTab = this;
-                this.TabContainer.InitialSelection = true;
-            }
-            if (this.InitialSelection)
+            if (this.IsActiveTab)
             {
                 this.TabContainer.ActiveTab = this;
             }

@@ -26,6 +26,7 @@ using Oqtane.ChatHubs.Extensions;
 using BlazorModal;
 using Oqtane.Models;
 using BlazorDropdown;
+using BlazorTabs;
 
 namespace Oqtane.ChatHubs
 {
@@ -430,14 +431,10 @@ namespace Oqtane.ChatHubs
         }
         public void HideWindow(WindowEvent e)
         {
-            var room = this.ChatHubService.Rooms.FirstOrDefault(item => item.Id == e.DeactivatedItem.Id);
-            if (room != null)
-            {
-                //this.ChatHubService.StopVideoChat(e.DeactivatedItem.Id);
-            }
         }
         public void ShownWindow(WindowEvent e)
         {
+            this.ChatHubService.ContextRoomId = e.ActivatedItem.Id.ToString();
         }
         public void HiddenWindow(WindowEvent e)
         {

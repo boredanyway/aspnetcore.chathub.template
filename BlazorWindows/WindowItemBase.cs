@@ -17,7 +17,7 @@ namespace BlazorWindows
 
         [Parameter] public int Id { get; set; }
 
-        [Parameter] public bool InitialSelection { get; set; }
+        [Parameter] public bool IsActiveWindow { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -26,12 +26,7 @@ namespace BlazorWindows
         }
         protected override void OnParametersSet()
         {
-            if (!this.WindowContainer.InitialSelection)
-            {
-                this.WindowContainer.ActiveWindow = this;
-                this.WindowContainer.InitialSelection = true;
-            }
-            if (this.InitialSelection)
+            if (this.IsActiveWindow)
             {
                 this.WindowContainer.ActiveWindow = this;
             }

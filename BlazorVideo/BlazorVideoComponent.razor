@@ -12,8 +12,6 @@
     }
 
     .video-item-resize-container-@(Id + ConnectionId) {
-        width: 240px;
-        min-height: 180px;
         resize: both;
         overflow: hidden;
         background-color: @BackgroundColor;
@@ -22,16 +20,12 @@
     @@media (max-width: 767px) {
         .video-item-resize-container-@(Id + ConnectionId) {
             width: 100%;
-            min-height: 180px;
+            min-height: 140px;
         }
     }
 
     .video-item-resize-container:hover .video-ellipsis {
         display: initial;
-    }
-
-    .video-item-element {
-        min-height: 180px;
     }
 
     .video-item-ellipsis {
@@ -44,7 +38,7 @@
 
 </style>
 
-<div class="video-item-@(Id + ConnectionId) p-1 w-100 h-100">
+<div class="video-item-@(Id + ConnectionId) p-0 p-sm-0 p-md-1 w-100 h-100">
 
     @{ 
         var maps = BlazorVideoService.BlazorVideoMaps.Where(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId).ToList();
@@ -71,7 +65,7 @@
             <button type="button" class="text-danger p-1 badge bg-white position-absolute" style="z-index: 1; top: 34px; left: 10px;" @onclick="async () => await BlazorVideoService.StopVideoChat(Id, ConnectionId)"><span class="oi oi-media-pause"></span><span class="video-item-ellipsis"> [loc.] @Name</span></button>
         }
 
-        <div class="video-item-resize-container-@(Id + ConnectionId) position-relative">
+        <div class="video-item-resize-container-@(Id + ConnectionId) position-relative w-100 h-100">
 
             <div class="align-items-center justify-content-center px-3 position-absolute w-100 h-100 @(IsVideoOverlay == true ? "d-flex" : "d-none")" style="z-index: 1;">
                 <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id, ConnectionId)">
@@ -110,7 +104,7 @@
             <button type="button" class="text-danger p-1 badge bg-white position-absolute" style="z-index: 1; top: 34px; left: 10px;" @onclick="async () => await BlazorVideoService.StopVideoChat(Id, ConnectionId)"><span class="oi oi-media-pause"></span><span class="video-item-ellipsis"> [rem.] @Name</span></button>
         }
 
-        <div class="video-item-resize-container-@(Id + ConnectionId) position-relative">
+        <div class="video-item-resize-container-@(Id + ConnectionId) position-relative w-100 h-100">
 
             <div class="align-items-center justify-content-center px-3 position-absolute w-100 h-100 @(IsVideoOverlay == true ? "d-flex" : "d-none")" style="z-index: 1;">
                 <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id, ConnectionId)">

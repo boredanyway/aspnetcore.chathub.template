@@ -20,12 +20,17 @@ namespace BlazorTabs
 
         protected override void OnParametersSet()
         {
+            base.OnParametersSet();
+        }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
             if (this.IsActiveTab)
             {
                 this.TabContainer.ActiveTab = this;
             }
 
-            base.OnParametersSet();
+            base.OnAfterRender(firstRender);
         }
 
         public string TitleCssClass => this.TabContainer.ActiveTab == this ? "active" : null;

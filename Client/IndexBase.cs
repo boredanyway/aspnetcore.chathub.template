@@ -360,6 +360,7 @@ namespace Oqtane.ChatHubs
         {
             this.ChatHubService.ContextRoomId = e.ClickedDropdownItem.Id.ToString();
             this.ChatHubService.ToggleUserlist(e.ClickedDropdownItem.Id);
+            this.UpdateUI();
         }
 
         public async Task FixCorruptConnections_ClickedAsync()
@@ -428,13 +429,14 @@ namespace Oqtane.ChatHubs
             {
                 room.UnreadMessages = 0;
             }
+            this.UpdateUI();
         }
         public void HideWindow(WindowEvent e)
         {
         }
         public void ShownWindow(WindowEvent e)
         {
-            this.ChatHubService.ContextRoomId = e.ActivatedItem.Id.ToString();
+
         }
         public void HiddenWindow(WindowEvent e)
         {

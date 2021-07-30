@@ -26,12 +26,16 @@ namespace BlazorWindows
         }
         protected override void OnParametersSet()
         {
+            base.OnParametersSet();
+        }
+        protected override void OnAfterRender(bool firstRender)
+        {
             if (this.IsActiveWindow)
             {
                 this.WindowContainer.ActiveWindow = this;
             }
 
-            base.OnParametersSet();
+            base.OnAfterRender(firstRender);
         }
 
         public string TitleCssClass => this.WindowContainer.ActiveWindow == this ? "active" : null;

@@ -1,7 +1,5 @@
 ﻿@namespace BlazorDraggableList
-
 @inherits BlazorDraggableListBase<TItemGeneric>
-
 @typeparam TItemGeneric
 
 <style>
@@ -29,26 +27,43 @@
 
 </style>
 
-<div id="@Id" class="container blazor-draggable-list" style="padding-left: 0; padding-right: 0;">
-    <div class="row w-100 align-items-center justify-content-center overflow-auto my-4 @Class" style="margin-left: 0; margin-right: 0;">
+@if (Items != null && Items.Any())
+{
 
-        @for (int i = 0; i < Items.Count(); i++)
-        {
-            var temp = i;
+    <div id="@Id" class="container blazor-draggable-list" style="padding-left: 0; padding-right: 0;">
+        <div class="row w-100 align-items-center justify-content-center overflow-auto my-4 @Class" style="margin-left: 0; margin-right: 0;">
 
-            <div class="position-relative h-100 p-0 @(Orientation == BlazorDraggableListOrientationType.Horizontal ? "col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3" : "col-12")">
+            @{ 
+                var columns = string.Empty;
+                if (Items.Count() == 1)
+                {
+                    columns = "col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6";
+                }
+                else
+                {
+                    columns = "col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3";
+                }
+            }
 
-                <div id="blazor-draggable-list-item-@temp" class="draggable-item" draggable="true">
-                    @BlazorDraggableListItem(Items[temp])
+            @for (int i = 0; i < Items.Count(); i++)
+            {
+                var temp = i;
+
+                <div class="position-relative h-100 p-0 @(Orientation == BlazorDraggableListOrientationType.Horizontal ? columns : "col-12")">
+
+                    <div id="blazor-draggable-list-item-@temp" class="draggable-item" draggable="true">
+                        @BlazorDraggableListItem(Items[temp])
+                    </div>
+
+                    <div id="blazor-draggable-list-item-dropzone-@temp" class="dropzone dropzone-@temp" />
+
                 </div>
+             }
 
-                <div id="blazor-draggable-list-item-dropzone-@temp" class="dropzone dropzone-@temp" />
-
-            </div>
-        }
-
+        </div>
     </div>
-</div>
+
+}
 
 @code {
 

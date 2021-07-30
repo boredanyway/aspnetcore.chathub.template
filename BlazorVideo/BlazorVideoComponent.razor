@@ -13,14 +13,25 @@
 
     .video-item-resize-container-@(Id + ConnectionId) {
         width: 240px;
-        height: 180px;
+        min-height: 180px;
         resize: both;
         overflow: hidden;
         background-color: @BackgroundColor;
     }
 
+    @@media (max-width: 767px) {
+        .video-item-resize-container-@(Id + ConnectionId) {
+            width: 100%;
+            min-height: 180px;
+        }
+    }
+
     .video-item-resize-container:hover .video-ellipsis {
         display: initial;
+    }
+
+    .video-item-element {
+        min-height: 180px;
     }
 
     .video-item-ellipsis {
@@ -31,21 +42,17 @@
         display: initial;
     }
 
-    .background-gradient-blue {
-        background-image: linear-gradient(to bottom, rgba(255,255,255,1), rgba(49,94,182,1));
-    }
-
-    .background-gradient-red {
-        background-image: linear-gradient(to bottom, rgba(255,255,255,1), rgba(182,94,49,1));
-    }
-
 </style>
 
-@{ 
-    var IsVideoOverlay = BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId && item.Value.VideoOverlay == true);
-}
+<div class="video-item-@(Id + ConnectionId) p-1 w-100 h-100">
 
-<div class="video-item-@(Id + ConnectionId) p-1">
+    @{ 
+        var maps = BlazorVideoService.BlazorVideoMaps.Where(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId).ToList();
+        if(maps.Any())
+        {
+            this.IsVideoOverlay = maps.FirstOrDefault().Value.VideoOverlay;
+        }
+    }
 
     @if (Type == BlazorVideoType.LocalLivestream)
     {
@@ -64,34 +71,33 @@
             <button type="button" class="text-danger p-1 badge bg-white position-absolute" style="z-index: 1; top: 34px; left: 10px;" @onclick="async () => await BlazorVideoService.StopVideoChat(Id, ConnectionId)"><span class="oi oi-media-pause"></span><span class="video-item-ellipsis"> [loc.] @Name</span></button>
         }
 
-        <div>
-            <div class="video-item-resize-container-@(Id + ConnectionId) position-relative">
-                <div class="align-items-center justify-content-center px-3 h-100 @(IsVideoOverlay == true ? "d-flex" : "d-none")">
-                    <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id, ConnectionId)">
+        <div class="video-item-resize-container-@(Id + ConnectionId) position-relative">
 
-                        ▷ @Name
+            <div class="align-items-center justify-content-center px-3 position-absolute w-100 h-100 @(IsVideoOverlay == true ? "d-flex" : "d-none")" style="z-index: 1;">
+                <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id, ConnectionId)">
 
-                    </button>
-                </div>
+                    ▷ @Name
 
-                <div class="w-100 h-100 @(!BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId) ? "d-none" : "d-block")">
+                </button>
+            </div>
 
-                    <video id="local-livestream-element-id-@(Id + ConnectionId)" class="blazor-video-item mb-0 w-100 h-100" controls></video>
+            <div class="w-100 h-100" style="@(IsVideoOverlay == true ? "visibility: hidden; opacity: 0;" : "opacity: 1;") transition: opacity linear 1s; transition-delay: 1s;">
 
-                    <div class="position-absolute video-item-devices bg-white p-1" style="z-index: 2; top: 0px; right: 0px;">
-                        <div class="input-group" style="padding: 0.125rem 0.25rem 0.1rem 0.25rem">
-                            <select id="local-livestream-micro-source-@(Id + ConnectionId)" class="border-0 custom-select custom-select-sm" style="width: 120px !important;"></select>
-                        </div>
-                        <div class="input-group" style="padding: 0.125rem 0.25rem 0.1rem 0.25rem">
-                            <select id="local-livestream-audio-source-@(Id + ConnectionId)" class="border-0 custom-select custom-select-sm" style="width: 120px !important;"></select>
-                        </div>
-                        <div class="input-group" style="padding: 0.125rem 0.25rem 0.1rem 0.25rem">
-                            <select id="local-livestream-video-source-@(Id + ConnectionId)" class="border-0 custom-select custom-select-sm" style="width: 120px !important;"></select>
-                        </div>
+                <video id="local-livestream-element-id-@(Id + ConnectionId)" class="video-item-element mb-0 w-100 h-100" controls></video>
+
+                <div class="position-absolute video-item-devices bg-white p-1" style="z-index: 2; top: 0px; right: 0px;">
+                    <div class="input-group" style="padding: 0.125rem 0.25rem 0.1rem 0.25rem">
+                        <select id="local-livestream-micro-source-@(Id + ConnectionId)" class="border-0 custom-select custom-select-sm" style="width: 120px !important;"></select>
+                    </div>
+                    <div class="input-group" style="padding: 0.125rem 0.25rem 0.1rem 0.25rem">
+                        <select id="local-livestream-audio-source-@(Id + ConnectionId)" class="border-0 custom-select custom-select-sm" style="width: 120px !important;"></select>
+                    </div>
+                    <div class="input-group" style="padding: 0.125rem 0.25rem 0.1rem 0.25rem">
+                        <select id="local-livestream-video-source-@(Id + ConnectionId)" class="border-0 custom-select custom-select-sm" style="width: 120px !important;"></select>
                     </div>
                 </div>
-
             </div>
+            
         </div>
     }
 
@@ -104,31 +110,29 @@
             <button type="button" class="text-danger p-1 badge bg-white position-absolute" style="z-index: 1; top: 34px; left: 10px;" @onclick="async () => await BlazorVideoService.StopVideoChat(Id, ConnectionId)"><span class="oi oi-media-pause"></span><span class="video-item-ellipsis"> [rem.] @Name</span></button>
         }
 
-        <div>
-            <div class="video-item-resize-container-@(Id + ConnectionId) position-relative">
+        <div class="video-item-resize-container-@(Id + ConnectionId) position-relative">
 
-                <div class="align-items-center justify-content-center px-3 h-100 @(IsVideoOverlay == true ? "d-flex" : "d-none")">
-                    <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id, ConnectionId)">
+            <div class="align-items-center justify-content-center px-3 position-absolute w-100 h-100 @(IsVideoOverlay == true ? "d-flex" : "d-none")" style="z-index: 1;">
+                <button class="btn btn-lg btn-link text-white bg-dark p-sm-2" type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(Id, ConnectionId)">
 
-                        @if (Status == BlazorVideoStatusType.Live)
-                        {
-                            <span class="oi oi-media-play text-danger"></span> @Name
-                        }
-                        @if (Status == BlazorVideoStatusType.Offline)
-                        {
-                            <span class="oi oi-media-pause text-info"></span> @Name
-                        }
+                    @if (Status == BlazorVideoStatusType.Live)
+                    {
+                        <span class="oi oi-media-play text-danger"></span> @Name
+                    }
+                    @if (Status == BlazorVideoStatusType.Offline)
+                    {
+                        <span class="oi oi-media-pause text-info"></span> @Name
+                    }
 
-                    </button>
-                </div>
+                </button>
+            </div>
 
-                <div class="w-100 h-100 @(!BlazorVideoService.BlazorVideoMaps.Any(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId) ? "d-none" : "d-block")">
+            <div class="w-100 h-100" style="@(IsVideoOverlay == true ? "visibility: hidden; opacity: 0;" : "opacity: 1;") transition: opacity linear 1s; transition-delay: 1s;">
 
-                    <video id="remote-livestream-element-id-@(Id + ConnectionId)" class="remote-livestream blazor-video-item mb-0 w-100 h-100" controls></video>
-
-                </div>
+                <video id="remote-livestream-element-id-@(Id + ConnectionId)" class="remote-livestream video-item-element mb-0 w-100 h-100" controls></video>
 
             </div>
+
         </div>
     }
 

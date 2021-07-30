@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlazorVideo
@@ -19,6 +20,8 @@ namespace BlazorVideo
         [Parameter] public int VideoBitsPerSecond { get; set; }
         [Parameter] public int AudioBitsPerSecond { get; set; }
         [Parameter] public int VideoSegmentsLength { get; set; }
+
+        public bool IsVideoOverlay { get; set; } = true;
 
         protected override async Task OnInitializedAsync()
         {
@@ -49,6 +52,13 @@ namespace BlazorVideo
 
         public void Dispose()
         {
+            var maps = BlazorVideoService.BlazorVideoMaps.Where(item => item.Value.Id == Id && item.Value.ConnectionId == ConnectionId).ToList();
+            if(maps.Any())
+            {
+                var keyvaluepair = maps.FirstOrDefault();
+                this.BlazorVideoService.BlazorVideoMaps[keyvaluepair.Key] = new BlazorVideoModel() { Id = keyvaluepair.Value.Id, ConnectionId = keyvaluepair.Value.ConnectionId, JsObjRef = keyvaluepair.Value.JsObjRef, Type = keyvaluepair.Value.Type, VideoOverlay = true };
+            }
+
             this.BlazorVideoService.RunUpdateUI -= UpdateUIStateHasChanged;
         }
 

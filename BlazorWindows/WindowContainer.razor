@@ -19,7 +19,7 @@
 
 @if (WindowItems.Count() >= 1 && RenderLivestreams)
 {
-    <BlazorDraggableListComponent Items="WindowItems" Id="@DraggableLivestreamContainerElementId" Class="video-items d-flex flex-wrap align-items-center justify-content-center overflow-auto my-4 p-2 border border-warning blazor-window-nav" Orientation="@BlazorDraggableListOrientationType.Horizontal">
+    <BlazorDraggableListComponent Items="WindowItems" Id="@DraggableLivestreamContainerElementId" Class="video-items w-100 d-md-inline-flex flex-wrap align-items-center justify-content-center overflow-auto my-4 p-2 border border-warning blazor-window-nav" Orientation="@BlazorDraggableListOrientationType.Horizontal">
 
         <BlazorDraggableListItem>
             @context.WindowLivestream

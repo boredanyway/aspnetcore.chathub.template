@@ -26,6 +26,7 @@
         background-color: rgba(76, 255, 0, 0.3);
         border: 3px dashed rgb(0, 255, 144);
     }
+
 </style>
 
 <section id="@Id" class="blazor-draggable-list @Class">
@@ -34,7 +35,7 @@
     {
         var temp = i;
 
-        <div class="position-relative">
+        <div class="position-relative h-100">
 
             <div id="blazor-draggable-list-item-@temp" class="draggable-item @(Orientation == BlazorDraggableListOrientationType.Horizontal ? "d-flex" : "")" draggable="true">
                 @BlazorDraggableListItem(Items[temp])

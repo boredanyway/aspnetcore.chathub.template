@@ -221,7 +221,30 @@ namespace Oqtane.ChatHubs.Services
                 }
             });
         }
-        
+        public async Task<bool> ConnectToChat(string GuestUsername, int ModuleId)
+        {
+            try
+            {
+                if (this.Connection?.State == HubConnectionState.Connected
+                 || this.Connection?.State == HubConnectionState.Connecting
+                 || this.Connection?.State == HubConnectionState.Reconnecting)
+                {
+                    this.BlazorAlertsService.NewBlazorAlert($"The client is already connected. Trying establish new connection with guest name { GuestUsername }.", "Javascript Application", PositionType.Fixed);
+                }
+
+                this.BuildHubConnection(GuestUsername, ModuleId);
+                this.RegisterHubConnectionHandlers();
+                await this.ConnectAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                this.HandleException(ex);
+            }
+
+            return false;
+        }
+
         public async Task OnDataAvailableEventHandlerExecute(string dataUri, string roomId)
         {
             try

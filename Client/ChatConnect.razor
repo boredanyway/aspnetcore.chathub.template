@@ -1,0 +1,52 @@
+﻿@namespace Oqtane.ChatHubs
+@inherits ModuleBase
+@inject ChatHubService ChatHubService
+@inject BlazorAlertsService BlazorAlertsService
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.SignalR.Client
+@using Oqtane.ChatHubs.Services
+@using BlazorAlerts
+
+<AuthorizeView>
+    <Authorizing>
+
+        <text>loading..</text>
+
+    </Authorizing>
+    <Authorized>
+
+        @if (ChatHubService.Connection == null || ChatHubService.Connection?.State == HubConnectionState.Disconnected)
+        {
+            <div class="p-0 p-sm-1">
+                <button type="button" class="btn btn-sm btn-link bg-white border border-light" @onclick="@(async () => await TryConnect())">Click here to connect to videochat</button>
+            </div>
+        }
+
+    </Authorized>
+    <NotAuthorized>
+
+        <div class="p-0 p-sm-1">
+            <input type="text" id="guestUsernameInput-@ModuleState.ModuleId.ToString()" class="form-control" @bind-value="@GuestUsername" placeholder="Choose your desired guestname" style="max-width: 320px;" />
+        </div>
+        <div class="p-0 p-sm-1">
+            <button type="button" class="btn btn-sm btn-link bg-white border border-light" @onclick="@(async () => await TryConnect())">Establish new connection</button>
+        </div>
+
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    [Parameter] public string GuestUsername { get; set; }
+
+    public async Task TryConnect()
+    {
+        var connected = await this.ChatHubService.ConnectToChat(this.GuestUsername, ModuleState.ModuleId);
+        if(connected)
+        {
+            this.GuestUsername = string.Empty;
+        }
+    }
+
+}

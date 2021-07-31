@@ -44,10 +44,10 @@ namespace Oqtane.ChatHubs
         [Inject] protected BlazorVideoService BlazorVideoService { get; set; }
         [Inject] protected BlazorModalService BlazorModalService { get; set; }
 
+        public string GuestUsername { get; set; } = string.Empty;
         public int MessageWindowHeight { get; set; }
         public int UserlistWindowHeight { get; set; }
         
-        public string GuestUsername { get; set; } = string.Empty;
         public ChatHubRoom contextRoom { get; set; }
 
         public int maxUserNameCharacters { get; set; }
@@ -115,7 +115,7 @@ namespace Oqtane.ChatHubs
                 var cookievalue = await this.CookieService.GetCookieAsync(".AspNetCore.Identity.Application");
                 this.ChatHubService.IdentityCookie = new Cookie(".AspNetCore.Identity.Application", cookievalue, "/", hostname);
 
-                await this.ConnectToChat();
+                await this.ChatHubService.ConnectToChat(this.GuestUsername, ModuleState.ModuleId);
                 await this.ChatHubService.chatHubMap.InvokeVoidAsync("showchathubscontainer");
                 await this.ChatHubService.GetLobbyRooms();
 
@@ -164,36 +164,11 @@ namespace Oqtane.ChatHubs
             {
                 this.ChatHubService.HandleException(ex);
             }
-        }
-
-        public async Task ConnectToChat()
-        {
-            try
-            {
-                if (this.ChatHubService.Connection?.State == HubConnectionState.Connected
-                 || this.ChatHubService.Connection?.State == HubConnectionState.Connecting
-                 || this.ChatHubService.Connection?.State == HubConnectionState.Reconnecting)
-                {
-                    this.BlazorAlertsService.NewBlazorAlert($"The client is already connected. Trying establish new connection with guest name { this.GuestUsername }.", "Javascript Application", PositionType.Fixed);
-                }
-
-                this.ChatHubService.BuildHubConnection(GuestUsername, ModuleState.ModuleId);
-                this.ChatHubService.RegisterHubConnectionHandlers();
-                await this.ChatHubService.ConnectAsync();
-                this.GuestUsername = string.Empty;
-            }
-            catch (Exception ex)
-            {
-                await logger.LogError(ex, "Error Connecting To ChatHub: {Error}", ex.Message);
-                ModuleInstance.AddModuleMessage("Error Connecting To ChatHub", MessageType.Error);
-            }
-        }
-        
+        }        
         public async Task LeaveRoom_Clicked(int roomId, int moduleId)
         {
             await this.ChatHubService.LeaveChatRoom(roomId);
-        }
-        
+        }        
         private async Task BrowserHasResized()
         {
             try

@@ -468,6 +468,44 @@ namespace Oqtane.ChatHubs.Services
                 }
             });
         }
+        public async Task EnterRoom_Clicked(int roomId, int moduleid)
+        {
+            if (!this.Rooms.Any(item => item.Id == roomId) && this.Connection?.State == HubConnectionState.Connected)
+            {
+                await this.EnterChatRoom(roomId);
+            }
+        }
+        public async Task EnableArchiveRoom_Clicked(ChatHubRoom room)
+        {
+            try
+            {
+                if (room.Status == ChatHubRoomStatus.Archived.ToString())
+                {
+                    room.Status = ChatHubRoomStatus.Enabled.ToString();
+                }
+                else if (room.Status == ChatHubRoomStatus.Enabled.ToString())
+                {
+                    room.Status = ChatHubRoomStatus.Archived.ToString();
+                }
+
+                await this.UpdateRoom(room);
+            }
+            catch
+            {
+                this.BlazorAlertsService.NewBlazorAlert("Could not enable/archive room.");
+            }
+        }
+        public async Task DeleteRoom_Clicked(int id)
+        {
+            try
+            {
+                await this.DeleteRoom(id);
+            }
+            catch
+            {
+                this.BlazorAlertsService.NewBlazorAlert("Could not delete room.");
+            }
+        }
         public void IgnoreUser_Clicked(int userId, int roomId, string username)
         {
             this.Connection.InvokeAsync("IgnoreUser", username).ContinueWith((task) =>

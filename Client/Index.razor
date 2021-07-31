@@ -7,10 +7,8 @@
 @using System.Linq
 @using System.Web
 @using BlazorAlerts
-@using BlazorModal
 @using BlazorWindows
 @using BlazorTabs
-@using BlazorPager
 @using BlazorFileUpload
 @using BlazorVideo
 @using Oqtane.ChatHubs.Models
@@ -115,62 +113,7 @@
                         </div>
                     }
 
-                    <BlazorPagerComponent Items="@ChatHubService.Lobbies" ItemsPerPage="14" Class="bg-white py-sm-3">
-
-                        <BlazorPagerItem>
-
-                            <div class="d-flex flex-wrap flex-sm-nowrap align-items-center w-100 py-2" style="@(context.Status == ChatHubRoomStatus.Archived.ToString() ? "background-color: #fff; border-top: 1px solid red;" : "background-color: #fff; border-top: 1px solid #bb99ff")">
-
-                                <div class="px-1">
-                                    <img src="@string.Format("{0}/{1}/{2}", NavigationManager.BaseUri, ChatHubConstants.RoomImagesPath, context.ImageUrl)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "d-none" : "img-fuid")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
-                                    <img src="@string.Format("{0}/{1}/chat-room-image.png", NavigationManager.BaseUri, ChatHubConstants.ModulePath)" class="@(string.IsNullOrEmpty(context.ImageUrl) ? "img-fluid" : "d-none")" style="background-color: @(context.Status == ChatHubRoomStatus.Archived.ToString() ? "#fff1f1;" : "#f1f1ff;"); max-width: 100px;" />
-                                </div>
-
-                                <div class="px-1 py-2">
-                                    <a href="@NavigateUrl(PageState.Page.Path, "moduleid=" + context.ModuleId.ToString() + "&" + "roomid=" + context.Id.ToString())">
-                                        <h5>
-                                            @context.Title
-                                        </h5>
-                                    </a>
-                                    <div>
-                                        <div>@context.Content</div>
-                                        <div>
-                                            <span class="badge bg-secondary">@context.Type</span>
-                                            <span class="badge bg-secondary">@context.Users.Count() Users Online</span>
-                                            <span class="badge bg-secondary">@context.Viewers.Count() Viewers</span>
-                                            <span class="badge bg-secondary">@context.Status</span>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted">
-
-                                                @if (context.Creator.Connections.Any(connection => context.Cams.Any(cam => cam.ChatHubConnectionId == connection.Id && cam.Status == ChatHubCamStatus.Broadcasting.ToString())))
-                                                {
-                                                    <span class="oi oi-media-record text-danger "></span><span> Broadcasting | </span>
-                                                }
-                                                @context.Creator.DisplayName <span class="oi oi-check"></span>
-
-                                            </small>
-                                            <br />
-                                            <small class="text-muted">Posted on @context.CreatedOn.ToShortDateString() <span class="oi oi-clock"></span></small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="ms-none ms-sm-auto px-1">
-                                    <button type="button" class="btn btn-sm btn-link bg-light" @onclick="@(async () => await EnterRoom_Clicked(context.Id, context.ModuleId))">Enter</button>
-                                    @if (ChatHubService.ConnectedUser?.UserId == context.CreatorId || ChatHubService.ConnectedUser?.Username == "host")
-                                    {
-                                        <button type="button" class="btn btn-sm btn-primary" @onclick="@(() => EditRoomModalRef.OpenEditRoomModal(context.Id))">Edit</button>
-                                        <ActionDialog Header="Enable/Archive" Message="@("Are you sure you want to archive this room?")" Action="Enable/Archive" Security="SecurityAccessLevel.Edit" Class="btn btn-sm btn-warning" OnClick="@(async () => await EnableArchiveRoom(context))" />
-                                        <ActionDialog Header="Delete" Message="@("Are your sure you want to delete this room?")" Action="Delete" Security="SecurityAccessLevel.Edit" Class="btn btn-sm btn-danger" OnClick="@(async () => await DeleteRoom(context.Id))" />
-                                    }
-                                </div>
-
-                            </div>
-
-                        </BlazorPagerItem>
-
-                    </BlazorPagerComponent>
+                    <Lobbies EditRoomModalRef="@EditRoomModalRef"></Lobbies>
 
                 }
 
@@ -934,9 +877,9 @@
 
 </div>
 
-<EditRoomModal @ref="EditRoomModalRef"></EditRoomModal>
 <SettingsModal @ref="SettingsModalRef"></SettingsModal>
 <ImageModal @ref="ImageModalRef"></ImageModal>
+<EditRoomModal @ref="EditRoomModalRef"></EditRoomModal>
 
 @code {
 

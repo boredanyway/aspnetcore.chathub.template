@@ -174,45 +174,6 @@ namespace Oqtane.ChatHubs
             }
         }
 
-        public async Task EnableArchiveRoom(ChatHubRoom room)
-        {
-            try
-            {
-                if(room.Status == ChatHubRoomStatus.Archived.ToString())
-                {
-                    room.Status = ChatHubRoomStatus.Enabled.ToString();
-                }
-                else if(room.Status == ChatHubRoomStatus.Enabled.ToString())
-                {
-                    room.Status = ChatHubRoomStatus.Archived.ToString();
-                }
-
-                await ChatHubService.UpdateRoom(room);
-                await logger.LogInformation("Room Archived {ChatHubRoom}", room);
-                NavigationManager.NavigateTo(NavigateUrl());
-            }
-            catch (Exception ex)
-            {
-                await logger.LogError(ex, "Error Archiving Room {ChatHubRoom} {Error}", room, ex.Message);
-                ModuleInstance.AddModuleMessage("Error Archiving Room", MessageType.Error);
-            }
-        }
-
-        public async Task DeleteRoom(int id)
-        {
-            try
-            {
-                await ChatHubService.DeleteRoom(id);
-                await logger.LogInformation("Room Deleted {ChatHubRoomId}", id);
-                NavigationManager.NavigateTo(NavigateUrl());
-            }
-            catch (Exception ex)
-            {
-                await logger.LogError(ex, "Error Deleting Room {ChatHubRoomId} {Error}", id, ex.Message);
-                ModuleInstance.AddModuleMessage("Error Deleting Room", MessageType.Error);
-            }
-        }
-
         public async Task ConnectToChat()
         {
             try
@@ -235,13 +196,7 @@ namespace Oqtane.ChatHubs
                 ModuleInstance.AddModuleMessage("Error Connecting To ChatHub", MessageType.Error);
             }
         }
-        public async Task EnterRoom_Clicked(int roomId, int moduleid)
-        {
-            if(!this.ChatHubService.Rooms.Any(item => item.Id == roomId) && ChatHubService.Connection?.State == HubConnectionState.Connected)
-            {
-                await this.ChatHubService.EnterChatRoom(roomId);
-            }
-        }
+        
         public async Task LeaveRoom_Clicked(int roomId, int moduleId)
         {
             await this.ChatHubService.LeaveChatRoom(roomId);

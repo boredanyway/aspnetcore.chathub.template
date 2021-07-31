@@ -1,0 +1,118 @@
+﻿@namespace Oqtane.ChatHubs
+@inherits ModuleBase
+@inject ChatHubService ChatHubService
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Linq
+@using Oqtane.ChatHubs.Services
+@using Oqtane.ChatHubs.Extensions
+
+<div class="d-flex flex-column bg-white px-1 py-3 w-100">
+
+    <AuthorizeView Roles="@RoleNames.Admin">
+        <Authorizing>
+            <text>...</text>
+        </Authorizing>
+        <Authorized>
+            <section class="my-1 p-sm-2">
+                <div class="form-group">
+                    <button type="button" class="btn btn-sm btn-link bg-white border border-light" @onclick="@(async() => await ChatHubService.FixCorruptConnections(ModuleState.ModuleId))">Clear all active user connections.</button>
+                </div>
+            </section>
+        </Authorized>
+    </AuthorizeView>
+
+    <section class="my-1 p-sm-2">
+
+        <div>
+
+            <h5><span class="oi oi-shield"></span> (@ChatHubService.IgnoredUsers?.Count()) Ignoliste <span class="badge bg-success">NEW</span></h5>
+
+            @if (ChatHubService.IgnoredUsers == null || !ChatHubService.IgnoredUsers.Any())
+            {
+                <div class="alert alert-info"><small>No one found yet</small></div>
+            }
+            else
+            {
+                <table class="table table-sm">
+                    <tbody>
+                        @foreach (var ignoredUser in ChatHubService.IgnoredUsers)
+                        {
+                            <tr>
+                                <td>@ignoredUser.DisplayName</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.UnignoreUser_Clicked(ignoredUser.Username)">
+                                        <span class="oi oi-x"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+        </div>
+
+    </section>
+
+    <section class="my-1 p-sm-2">
+
+        <div>
+
+            <h5><span class="oi oi-bug"></span> (@ChatHubService.IgnoredByUsers?.Count()) Ignored by users list <span class="badge bg-success">NEW</span></h5>
+
+            @if (ChatHubService.IgnoredByUsers == null || !ChatHubService.IgnoredByUsers.Any())
+            {
+                <div class="alert alert-info"><small>No one found yet</small></div>
+            }
+            else
+            {
+                @foreach (var ignoredByUser in ChatHubService.IgnoredByUsers)
+                {
+                    <div>@ignoredByUser.DisplayName</div>
+
+                }
+            }
+
+        </div>
+
+    </section>
+
+    <section class="my-1 p-sm-2">
+
+        <div>
+
+            <h5><span class="oi oi-list"></span> (@ChatHubService.Invitations.Count()) All Invitations <span class="badge bg-success">NEW</span></h5>
+
+            <div>
+                @foreach (var item in ChatHubService.Invitations)
+                {
+                    <div class="d-flex">
+                        <div class="flex-fill">
+                            <button type="button" @onclick="@(async () => await ChatHubService.FollowInvitation_Clicked(item.Guid, item.RoomId))" class="btn btn-sm btn-link">@item.Hostname</button>
+                        </div>
+                        <div class="flex-fill">
+                            <button type="button" @onclick="@(() => ChatHubService.Invitations.RemoveInvitation(item.Guid))" class="btn btn-sm btn-danger">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (!ChatHubService.Invitations.Any())
+            {
+                <div class="alert alert-warning" role="alert">
+                    No invitations found yet.
+                </div>
+            }
+
+        </div>
+
+    </section>
+
+</div>
+
+@code {
+
+}

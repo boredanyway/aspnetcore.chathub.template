@@ -1,0 +1,330 @@
+﻿@namespace Oqtane.ChatHubs
+@inherits ModuleBase
+@inject ChatHubService ChatHubService
+@inject NavigationManager NavigationManager
+
+@using BlazorFileUpload
+@using BlazorWindows
+@using BlazorVideo
+@using Oqtane.ChatHubs.Services
+@using Oqtane.ChatHubs.Models
+@using System.Linq
+@using Microsoft.AspNetCore.Components
+
+<div class="w-100 my-3" style="height: @(string.Format("{0}px", UserlistWindowHeight)); overflow: auto;">
+
+    <button type="button" class="btn btn-light input-group-button @(room.ShowUserlist ? "d-block" : "d-none")" @onclick="() => ChatHubService.ToggleUserlist(room.Id)" style="position: relative; float: right;"><span class="oi oi-x"></span></button>
+
+    <WindowContainer>
+        <WindowItem>
+            <WindowTitle><div><span class="oi oi-people"></span> (@room.Users.Count())</div></WindowTitle>
+            <WindowContent>
+
+                <div class="px-sm-0">
+
+                    <div class="accordion">
+                        @foreach (ChatHubUser user in room.Users)
+                        {
+                            @if (user.UserId == ChatHubService.ConnectedUser.UserId)
+                            {
+                                <div class="accordion-item" @key="user">
+                                    <div class="accordion-header">
+                                        <button type="button" OnClick="(e) => UserlistItem_Clicked(e, room, user)" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse-@user.UserId" aria-expanded="@user.UserlistItemCollapsed">
+                                            <strong class="align-middle" style="height: 16px;">@user.DisplayName</strong>
+                                        </button>
+                                    </div>
+                                    <div id="collapse-@user.UserId" class="accordion-collapse collapse show">
+                                        <div class="accordion-body">
+                                            <div class="card-text">
+                                                <button type="button" class="btn btn-sm btn-link" @onclick="() => OpenProfile_Clicked(user.UserId, room.Id)">Profile/Settings</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="accordion-item" @key="user">
+                                    <div class="accordion-header">
+                                        <button type="button" OnClick="(e) => UserlistItem_Clicked(e, room, user)" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse-@user.UserId" aria-expanded="@user.UserlistItemCollapsed">
+                                            <span class="align-middle" style="height: 16px;">@user.DisplayName</span>
+                                        </button>
+                                    </div>
+
+                                    <div id="collapse-@user.UserId" class="accordion-collapse collapse">
+                                        <div class="accordion-body">
+
+                                            @if (!ChatHubService.IgnoredUsers.Any(item => item.UserId == user.UserId))
+                                            {
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.IgnoreUser_Clicked(user.UserId, room.Id, user.Username)">Ignore User</button>
+                                                </div>
+                                            }
+
+                                            @if (!room.Moderators.Any(item => item.ChatHubUserId == user.UserId))
+                                            {
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddModerator_Clicked(user.UserId, room.Id)">Add Modi</button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveModerator_Clicked(user.UserId, room.Id)">Delete Modi</button>
+                                                </div>
+                                            }
+
+                                            @if (!room.WhitelistUsers.Any(item => item.ChatHubUserId == user.UserId))
+                                            {
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddWhitelistUser_Clicked(user.UserId, room.Id)">Add Whitelist User</button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveWhitelistUser_Clicked(user.UserId, room.Id)">Delete Whitelist User</button>
+                                                </div>
+                                            }
+
+                                            @if (!room.BlacklistUsers.Any(item => item.ChatHubUserId == user.UserId))
+                                            {
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.AddBlacklistUser_Clicked(user.UserId, room.Id)">Add Blacklist User</button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveBlacklistUser_Clicked(user.UserId, room.Id)">Delete Blacklist User</button>
+                                                </div>
+                                            }
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            }
+                        }
+                    </div>
+
+                </div>
+
+            </WindowContent>
+        </WindowItem>
+        <WindowItem>
+            <WindowTitle><div><span class="oi oi-image"></span></div></WindowTitle>
+            <WindowContent>
+
+                <div class="px-sm-1 py-3">
+
+                    <h5>Share your pics <span class="badge bg-success">FREE</span></h5>
+
+                    @{
+                        var url = string.Concat(NavigationManager.BaseUri.Substring(0, NavigationManager.BaseUri.LastIndexOf('/')), this.ChatHubService.ChatHubControllerApiUrl, "/PostImageUpload");
+
+                        Dictionary<string, string> headers = new Dictionary<string, string>();
+                        headers.Add("connectionId", ChatHubService.Connection?.ConnectionId);
+                        headers.Add("displayName", ChatHubService.ConnectedUser?.DisplayName);
+                        headers.Add("roomId", room.Id.ToString());
+                        headers.Add("moduleId", ModuleState.ModuleId.ToString());
+                    }
+
+                    <BlazorFileUploadComponent ApiUrl="@url" FileUploadHeaders="@headers" InputFileId="@(FileUploadInputFileElementIdPrefix + room.Id.ToString())" DropzoneElementId="@(FileUploadDropzoneContainerElementIdPrefix + room.Id.ToString())"></BlazorFileUploadComponent>
+
+                </div>
+
+            </WindowContent>
+        </WindowItem>
+        <WindowItem>
+            <WindowTitle><div><span class="oi oi-camera-slr"></span></div></WindowTitle>
+            <WindowContent>
+
+                <div class="px-sm-1 py-3">
+
+                    <h5>Webcam Live Streams <span class="badge bg-success">NEW</span></h5>
+
+                    @if (ChatHubService.ConnectedUser.UserId == room.CreatorId)
+                    {
+                        <button type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(room.Id.ToString(), ChatHubService.Connection.ConnectionId)">Start Streaming</button>
+                        <button type="button" @onclick="async () => await BlazorVideoService.StopVideoChat(room.Id.ToString(), ChatHubService.Connection.ConnectionId)">Stop Streaming</button>
+                    }
+                    else
+                    {
+                        if (room.Creator != null)
+                        {
+
+                            foreach (var connection in room.Creator?.Connections)
+                            {
+                                <button type="button" @onclick="async () => await BlazorVideoService.StartVideoChat(room.Id.ToString(), connection.ConnectionId)">Start Streaming</button>
+                                <button type="button" @onclick="async () => await BlazorVideoService.StopVideoChat(room.Id.ToString(), connection.ConnectionId)">Stop Streaming</button>
+                            }
+
+                        }
+                    }
+
+                </div>
+
+            </WindowContent>
+        </WindowItem>
+        <WindowItem>
+            <WindowTitle><div><span class="oi oi-warning"></span> (@room.Moderators.Count())</div></WindowTitle>
+            <WindowContent>
+
+                <div class="px-sm-1 py-3">
+
+                    <h5>Moderators <span class="badge bg-success">NEW</span></h5>
+
+                    <table class="table table-sm">
+                        <tbody>
+                            @foreach (var modi in room.Moderators)
+                            {
+                                <tr>
+                                    <td>@modi.ModeratorDisplayName</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveModerator_Clicked(modi.ChatHubUserId, room.Id)">
+                                            <span class="oi oi-x"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @if (!room.Moderators.Any())
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            No moderators found yet.
+                        </div>
+                    }
+
+                </div>
+
+            </WindowContent>
+        </WindowItem>
+        <WindowItem>
+            <WindowTitle><div><span class="oi oi-question-mark"></span> (@room.WhitelistUsers.Count())</div></WindowTitle>
+            <WindowContent>
+
+                <div class="px-sm-1 py-3">
+
+                    <h5>Whitelist Users <span class="badge bg-success">NEW</span></h5>
+
+                    <table class="table table-sm">
+                        <tbody>
+                            @foreach (var whitelistUser in room.WhitelistUsers)
+                            {
+                                <tr>
+                                    <td>@whitelistUser.WhitelistUserDisplayName</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveWhitelistUser_Clicked(whitelistUser.ChatHubUserId, room.Id)">
+                                            <span class="oi oi-x"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @if (!room.WhitelistUsers.Any())
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            No whitelist users found yet.
+                        </div>
+                    }
+
+                </div>
+
+            </WindowContent>
+        </WindowItem>
+        <WindowItem>
+            <WindowTitle><div><span class="oi oi-ban"></span> (@room.BlacklistUsers.Count())</div></WindowTitle>
+            <WindowContent>
+
+                <div class="px-sm-1 py-3">
+
+                    <h5>Blacklist Users <span class="badge bg-success">NEW</span></h5>
+
+                    <table class="table table-sm">
+                        <tbody>
+                            @foreach (var blacklistUser in room.BlacklistUsers)
+                            {
+                                <tr>
+                                    <td>@blacklistUser.BlacklistUserDisplayName</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveBlacklistUser_Clicked(blacklistUser.ChatHubUserId, room.Id)">
+                                            <span class="oi oi-x"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @if (!room.BlacklistUsers.Any())
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            No blacklist users found yet.
+                        </div>
+                    }
+
+                </div>
+
+            </WindowContent>
+        </WindowItem>
+        <WindowItem>
+            <WindowTitle><div><span class="oi oi-key"></span> (@room.WaitingRoomItems.Count())</div></WindowTitle>
+            <WindowContent>
+
+                <div class="px-sm-1 py-3">
+
+                    <h5>Users waiting to become whitelisted <span class="badge bg-success">NEW</span></h5>
+
+                    <table class="table table-sm">
+                        <tbody>
+                            @foreach (var waitingRoomItem in room.WaitingRoomItems)
+                            {
+                                <tr>
+                                    <td>@waitingRoomItem.DisplayName</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-link" @onclick="() => ChatHubService.RemoveWaitingRoomItem_Clicked(waitingRoomItem)">
+                                            <span class="oi oi-check"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @if (!room.WaitingRoomItems.Any())
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            No waiting room users found yet.
+                        </div>
+                    }
+
+                </div>
+
+            </WindowContent>
+        </WindowItem>
+
+    </WindowContainer>
+
+</div>
+
+@code {
+
+    [Inject] public BlazorVideoService BlazorVideoService { get; set; }
+    [Parameter] public SettingsModal SettingsModalRef { get; set; }
+    [Parameter] public ChatHubRoom room { get; set; }
+    [Parameter] public int UserlistWindowHeight { get; set; }
+
+    protected readonly string FileUploadDropzoneContainerElementIdPrefix = "FileUploadDropzoneContainer";
+    protected readonly string FileUploadInputFileElementIdPrefix = "FileUploadInputFileContainer";
+
+    public void OpenProfile_Clicked(int userId, int roomId)
+    {
+        this.SettingsModalRef.OpenDialogAsync();
+    }
+
+}

@@ -1,0 +1,35 @@
+﻿@namespace Oqtane.ChatHubs
+@inherits ModuleBase
+@inject NavigationManager NavigationManager
+
+@using Oqtane.ChatHubs.Constants
+
+<div class="jumbotron jumbotron-fluid bg-white py-1 mt-3 mb-0">
+    <div class="container" style="padding-left: 0; padding-right: 0;">
+
+        <div class="row align-items-center" style="margin-left: 0; margin-right: 0;">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
+
+                <div class="w-100 text-center">
+                    <img src="@string.Format("{0}/{1}/wasmchatlogo.png", NavigationManager.BaseUri, ChatHubConstants.ModulePath)" class="img-fluid my-2 mb-sm-5" style="width: 320px;" />
+                </div>
+
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7">
+
+                <h4>Videostream chat rules so far</h4>
+                <ul>
+                    <li>Be respectful to each other and do not harass anybody</li>
+                    <li>Do not broadcast or video play any obscene and not appropriate content</li>
+                    <li>Dont do any other not already mentioned illegal or very stupid things</li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+
+}

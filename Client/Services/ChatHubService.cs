@@ -506,6 +506,15 @@ namespace Oqtane.ChatHubs.Services
                 this.BlazorAlertsService.NewBlazorAlert("Could not delete room.");
             }
         }
+        public async Task FollowInvitation_Clicked(Guid invitationGuid, int roomId)
+        {
+            if (this.Connection?.State == HubConnectionState.Connected)
+            {
+                await this.EnterChatRoom(roomId);
+                this.Invitations.RemoveInvitation(invitationGuid);
+                this.RunUpdateUI();
+            }
+        }
         public void IgnoreUser_Clicked(int userId, int roomId, string username)
         {
             this.Connection.InvokeAsync("IgnoreUser", username).ContinueWith((task) =>
@@ -760,6 +769,7 @@ namespace Oqtane.ChatHubs.Services
             if(room != null)
             {
                 room.ShowUserlist = !room.ShowUserlist;
+                this.RunUpdateUI();
             }
         }
         public string AutocompleteUsername(string msgInput, int roomId, int autocompleteCounter, string pressedKey)

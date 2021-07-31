@@ -205,11 +205,11 @@
 
 @code {
 
+    [Inject] protected ISettingService SettingService { get; set; }
     [Parameter] public ChatHubRoom room { get; set; }
     [Parameter] public ImageModal ImageModalRef { get; set; }
     [Parameter] public int MessageWindowHeight { get; set; }
     [Parameter] public Dictionary<string, string> Settings { get; set; }
-    [Inject] protected ISettingService SettingService { get; set; }
 
     public static string ChatWindowDatePattern = @"HH:mm:ss";
     public string HighlightOwnUsername(string message, string username)

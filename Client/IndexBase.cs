@@ -20,12 +20,9 @@ using BlazorBrowserResize;
 using BlazorVideo;
 using Oqtane.ChatHubs;
 using Oqtane.ChatHubs.Models;
-using Oqtane.ChatHubs.Enums;
-using Oqtane.ChatHubs.Extensions;
 using BlazorModal;
 using Oqtane.Models;
 using BlazorDropdown;
-using BlazorTabs;
 
 namespace Oqtane.ChatHubs
 {
@@ -69,8 +66,6 @@ namespace Oqtane.ChatHubs
         public EditRoomModal EditRoomModalRef;
 
         protected readonly string DraggableLivestreamsContainerElementId = "DraggableLivestreamsContainer";
-        protected readonly string FileUploadDropzoneContainerElementId = "FileUploadDropzoneContainer";
-        protected readonly string FileUploadInputFileElementId = "FileUploadInputFileContainer";
 
         protected override async Task OnInitializedAsync()
         {
@@ -198,20 +193,6 @@ namespace Oqtane.ChatHubs
         {
             await this.ChatHubService.LeaveChatRoom(roomId);
         }
-
-        public async Task FollowInvitation_Clicked(Guid invitationGuid, int roomId)
-        {
-            if (ChatHubService.Connection?.State == HubConnectionState.Connected)
-            {
-                await this.ChatHubService.EnterChatRoom(roomId);
-                this.ChatHubService.Invitations.RemoveInvitation(invitationGuid);
-            }
-        }
-
-        public void RemoveInvitation_Clicked(Guid guid)
-        {
-            this.ChatHubService.Invitations.RemoveInvitation(guid);
-        }
         
         private async Task BrowserHasResized()
         {
@@ -255,38 +236,12 @@ namespace Oqtane.ChatHubs
                 StateHasChanged();
             });
         }
-
-        public void OpenProfile_Clicked(int userId, int roomId)
-        {
-            this.SettingsModalRef.OpenDialogAsync();
-        }
-
         public void SettingsDropdown_Clicked(BlazorDropdownEvent e)
         {
             this.ChatHubService.ContextRoomId = e.ClickedDropdownItem.Id.ToString();
             this.ChatHubService.ToggleUserlist(e.ClickedDropdownItem.Id);
             this.UpdateUI();
-        }
-
-        public async Task FixCorruptConnections_ClickedAsync()
-        {
-            try
-            {
-                await this.ChatHubService.FixCorruptConnections(ModuleState.ModuleId);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        private void UpdateUI()
-        {
-            InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
-        }
+        }        
 
         public void ShowWindow(WindowEvent e)
         {
@@ -339,7 +294,13 @@ namespace Oqtane.ChatHubs
             new Resource { ResourceType = ResourceType.Script, Bundle = "IoButtons", Url = "https://buttons.github.io/buttons.js", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
             new Resource { ResourceType = ResourceType.Script, Bundle = "IoButtons", Url = "https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js", Integrity = "sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p", CrossOrigin = "anonymous", Location = ResourceLocation.Body, Declaration = ResourceDeclaration.Local },
         };
-
+        private void UpdateUI()
+        {
+            InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
         public void Dispose()
         {
             this.BlazorDraggableListService.BlazorDraggableListServiceExtension.OnDropEvent -= OnDraggableListDropEventExecute;

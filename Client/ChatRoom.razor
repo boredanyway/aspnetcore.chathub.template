@@ -1,0 +1,298 @@
+﻿@namespace Oqtane.ChatHubs
+@inherits ModuleBase
+@inject ChatHubService ChatHubService
+@inject NavigationManager NavigationManager
+
+@using System
+@using System.Web
+@using Oqtane.ChatHubs.Services
+@using Oqtane.ChatHubs.Models
+@using System.Linq
+@using System.Text.RegularExpressions
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+
+<div class="w-100 bg-white p-1 p-sm-3">
+
+    <div id="message-window-@ModuleState.ModuleId-@room.Id" style="height: @(string.Format("{0}px", MessageWindowHeight)); overflow: auto;">
+
+        <h3>@room.Title</h3>
+        <br />
+
+        <MessageTemplate Messages="@room.Messages.OrderBy(item => item.ModifiedOn).ThenBy(item => item.Id)" Context="item">
+            <SystemTemplate>
+                <div>
+                    <span class="text-muted">
+                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                    </span>
+                    <span>
+                        <strong><span class="bg-danger text-white">System</span>:</strong>
+                    </span>
+                    <span>
+                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                    </span>
+                </div>
+            </SystemTemplate>
+            <AdminTemplate>
+                <div>
+                    <span class="text-muted">
+                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                    </span>
+                    <span>
+                        <strong>@item.User.DisplayName:</strong>
+                    </span>
+                    <span>
+                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                    </span>
+                </div>
+            </AdminTemplate>
+            <UserTemplate>
+                <div>
+                    <span class="text-muted">
+                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                    </span>
+                    <span>
+                        <strong>@item.User.DisplayName:</strong>
+                    </span>
+                    <span>
+                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                    </span>
+                </div>
+            </UserTemplate>
+            <GuestTemplate>
+                <div>
+                    <span class="text-muted">
+                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                    </span>
+                    <span style="color: @item.User.Settings.UsernameColor">
+                        <strong>@item.User.DisplayName:</strong>
+                    </span>
+                    <span style="color: @item.User.Settings.MessageColor">
+                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                    </span>
+                </div>
+            </GuestTemplate>
+            <WhisperTemplate>
+                <div>
+                    <span class="text-muted">
+                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                    </span>
+                    <span>
+                        <strong><span class="bg-primary text-white">PM @item.User.DisplayName</span>:</strong>
+                    </span>
+                    <span>
+                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                    </span>
+                </div>
+            </WhisperTemplate>
+            <MeTemplate>
+                <div>
+                    <span class="text-muted">
+                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                    </span>
+                    <span>
+                        <span class="text-muted">@item.User.DisplayName</span>
+                    </span>
+                    <span class="text-muted">
+                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                    </span>
+                </div>
+            </MeTemplate>
+            <EnterLeaveTemplate>
+                <div>
+                    <span class="text-muted">
+                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                    </span>
+                    <span>
+                        <strong><span class="bg-success text-white">Enter/Leave</span>:</strong>
+                    </span>
+                    <span>
+                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                    </span>
+                </div>
+            </EnterLeaveTemplate>
+            <ConnectDisconnectTemplate>
+                <div>
+                    <span class="text-muted">
+                        @string.Format("[{0}]", item.CreatedOn.ToLocalTime().ToString(ChatWindowDatePattern))
+                    </span>
+                    <span>
+                        <strong><span class="bg-warning text-white">Connect/Disconnect</span>:</strong>
+                    </span>
+                    <span>
+                        @((MarkupString)HighlightOwnUsername(ReplaceYoutubeLinksAsync(HttpUtility.HtmlEncode(item.Content)), ChatHubService.ConnectedUser.DisplayName))
+                    </span>
+                </div>
+            </ConnectDisconnectTemplate>
+            <ImageTemplate>
+                @if (item.Photos != null)
+                {
+
+                    <div>
+                        <button type="button" class="btn btn-link" @onclick="() => ImageModalRef.OpenDialogAsync(item)">
+
+                            Open Image(s)
+
+                            @if (item.Photos != null)
+                            {
+                                @foreach (var photo in item.Photos)
+                                {
+                                    <span>@photo.Caption</span>
+
+                                    @if (!photo.Equals(item.Photos.Last()))
+                                    {
+                                        <strong> | </strong>
+                                    }
+                                }
+                            }
+                        </button>
+                    </div>
+
+                }
+            </ImageTemplate>
+            <CommandsTemplate>
+
+                <div>
+                    @if (item.CommandMetaDatas != null && item.CommandMetaDatas.Any())
+                    {
+                        <div class="table-responsive-sm">
+                            <table class="table table-sm chathub-font-size-075rem">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Roles</th>
+                                        <th scope="col">Usage</th>
+                                        <th scope="col">Arguments</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var command in item.CommandMetaDatas)
+                                    {
+                                        <tr>
+                                            <td>/@command.ResourceName</td>
+                                            <td>@string.Join(" | ", command.Roles)</td>
+                                            <td>@command.Usage</td>
+                                            <td>@command.Arguments</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+
+            </CommandsTemplate>
+        </MessageTemplate>
+
+    </div>
+
+    <div class="bg-white px-1 py-2" style="height: 50px;">
+
+        <div class="input-group">
+
+            <input type="text" class="form-control" @bind-value="@room.MessageInput" @onkeyup="async (e) => await KeyDown(e, room)" placeholder="Send your msg here or type /help for commands" />
+
+            <button type="button" class="btn btn-primary mr-0 mr-sm-4" @onclick="async () => await SendMessage_Clicked(room.MessageInput, room)"><span class="oi oi-envelope-open"></span></button>
+            <button type="button" class="btn btn-info d-none d-sm-inline-block" @onclick="() => ChatHubService.ClearHistory(room.Id)"><span class="oi oi-trash"></span></button>
+            <button type="button" class="btn btn-dark d-inline-block d-xl-none" @onclick="() => ChatHubService.ToggleUserlist(room.Id)"><span class="oi oi-list"></span></button>
+            <button type="button" class="btn btn-danger d-none d-sm-inline-block" @onclick="async () => await ChatHubService.DisconnectAsync()"><span class="oi oi-power-standby"></span></button>
+
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+
+    [Parameter] public ChatHubRoom room { get; set; }
+    [Parameter] public ImageModal ImageModalRef { get; set; }
+    [Parameter] public int MessageWindowHeight { get; set; }
+    [Parameter] public Dictionary<string, string> Settings { get; set; }
+    [Inject] protected ISettingService SettingService { get; set; }
+
+    public static string ChatWindowDatePattern = @"HH:mm:ss";
+    public string HighlightOwnUsername(string message, string username)
+    {
+        try
+        {
+            string pattern = username;
+            string replacement = string.Format("<strong>{0}</strong>", "$0");
+            message = Regex.Replace(message, pattern, replacement);
+        }
+        catch (Exception ex)
+        {
+            ModuleInstance.AddModuleMessage(ex.Message, MessageType.Error);
+        }
+
+        return message;
+    }
+
+    private int _cachedMsgInputCounter { get; set; } = 1;
+    private List<string> _cachedMsgInputList { get; set; } = new List<string>();
+    public async Task KeyDown(KeyboardEventArgs e, ChatHubRoom room)
+    {
+        if (!e.ShiftKey && e.Key == "Enter")
+        {
+            await this.SendMessage_Clicked(room.MessageInput, room);
+        }
+        else if (e.ShiftKey && e.Key == "Enter")
+        {
+            if (!string.IsNullOrEmpty(room.MessageInput))
+            {
+                room.MessageInput.Trim();
+
+                if (this._cachedMsgInputCounter == 1)
+                {
+                    this._cachedMsgInputList.Add(room.MessageInput);
+                }
+
+                if (this._cachedMsgInputList.Contains(room.MessageInput) == false)
+                {
+                    this._cachedMsgInputList.Clear();
+                    this._cachedMsgInputList.Add(room.MessageInput);
+                    this._cachedMsgInputCounter = 1;
+                }
+
+                string newMessageInput = this.ChatHubService.AutocompleteUsername(this._cachedMsgInputList.FirstOrDefault(), room.Id, this._cachedMsgInputCounter, e.Key);
+                this._cachedMsgInputList.Add(newMessageInput);
+                room.MessageInput = newMessageInput;
+
+                if (this._cachedMsgInputList.Contains(room.MessageInput) == true)
+                {
+                    this._cachedMsgInputCounter++;
+                }
+
+                this.StateHasChanged();
+            }
+        }
+    }
+    public async Task SendMessage_Clicked(string messageInput, ChatHubRoom room)
+    {
+        await this.ChatHubService.SendMessage(messageInput, room.Id);
+        room.MessageInput = string.Empty;
+        this.StateHasChanged();
+    }
+    public string ReplaceYoutubeLinksAsync(string message)
+    {
+        try
+        {
+            //var youtubeRegex = @"(?:http?s?:\/\/)?(?:www.)?(?:m.)?(?:music.)?youtu(?:\.?be)(?:\.com)?(?:(?:\w*.?:\/\/)?\w*.?\w*-?.?\w*\/(?:embed|e|v|watch|.*\/)?\??(?:feature=\w*\.?\w*)?&?(?:v=)?\/?)([\w\d_-]{11})(?:\S+)?";
+            List<string> regularExpressions = this.SettingService.GetSetting(this.Settings, "RegularExpression", "").Split(";delimiter;", StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            foreach (var regularExpression in regularExpressions)
+            {
+                string pattern = regularExpression;
+                string replacement = string.Format("<a href=\"{0}\" target=\"_blank\" title=\"{0}\">{0}</a>", "$0");
+                message = Regex.Replace(message, pattern, replacement);
+            }
+        }
+        catch (Exception ex)
+        {
+            ModuleInstance.AddModuleMessage(ex.Message, MessageType.Error);
+        }
+
+        return message;
+    }
+
+}

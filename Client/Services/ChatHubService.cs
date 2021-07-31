@@ -854,7 +854,7 @@ namespace Oqtane.ChatHubs.Services
 
         public string ChatHubControllerApiUrl
         {
-            get { return CreateApiUrl("ChatHub", SiteState.Alias, ControllerRoutes.ApiRoute); }
+            get { return CreateApiUrl(SiteState.Alias, "ChatHub"); }
         }
         public async Task FixCorruptConnections(int ModuleId)
         {

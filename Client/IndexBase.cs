@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using BlazorAlerts;
 using BlazorWindows;
 using System.Net;
@@ -62,8 +61,6 @@ namespace Oqtane.ChatHubs
 
         public int InnerHeight = 0;
         public int InnerWidth = 0;
-
-        public static string ChatWindowDatePattern = @"HH:mm:ss";
 
         public Dictionary<string, string> settings { get; set; }
 
@@ -215,53 +212,6 @@ namespace Oqtane.ChatHubs
         {
             this.ChatHubService.Invitations.RemoveInvitation(guid);
         }
-
-        private int _cachedMsgInputCounter { get; set; } = 1;
-        private List<string> _cachedMsgInputList { get; set; } = new List<string>();
-        public async Task KeyDown(KeyboardEventArgs e, ChatHubRoom room)
-        {
-            if (!e.ShiftKey && e.Key == "Enter")
-            {
-                await this.SendMessage_Clicked(room.MessageInput, room);
-            }
-            else if (e.ShiftKey && e.Key == "Enter")
-            {
-                if (!string.IsNullOrEmpty(room.MessageInput))
-                {
-                    room.MessageInput.Trim();
-
-                    if (this._cachedMsgInputCounter == 1)
-                    {
-                        this._cachedMsgInputList.Add(room.MessageInput);
-                    }
-
-                    if (this._cachedMsgInputList.Contains(room.MessageInput) == false)
-                    {
-                        this._cachedMsgInputList.Clear();
-                        this._cachedMsgInputList.Add(room.MessageInput);
-                        this._cachedMsgInputCounter = 1;
-                    }
-
-                    string newMessageInput = this.ChatHubService.AutocompleteUsername(this._cachedMsgInputList.FirstOrDefault(), room.Id, this._cachedMsgInputCounter, e.Key);
-                    this._cachedMsgInputList.Add(newMessageInput);
-                    room.MessageInput = newMessageInput;
-
-                    if (this._cachedMsgInputList.Contains(room.MessageInput) == true)
-                    {
-                        this._cachedMsgInputCounter++;
-                    }
-
-                    this.UpdateUI();
-                }
-            }
-        }
-
-        public async Task SendMessage_Clicked(string messageInput, ChatHubRoom room)
-        {
-            await this.ChatHubService.SendMessage(messageInput, room.Id);
-            room.MessageInput = string.Empty;
-            this.StateHasChanged();
-        }
         
         private async Task BrowserHasResized()
         {
@@ -328,44 +278,6 @@ namespace Oqtane.ChatHubs
             {
                 throw;
             }
-        }
-
-        public string ReplaceYoutubeLinksAsync(string message)
-        {
-            try
-            {
-                //var youtubeRegex = @"(?:http?s?:\/\/)?(?:www.)?(?:m.)?(?:music.)?youtu(?:\.?be)(?:\.com)?(?:(?:\w*.?:\/\/)?\w*.?\w*-?.?\w*\/(?:embed|e|v|watch|.*\/)?\??(?:feature=\w*\.?\w*)?&?(?:v=)?\/?)([\w\d_-]{11})(?:\S+)?";
-                List<string> regularExpressions = this.SettingService.GetSetting(this.settings, "RegularExpression", "").Split(";delimiter;", StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                foreach (var regularExpression in regularExpressions)
-                {
-                    string pattern = regularExpression;
-                    string replacement = string.Format("<a href=\"{0}\" target=\"_blank\" title=\"{0}\">{0}</a>", "$0");
-                    message = Regex.Replace(message, pattern, replacement);
-                }
-            }
-            catch (Exception ex)
-            {
-                ModuleInstance.AddModuleMessage(ex.Message, MessageType.Error);
-            }
-
-            return message;
-        }
-
-        public string HighlightOwnUsername(string message, string username)
-        {
-            try
-            {
-                string pattern = username;
-                string replacement = string.Format("<strong>{0}</strong>", "$0");
-                message = Regex.Replace(message, pattern, replacement);
-            }
-            catch (Exception ex)
-            {
-                ModuleInstance.AddModuleMessage(ex.Message, MessageType.Error);
-            }
-
-            return message;
         }
 
         private void UpdateUI()

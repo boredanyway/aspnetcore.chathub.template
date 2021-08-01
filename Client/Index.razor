@@ -27,16 +27,12 @@
                 {
                     if (ChatHubService.Lobbies?.Count > 0)
                     {
-                        <div>
-
-                            <div class="jumbotron jumbotron-fluid px-1 px-sm-3 py-sm-3 py-5 mb-0" style="background-color: transparent">
-                                <div class="container">
-                                    <h1 class="display-4">@contextRoom?.Title</h1>
-                                    <p class="lead">Posted by @contextRoom?.Creator.DisplayName on @contextRoom?.CreatedOn.ToShortDateString()</p>
-                                    <NavLink class="btn btn-secondary" href="@NavigateUrl()">View All Rooms</NavLink>
-                                </div>
+                        <div class="jumbotron jumbotron-fluid px-1 px-sm-3 py-sm-3 py-5 mb-0" style="background-color: transparent">
+                            <div class="container">
+                                <h1 class="display-4">@contextRoom?.Title</h1>
+                                <p class="lead">Posted by @contextRoom?.Creator.DisplayName on @contextRoom?.CreatedOn.ToShortDateString()</p>
+                                <NavLink class="btn btn-secondary" href="@NavigateUrl()">View All Rooms</NavLink>
                             </div>
-
                         </div>
                     }
                 }
@@ -118,7 +114,7 @@
                                             {
                                                 if (!room.Creator.Connections.Any())
                                                 {
-                                                    <div class="card bg-light" style="width: 240px; height: 180px;">
+                                                    <div class="card bg-light w-100" style="height: 180px;">
                                                         <div class="card-body">
                                                             <h6 class="card-subtitle mb-2 text-muted">@room.Title</h6>
                                                             <p class="card-text">No video found from room creator @(room.Creator.Username).</p>
@@ -154,7 +150,6 @@
                                                 <ChatUserlist room="@room" SettingsModalRef="@SettingsModalRef" UserlistWindowHeight="@UserlistWindowHeight"></ChatUserlist>
 
                                             </div>
-
                                         </div>
 
                                     </WindowContent>
@@ -177,9 +172,7 @@
                     Settings
                 </TabTitle>
                 <TabContent>
-
                     <ChatSettings></ChatSettings>
-
                 </TabContent>
             </TabItem>
 
@@ -188,22 +181,18 @@
         <TabItem>
             <TabTitle>About</TabTitle>
             <TabContent>
-
                 <ChatAbout></ChatAbout>
-
             </TabContent>
         </TabItem>
 
     </TabContainer>
 
     <div class="d-flex flex-column my-2 px-2">
-
         <div class="ms-auto bg-yellow">
             <small>
                 <a href="https://github.com/boredanyway/aspnetcore.chathub.template" target="_blank" title="oqtane chathub module">Wasmchat Project At Github</a>
             </small>
         </div>
-
     </div>
 
     <BlazorAlertsComponent></BlazorAlertsComponent>

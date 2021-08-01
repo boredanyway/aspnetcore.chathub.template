@@ -15,11 +15,17 @@
     .blazor-window-nav {
         scrollbar-width: thin;
     }
+
+    @@media(min-width: 1199px) {
+        .livestream-container-border {
+            border: 1px solid #ffbb66;
+        }
+    }
 </style>
 
 @if (WindowItems.Count() >= 1 && RenderLivestreams)
 {
-    <BlazorDraggableListComponent Items="WindowItems" Id="@DraggableLivestreamContainerElementId" Class="p-2 border border-warning blazor-window-nav" Orientation="@BlazorDraggableListOrientationType.Horizontal">
+    <BlazorDraggableListComponent Items="WindowItems" Id="@DraggableLivestreamContainerElementId" Class="p-2 livestream-container-border blazor-window-nav" Orientation="@BlazorDraggableListOrientationType.Horizontal">
 
         <BlazorDraggableListItem>
             @context.WindowLivestream

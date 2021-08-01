@@ -73,9 +73,9 @@ namespace Oqtane.ChatHubs
 
             Dictionary<string, string> settings = await this.SettingService.GetModuleSettingsAsync(ModuleState.ModuleId);
             this.maxUserNameCharacters = Int32.Parse(this.SettingService.GetSetting(settings, "MaxUserNameCharacters", "20"));
-            this.framerate = Int32.Parse(this.SettingService.GetSetting(settings, "Framerate", "30"));
-            this.videoBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "240000"));
-            this.audioBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "100000"));
+            this.framerate = Int32.Parse(this.SettingService.GetSetting(settings, "Framerate", "20"));
+            this.videoBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "VideoBitsPerSecond", "30000"));
+            this.audioBitsPerSecond = Int32.Parse(this.SettingService.GetSetting(settings, "AudioBitsPerSecond", "12800"));
             this.videoSegmentsLength = Int32.Parse(this.SettingService.GetSetting(settings, "VideoSegmentsLength", "2000"));
 
             this.BrowserResizeService.BrowserResizeServiceExtension.OnResize += BrowserHasResized;

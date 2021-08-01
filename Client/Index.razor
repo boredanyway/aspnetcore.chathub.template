@@ -42,36 +42,12 @@
                 }
                 else
                 {
-
-                    <div class="jumbotron jumbotron-fluid px-1 px-sm-3 py-sm-3 py-5 mb-0" style="background-color: transparent">
-                        <div class="container">
-
-                            <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
-
-                                <div class="p-0 pe-sm-3">
-
-                                    <img src="https://raw.githubusercontent.com/boredanyway/aspnetcore.chathub.template/master/screenshot1.png" class="img-fluid" alt="preview" style="max-width: 256px;" />
-
-                                </div>
-
-                                <div class="p-0 ps-sm-3">
-
-                                    <h1 class="display-4">Video chat app</h1>
-
-                                    <p class="lead">This is a base video chat implementation in its beta version but free to use and have fun. Create a new post and start videochatting with friends or strangers.</p>
-
-                                    <ChatConnect GuestUsername="@GuestUsername"></ChatConnect>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
+                    <ChatJumbotron></ChatJumbotron>
+                    <ChatConnect GuestUsername="@GuestUsername"></ChatConnect>
 
                     @if (ChatHubService.Connection?.State == HubConnectionState.Connected)
                     {
-                        <div class="d-flex justify-content-between bd-highlight mt-4">
+                        <div class="d-flex justify-content-between bd-highlight mt-2">
                             <div class="flex-fill bd-highlight bg-yellow p-md-3 px-2 py-1 px-md-5 py-md-4">
                                 <small style="font-family: Consolas, monospace;">
                                     Connected as @ChatHubService.ConnectedUser?.DisplayName
@@ -84,7 +60,6 @@
                     }
 
                     <ChatLobbies EditRoomModalRef="@EditRoomModalRef"></ChatLobbies>
-
                 }
 
             </TabContent>

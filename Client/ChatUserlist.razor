@@ -130,7 +130,7 @@
                         headers.Add("moduleId", ModuleState.ModuleId.ToString());
                     }
 
-                    <BlazorFileUploadComponent ApiUrl="@url" FileUploadHeaders="@headers" InputFileId="@(FileUploadInputFileElementIdPrefix + room.Id.ToString())" DropzoneElementId="@(FileUploadDropzoneContainerElementIdPrefix + room.Id.ToString())"></BlazorFileUploadComponent>
+                    <BlazorFileUploadComponent ApiUrl="@url" FileUploadHeaders="@headers" InputFileId="@(FileUploadInputFileElementId)" DropzoneElementId="@(FileUploadDropzoneContainerElementId)"></BlazorFileUploadComponent>
 
                 </div>
 
@@ -319,8 +319,8 @@
     [Parameter] public ChatHubRoom room { get; set; }
     [Parameter] public int UserlistWindowHeight { get; set; }
 
-    protected readonly string FileUploadDropzoneContainerElementIdPrefix = "FileUploadDropzoneContainer";
-    protected readonly string FileUploadInputFileElementIdPrefix = "FileUploadInputFileContainer";
+    protected readonly string FileUploadDropzoneContainerElementId = "FileUploadDropzoneContainer";
+    protected readonly string FileUploadInputFileElementId = "FileUploadInputFileContainer";
 
     public void OpenProfile_Clicked(int userId, int roomId)
     {

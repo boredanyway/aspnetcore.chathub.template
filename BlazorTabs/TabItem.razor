@@ -1,21 +1,13 @@
 ﻿@namespace BlazorTabs
 @inherits TabItemBase
 
+@using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Web
-
-<style type="text/css">
-
-    .ellipsis {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-</style>
 
 <CascadingValue Value=this>
 
     <li>
-        <a class="nav-link position-relative ellipsis @TitleCssClass" @onclick="() => ActivateTab()" href="javascript:void(0);" role="button" style="height: 48px; max-width: 120px;">
+        <a class="nav-link position-relative ellipsis @TitleCssClass" @onclick="() => ActivateTab()" href="javascript:void(0);" role="button" style="height: 48px; width: 100%;">
             @TabTitle
         </a>
     </li>

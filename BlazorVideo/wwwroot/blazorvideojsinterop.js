@@ -494,8 +494,8 @@ export function initblazorvideo(dotnetobjref, id, connectionid, type, framerate,
                         reader.onloadend = function (event) {
 
                             var timeDiff = __selfremotelivestream.video.currentTime - __selfremotelivestream.sourcebuffer.timestampOffset;
-                            if (timeDiff > videoSegmentsLength + 420) {
-                                __selfremotelivestream.currentTime = __selfremotelivestream.currentTime + (timeDiff - videoSegmentsLength + 420);
+                            if (timeDiff > videoSegmentsLength) {
+                                __selfremotelivestream.currentTime = __selfremotelivestream.currentTime + videoSegmentsLength;
                             }
 
                             if (!__selfremotelivestream.sourcebuffer.updating && __selfremotelivestream.mediasource.readyState === 'open') {

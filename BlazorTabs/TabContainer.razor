@@ -1,14 +1,24 @@
 ﻿@namespace BlazorTabs
 @inherits TabContainerBase
 
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+
 <style type="text/css">
 
     .blazor-tab-nav::-webkit-scrollbar {
         height: 8px;
         background-color: grey;
     }
+
     .blazor-tab-nav {
         scrollbar-width: thin;
+    }
+
+    .ellipsis {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 </style>
 

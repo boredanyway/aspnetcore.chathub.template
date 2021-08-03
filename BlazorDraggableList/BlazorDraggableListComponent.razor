@@ -26,26 +26,38 @@
     }
 
     @@media(min-width: 576px) {
+        #@Id {
+            column-count: 2;
+            column-gap: 0;
+        }
+
         .draggable-item-horizontal {
             display: initial;
             vertical-align: initial;
-            float: left;
-            width: 50%;
+            width: 100%;
         }
     }
 
     @@media(min-width: 768px) {
+        #@Id {
+            column-count: 2;
+            column-gap: 0;
+        }
+
         .draggable-item-horizontal {
             display: initial;
             vertical-align: initial;
-            float: left;
-            width: 50%;
+            width: 100%;
         }
     }
 
     @@media(min-width: 992px) {
+        #@Id {
+            column-count: initial;
+            column-gap: initial;
+        }
+
         .draggable-item-horizontal {
-            float: none;
             display: inline-block;
             vertical-align: middle;
             width: 30% !important;
@@ -53,8 +65,12 @@
     }
 
     @@media(min-width: 1200px) {
+        #@Id {
+            column-count: initial;
+            column-gap: initial;
+        }
+
         .draggable-item-horizontal {
-            float: none;
             display: inline-block;
             vertical-align: middle;
             width: 24% !important;
@@ -62,8 +78,12 @@
     }
 
     @@media(min-width: 1400px) {
+        #@Id {
+            column-count: initial;
+            column-gap: initial;
+        }
+
         .draggable-item-horizontal {
-            float: none;
             display: inline-block;
             vertical-align: middle;
             width: 24% !important;
@@ -71,22 +91,31 @@
     }
 
     @@media(max-width: 575px) {
+        #@Id {
+            column-count: 2;
+            column-gap: 0;
+        }
+
         .draggable-item-horizontal {
             display: initial;
             vertical-align: initial;
-            float: left;
-            width: 50%;
+            width: 100%;
         }
     }
 
     @@media(max-width: 320px) {
+        #@Id {
+            column-count: 1;
+            column-gap: 0;
+        }
+
         .draggable-item-horizontal {
             display: initial;
             vertical-align: initial;
-            float: left;
             width: 100%;
         }
     }
+
 </style>
 
 @if (Items != null && Items.Any())

@@ -32,7 +32,7 @@ namespace Oqtane.ChatHubs.Services
             }
 
             List<ChatHubUser> onlineUsers = await this.chatHubRepository.GetChatHubUsersByRoom(room).Online().ToListAsync();
-            onlineUsers = onlineUsers != null && onlineUsers.Any() ? onlineUsers = onlineUsers.Select(item => this.CreateChatHubUserClientModel(item)).ToList() : new List<ChatHubUser>();
+            onlineUsers = onlineUsers != null && onlineUsers.Any() ? onlineUsers.Select(item => this.CreateChatHubUserClientModel(item)).ToList() : new List<ChatHubUser>();
 
             IQueryable<ChatHubModerator> moderatorsQuery = this.chatHubRepository.GetChatHubModerators(room);
             IList<ChatHubModerator> moderatorsList = await moderatorsQuery.ToListAsync();
@@ -69,6 +69,41 @@ namespace Oqtane.ChatHubs.Services
                 Moderators = moderatorsList,
                 WhitelistUsers = whitelistUsersList,
                 BlacklistUsers = blacklistUsersList,
+                Cams = camsList,
+                Viewers = viewerList,
+                CreatedOn = room.CreatedOn,
+                CreatedBy = room.CreatedBy,
+                ModifiedBy = room.ModifiedBy,
+                ModifiedOn = room.ModifiedOn
+            };
+        }
+        public async Task<ChatHubRoom> CreateChatHubLobbyClientModel(ChatHubRoom room)
+        {
+            List<ChatHubUser> onlineUsers = await this.chatHubRepository.GetChatHubUsersByRoom(room).Online().ToListAsync();
+            onlineUsers = onlineUsers != null && onlineUsers.Any() ? onlineUsers.Select(item => new ChatHubUser() { UserId = item.UserId, Username = item.Username }).ToList() : new List<ChatHubUser>();
+
+            IQueryable<ChatHubCam> camsQuery = this.chatHubRepository.GetChatHubCamsByRoomId(room.Id);
+            IList<ChatHubCam> camsList = await camsQuery.ToListAsync();
+
+            IList<ChatHubViewer> viewerList = await this.chatHubRepository.GetChatHubViewersByRoomIdAsync(room.Id);
+
+            ChatHubUser creator = await this.chatHubRepository.GetUserByIdAsync(room.CreatorId);
+            ChatHubUser creatorClientModel = this.CreateChatHubUserClientModel(creator);
+
+            return new ChatHubRoom()
+            {
+                Id = room.Id,
+                ModuleId = room.ModuleId,
+                Title = room.Title,
+                Content = room.Content,
+                BackgroundColor = room.BackgroundColor ?? "#999999",
+                ImageUrl = room.ImageUrl,
+                Type = room.Type,
+                Status = room.Status,
+                OneVsOneId = room.OneVsOneId,
+                CreatorId = room.CreatorId,
+                Creator = creator,
+                Users = onlineUsers,
                 Cams = camsList,
                 Viewers = viewerList,
                 CreatedOn = room.CreatedOn,
@@ -252,7 +287,7 @@ namespace Oqtane.ChatHubs.Services
             return connectionsIds;
         }
 
-        public ChatHubRoom GetOneVsOneRoom(ChatHubUser callerUser, ChatHubUser targetUser, int moduleId)
+        public async Task<ChatHubRoom> GetOneVsOneRoomAsync(ChatHubUser callerUser, ChatHubUser targetUser, int moduleId)
         {
             if (callerUser != null && targetUser != null)
             {
@@ -274,7 +309,7 @@ namespace Oqtane.ChatHubs.Services
                     OneVsOneId = this.CreateOneVsOneId(callerUser, targetUser),
                     CreatorId = callerUser.UserId
                 };
-                return this.chatHubRepository.AddChatHubRoom(chatHubRoom);
+                return await this.chatHubRepository.AddChatHubRoom(chatHubRoom);
             }
 
             return null;

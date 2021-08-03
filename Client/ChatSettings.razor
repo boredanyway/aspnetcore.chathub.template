@@ -18,6 +18,9 @@
                 <div class="form-group">
                     <button type="button" class="btn btn-sm btn-link bg-white border border-light" @onclick="@(async() => await ChatHubService.FixCorruptConnections(ModuleState.ModuleId))">Clear all active user connections.</button>
                 </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-sm btn-link bg-white border border-light" @onclick="@(async() => await ChatHubService.CreateExampleData(ModuleState.ModuleId))">Create example data.</button>
+                </div>
             </section>
         </Authorized>
     </AuthorizeView>

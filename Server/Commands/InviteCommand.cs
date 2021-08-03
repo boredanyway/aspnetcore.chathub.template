@@ -52,7 +52,7 @@ namespace Oqtane.ChatHubs.Commands
             }
 
             var callerRoom = context.ChatHubRepository.GetChatHubRoom(callerContext.RoomId);
-            var oneVsOneRoom = context.ChatHubService.GetOneVsOneRoom(caller, targetUser, callerRoom.ModuleId);
+            var oneVsOneRoom = await context.ChatHubService.GetOneVsOneRoomAsync(caller, targetUser, callerRoom.ModuleId);
 
             if(oneVsOneRoom != null)
             {

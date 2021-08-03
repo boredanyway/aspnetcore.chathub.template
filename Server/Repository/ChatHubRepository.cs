@@ -326,11 +326,11 @@ namespace Oqtane.ChatHubs.Repository
 
         #region ADD
 
-        public ChatHubRoom AddChatHubRoom(ChatHubRoom ChatHubRoom)
+        public async Task<ChatHubRoom> AddChatHubRoom(ChatHubRoom ChatHubRoom)
         {
             if(ChatHubRoom != null)
             {
-                db.ChatHubRoom.Add(ChatHubRoom);
+                await db.ChatHubRoom.AddAsync(ChatHubRoom);
                 db.SaveChanges();
             }
             return ChatHubRoom;

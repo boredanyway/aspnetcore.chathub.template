@@ -985,6 +985,30 @@ namespace Oqtane.ChatHubs.Hubs
             }
         }
         [AllowAnonymous]
+        public async Task<List<ChatHubRoom>> GetLobbiesByModuleId()
+        {
+            try
+            {
+                int moduleId = Convert.ToInt32(Context.GetHttpContext().Request.Headers["moduleid"]);
+                List<ChatHubRoom> lobbies = new List<ChatHubRoom>();
+                List<ChatHubRoom> rooms = new List<ChatHubRoom>();
+                rooms = this.chatHubRepository.GetChatHubRooms().FilterByModuleId(moduleId).Where(item => item.Type != ChatHubRoomType.OneVsOne.ToString()).ToList();
+
+                foreach (var room in rooms)
+                {
+                    var item = await this.chatHubService.CreateChatHubLobbyClientModel(room);
+                    lobbies.Add(item);
+                }
+
+                lobbies = lobbies.OrderByDescending(item => item.Users.Count()).ThenBy(item => (int)Enum.Parse(typeof(ChatHubRoomStatus), item.Status)).ToList();
+                return lobbies;
+            }
+            catch
+            {
+                throw new HubException("Failed get lobbies by module id.");
+            }
+        }
+        [AllowAnonymous]
         public async Task<ChatHubRoom> CreateRoom(ChatHubRoom room)
         {
             ChatHubUser user = await this.GetChatHubUserAsync();
@@ -993,7 +1017,7 @@ namespace Oqtane.ChatHubs.Hubs
             {
                 if (room.CreatorId == user.UserId)
                 {
-                    var createdRoom = chatHubRepository.AddChatHubRoom(room);
+                    var createdRoom = await chatHubRepository.AddChatHubRoom(room);
                     return await this.chatHubService.CreateChatHubRoomClientModelAsync(createdRoom);
                 }
 
@@ -1041,6 +1065,39 @@ namespace Oqtane.ChatHubs.Hubs
             catch
             {
                 throw new HubException("Failed to delete room.");
+            }
+        }
+        [AllowAnonymous]
+        public async Task CreateExampleData()
+        {
+            string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
+            ChatHubUser user = await this.GetChatHubUserAsync();
+
+            try
+            {
+                for(var i = 1; i <= 20; i++)
+                {
+                    var item = new ChatHubRoom();
+                    item.ModuleId = Int32.Parse(moduleId);
+                    item.Title = "post" + i;
+                    item.Content = "some description";
+                    item.Status = ChatHubRoomStatus.Enabled.ToString();
+                    item.Type = ChatHubRoomType.Public.ToString();
+                    item.CreatorId = user.UserId;
+                    item.ImageUrl = "";
+                    item.OneVsOneId = "";
+                    item.BackgroundColor = "#f1f1f1";
+                    item.CreatedBy = user.Username;
+                    item.CreatedOn = DateTime.Now;
+                    item.ModifiedBy = user.Username;
+                    item.ModifiedOn = DateTime.Now;
+
+                    await this.chatHubRepository.AddChatHubRoom(item);
+                }
+            }
+            catch
+            {
+                throw new HubException("Failed to create example data.");
             }
         }
 

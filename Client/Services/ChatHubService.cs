@@ -47,7 +47,7 @@ namespace Oqtane.ChatHubs.Services
         public Cookie IdentityCookie { get; set; }
         public string ContextRoomId { get; set; }        
 
-        public List<ChatHubRoom> Lobbies { get; set; } = new List<ChatHubRoom>();
+        public List<ChatHubRoom> Lobbies { get; set; }
         public List<ChatHubRoom> Rooms { get; set; } = new List<ChatHubRoom>();
         public List<ChatHubInvitation> Invitations { get; set; } = new List<ChatHubInvitation>();
         public List<ChatHubUser> IgnoredUsers { get; set; } = new List<ChatHubUser>();
@@ -129,7 +129,7 @@ namespace Oqtane.ChatHubs.Services
             this.OnRemoveIgnoredByUserEvent += OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent += OnClearHistoryExecute;
 
-            GetLobbyRoomsTimer.Elapsed += new ElapsedEventHandler(OnGetLobbyRoomsTimerElapsed);
+            GetLobbyRoomsTimer.Elapsed += new ElapsedEventHandler(async (object source, ElapsedEventArgs e) => await OnGetLobbyRoomsTimerElapsed(source, e));
             GetLobbyRoomsTimer.Interval = 10000;
             GetLobbyRoomsTimer.Enabled = true;
         }
@@ -294,21 +294,28 @@ namespace Oqtane.ChatHubs.Services
         }
         public async Task GetChatHubViewers()
         {
-            if (this.Rooms != null && this.Rooms.Any())
+            try
             {
-                List<int> roomIds = this.Rooms.Select(item => item.Id).ToList<int>();
-                await this.Connection.InvokeAsync<IList<ChatHubViewer>[]>("GetChatHubViewers", roomIds).ContinueWith((task) =>
+                if (this.Rooms != null && this.Rooms.Any())
                 {
-                    if (task.IsCompleted)
+                    List<int> roomIds = this.Rooms.Select(item => item.Id).ToList<int>();
+                    await this.Connection.InvokeAsync<IList<ChatHubViewer>[]>("GetChatHubViewers", roomIds).ContinueWith((task) =>
                     {
-                        this.HandleException(task);
-                        IList<ChatHubViewer>[] result = task.Result;
-                        foreach (var item in this.Rooms.Select((room, index) => new { room = room, index = index }))
+                        if (task.IsCompleted)
                         {
-                            item.room.Viewers = result[item.index];
+                            this.HandleException(task);
+                            IList<ChatHubViewer>[] result = task.Result;
+                            foreach (var item in this.Rooms.Select((room, index) => new { room = room, index = index }))
+                            {
+                                item.room.Viewers = result[item.index];
+                            }
                         }
-                    }
-                });
+                    });
+                }
+            }
+            catch (Exception exception)
+            {
+                this.BlazorAlertsService.NewBlazorAlert("Failed get viewers.", "Javascript Application", PositionType.Fixed);
             }
         }
 
@@ -330,6 +337,20 @@ namespace Oqtane.ChatHubs.Services
         {
             List<ChatHubRoom> rooms = new List<ChatHubRoom>();
             await this.Connection.InvokeAsync<List<ChatHubRoom>>("GetRoomsByModuleId").ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                    rooms = task.Result;
+                }
+            });
+
+            return rooms;
+        }
+        public async Task<List<ChatHubRoom>> GetLobbiesByModuleId(int moduleId)
+        {
+            List<ChatHubRoom> rooms = new List<ChatHubRoom>();
+            await this.Connection.InvokeAsync<List<ChatHubRoom>>("GetLobbiesByModuleId").ContinueWith((task) =>
             {
                 if (task.IsCompleted)
                 {
@@ -422,16 +443,11 @@ namespace Oqtane.ChatHubs.Services
         {
             try
             {
-                this.Lobbies = await this.GetRoomsByModuleId(this.ModuleId);
-                if(this.Lobbies != null && this.Lobbies.Any())
-                {
-                    this.SortLobbyRooms();
-                    this.RunUpdateUI();
-                }
+                this.Lobbies = await this.GetLobbiesByModuleId(this.ModuleId);
             }
             catch
             {
-                //this.HandleException(ex);
+                BlazorAlertsService.NewBlazorAlert("Failed to retrive lobby rooms.", "Javascript Application", PositionType.Fixed);
             }
         }
         public async Task GetIgnoredUsers()
@@ -471,14 +487,6 @@ namespace Oqtane.ChatHubs.Services
                     }
                 }
             });
-        }
-
-        public void SortLobbyRooms()
-        {
-            if (this.Lobbies != null && this.Lobbies.Any())
-            {
-                this.Lobbies = this.Lobbies.OrderByDescending(item => item.Users?.Count()).ThenByDescending(item => item.CreatedOn).OrderBy(item => (int)Enum.Parse(typeof(ChatHubRoomStatus), item.Status)).Take(1000).ToList();
-            }
         }
 
         public async Task SendMessage(string content, int roomId)
@@ -756,7 +764,7 @@ namespace Oqtane.ChatHubs.Services
             this.RunUpdateUI();
         }
 
-        private async void OnGetLobbyRoomsTimerElapsed(object source, ElapsedEventArgs e)
+        private async Task OnGetLobbyRoomsTimerElapsed(object source, ElapsedEventArgs e)
         {
             await this.GetLobbyRooms();
             await this.GetChatHubViewers();
@@ -877,7 +885,7 @@ namespace Oqtane.ChatHubs.Services
             this.OnRemoveIgnoredByUserEvent -= OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent -= OnClearHistoryExecute;
 
-            GetLobbyRoomsTimer.Elapsed -= new ElapsedEventHandler(OnGetLobbyRoomsTimerElapsed);            
+            GetLobbyRoomsTimer.Elapsed -= new ElapsedEventHandler(async (object source, ElapsedEventArgs e) => await OnGetLobbyRoomsTimerElapsed(source, e));
         }
 
         public void RunUpdateUI()
@@ -893,6 +901,16 @@ namespace Oqtane.ChatHubs.Services
         {
             await HttpClient.DeleteAsync(ChatHubControllerApiUrl + "/fixcorruptconnections" + "?entityid=" + ModuleId);
         }
-        
+        public async Task CreateExampleData(int ModuleId)
+        {
+            await this.Connection.InvokeAsync("CreateExampleData").ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                }
+            });
+        }
+
     }
 }

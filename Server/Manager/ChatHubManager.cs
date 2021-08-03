@@ -33,7 +33,7 @@ namespace Oqtane.ChatHubs.Manager
         {
             if (tenant.DBType == Oqtane.Shared.Constants.DefaultDBType)
             {
-                if (version == "4.2.5")
+                if (version == "4.2.6")
                 {
                     // version 1.0.0 used SQL scripts rather than migrations, so we need to seed the migration history table
                     _sql.ExecuteNonQuery(tenant, MigrationUtils.BuildInsertScript("ChatHub.01.00.00.00"));
@@ -58,7 +58,7 @@ namespace Oqtane.ChatHubs.Manager
             return content;
         }
 
-        public void ImportModule(Module module, string content, string version)
+        public async void ImportModule(Module module, string content, string version)
         {
             List<ChatHubRoom> rooms = null;
             if (!string.IsNullOrEmpty(content))
@@ -80,8 +80,12 @@ namespace Oqtane.ChatHubs.Manager
                     Room.ImageUrl = room.ImageUrl;
                     Room.OneVsOneId = room.OneVsOneId;
                     Room.BackgroundColor = room.BackgroundColor;
+                    Room.CreatedBy = room.CreatedBy;
+                    Room.CreatedOn = room.CreatedOn;
+                    Room.ModifiedBy = room.ModifiedBy;
+                    Room.ModifiedOn = room.ModifiedOn;
 
-                    _chatHubRepository.AddChatHubRoom(Room);
+                    await _chatHubRepository.AddChatHubRoom(Room);
                 }
             }
         }

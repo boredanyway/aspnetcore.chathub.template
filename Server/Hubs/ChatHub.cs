@@ -594,14 +594,13 @@ namespace Oqtane.ChatHubs.Hubs
                     {
                         var streamingCams = await this.chatHubRepository.GetChatHubCamsByRoomId(userRoom.Id).Where(cam => cam.Status == ChatHubCamStatus.Streaming.ToString()).ToListAsync();
                         foreach (var streamingCam in streamingCams)
-                        {
-                            var streamingConnection = await this.chatHubRepository.GetConnectionById(streamingCam.ChatHubConnectionId);
-                            var streamingUser = streamingConnection.User;
+                        {                            
                             var matched = contextRoomBroadcastingCams.Any(cam => cam.ChatHubConnectionId == streamingCam.ChatHubConnectionId);
-
                             if (matched)
                             {
-                                string message = $"{ user.DisplayName } matched { streamingUser.DisplayName }😂😂";
+                                var streamingConnection = await this.chatHubRepository.GetConnectionById(streamingCam.ChatHubConnectionId);
+                                var streamingUser = streamingConnection.User;
+                                string message = $"{ user.DisplayName } matched { streamingUser.DisplayName }.";
                                 await Clients.Clients(new string[] { streamingConnection.ConnectionId, Context.ConnectionId }).SendAsync("Matched", message);
                             }
                         }

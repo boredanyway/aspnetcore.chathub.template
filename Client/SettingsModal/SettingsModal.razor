@@ -30,7 +30,7 @@
 
                 <BlazorDraggableListComponent Items="ChatHubService.ConnectedUser.Connections" Id="DraggableConnectionsElementId" Class="form-group" Orientation="@BlazorDraggableListOrientationType.Vertical">
                     <BlazorDraggableListItem>
-                        <div class="form-group">
+                        <div class="form-group text-start small">
                             <label for="displayname">Connected since @context.CreatedOn.ToLongDateString() @context.CreatedOn.ToLongTimeString()</label>
                             <input class="form-control" type="text" placeholder="@context.ConnectionId" readonly>
                         </div>

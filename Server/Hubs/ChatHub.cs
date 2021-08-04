@@ -366,6 +366,7 @@ namespace Oqtane.ChatHubs.Hubs
                     };
 
                     cam = this.chatHubRepository.AddChatHubCam(cam);
+                    await Clients.Group(room.Id.ToString()).SendAsync("AddCam", this.chatHubService.CreateChatHubCamClientModel(cam), room.Id.ToString());
                 }
 
                 ChatHubRoomChatHubUser room_user = new ChatHubRoomChatHubUser()
@@ -574,6 +575,12 @@ namespace Oqtane.ChatHubs.Hubs
                 cam.Status = user.UserId == room.CreatorId ? ChatHubCamStatus.Broadcasting.ToString() : ChatHubCamStatus.Streaming.ToString();
                 this.chatHubRepository.UpdateChatHubCam(cam);
             }
+
+            if (user.UserId == room.CreatorId)
+            {
+                var exceptConnectionIds = this.chatHubService.GetAllExceptConnectionIds(user);
+                await this.UpdateRoomCreator(room, exceptConnectionIds);
+            }
         }
         [AllowAnonymous]
         public async Task StopCam(int roomId)
@@ -611,7 +618,7 @@ namespace Oqtane.ChatHubs.Hubs
             }
 
             ChatHubUser creatorClientModel = this.chatHubService.CreateChatHubUserClientModel(user);
-            await Clients.GroupExcept(roomId, connectionsIds).SendAsync("DownloadBytes", dataUri, roomId, Context.ConnectionId, creatorClientModel);
+            await Clients.GroupExcept(roomId, connectionsIds).SendAsync("DownloadBytes", dataUri, roomId, Context.ConnectionId);
         }
 
         [AllowAnonymous]
@@ -1072,6 +1079,7 @@ namespace Oqtane.ChatHubs.Hubs
         {
             string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
+            List<string> colors = new List<string>() { "lightgreen", "lightskyblue", "lightpink", "lightgrey", "lightgoldenrod", "lightcoral", "lightblue", "lavender", "thistle" };
 
             try
             {
@@ -1086,7 +1094,7 @@ namespace Oqtane.ChatHubs.Hubs
                     item.CreatorId = user.UserId;
                     item.ImageUrl = "";
                     item.OneVsOneId = "";
-                    item.BackgroundColor = "#f1f1f1";
+                    item.BackgroundColor = colors[new Random().Next(0, colors.Count())];
                     item.CreatedBy = user.Username;
                     item.CreatedOn = DateTime.Now;
                     item.ModifiedBy = user.Username;

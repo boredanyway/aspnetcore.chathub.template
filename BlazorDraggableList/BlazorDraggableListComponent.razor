@@ -121,7 +121,7 @@
 @if (Items != null && Items.Any())
 {
 
-    <div id="@Id" class="w-100 overflow-auto my-4 @Class">
+    <div id="@Id" class="w-100 overflow-auto my-md-4 @Class">
         <div class="align-items-center justify-content-center text-center w-100 @(Orientation == BlazorDraggableListOrientationType.Horizontal ? "" : "d-flex flex-column")">
 
             @for (int i = 0; i < Items.Count(); i++)

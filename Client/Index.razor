@@ -43,7 +43,7 @@
 
                     @if (ChatHubService.Connection?.State == HubConnectionState.Connected)
                     {
-                        <div class="d-flex justify-content-between bd-highlight mt-2">
+                        <div class="d-flex justify-content-between bd-highlight" style="border: 1px solid thistle;">
                             <div class="flex-fill bd-highlight bg-yellow p-md-3 px-2 py-1 px-md-5 py-md-4">
                                 <small style="font-family: Consolas, monospace;">
                                     Connected as @ChatHubService.ConnectedUser?.DisplayName

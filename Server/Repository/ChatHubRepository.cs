@@ -104,6 +104,12 @@ namespace Oqtane.ChatHubs.Repository
                       .Collection(u => u.Connections)
                       .Query().Select(c => c);
         }
+        public async Task<ChatHubConnection> GetConnectionById(int id)
+        {
+            return await db.ChatHubConnection
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
         public async Task<ChatHubConnection> GetConnectionByConnectionId(string connectionId)
         {
             return await db.ChatHubConnection

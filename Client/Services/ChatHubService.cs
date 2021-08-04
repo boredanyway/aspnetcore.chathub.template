@@ -81,6 +81,7 @@ namespace Oqtane.ChatHubs.Services
         public event Action<string, string, string> OnDownloadBytesEvent;
         public event Action<int, ChatHubUser> UpdateRoomCreator;
         public event EventHandler<int> OnClearHistoryEvent;
+        public event EventHandler<string> OnMatchedEvent;
 
         public IJSObjectReference chatHubScriptJsObjRef { get; set; }
         public IJSObjectReference chatHubMap { get; set; }
@@ -128,11 +129,18 @@ namespace Oqtane.ChatHubs.Services
             this.UpdateRoomCreator += OnUpdateRoomCreator;
             this.OnRemoveIgnoredByUserEvent += OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent += OnClearHistoryExecute;
+            this.OnMatchedEvent += MatchedEventExecute;
 
             GetLobbyRoomsTimer.Elapsed += new ElapsedEventHandler(async (object source, ElapsedEventArgs e) => await OnGetLobbyRoomsTimerElapsed(source, e));
             GetLobbyRoomsTimer.Interval = 10000;
             GetLobbyRoomsTimer.Enabled = true;
         }
+
+        private void MatchedEventExecute(object sender, string e)
+        {
+            this.BlazorAlertsService.NewBlazorAlert(e, "Javascript Application", PositionType.Fixed);
+        }
+
         public async Task InitChatHubService()
         {
             this.chatHubScriptJsObjRef = await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", "/Modules/Oqtane.ChatHubs/chathubjsinterop.js");
@@ -202,6 +210,7 @@ namespace Oqtane.ChatHubs.Services
             this.Connection.On("AddCam", (ChatHubCam cam, int roomId) => OnAddChatHubCamEvent(cam, roomId));
             this.Connection.On("RemoveCam", (ChatHubCam cam, int roomId) => OnRemoveChatHubCamEvent(cam, roomId));
             this.Connection.On("ClearHistory", (int roomId) => OnClearHistoryEvent(this, roomId));
+            this.Connection.On("Matched", (string message) => OnMatchedEvent(this, message));
         }
         public async Task ConnectAsync()
         {
@@ -883,6 +892,7 @@ namespace Oqtane.ChatHubs.Services
             this.UpdateRoomCreator -= OnUpdateRoomCreator;
             this.OnRemoveIgnoredByUserEvent -= OnRemoveIgnoredByUserExecute;
             this.OnClearHistoryEvent -= OnClearHistoryExecute;
+            this.OnMatchedEvent -= MatchedEventExecute;
 
             GetLobbyRoomsTimer.Elapsed -= new ElapsedEventHandler(async (object source, ElapsedEventArgs e) => await OnGetLobbyRoomsTimerElapsed(source, e));
         }

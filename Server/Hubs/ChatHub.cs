@@ -69,7 +69,7 @@ namespace Oqtane.ChatHubs.Hubs
         }
         public async Task<ChatHubUser> IdentifyGuest(string connectionId)
         {
-            ChatHubConnection connection = await Task.Run(() => chatHubRepository.GetConnectionByConnectionId(connectionId));
+            ChatHubConnection connection = await chatHubRepository.GetConnectionByConnectionId(connectionId);
             if (connection != null)
             {
                 return await this.chatHubRepository.GetUserByIdAsync(connection.User.UserId);
@@ -562,6 +562,7 @@ namespace Oqtane.ChatHubs.Hubs
         [AllowAnonymous]
         public async Task StartCam(int roomId)
         {
+            string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
             ChatHubRoom room = chatHubRepository.GetChatHubRoom(roomId);
 
@@ -580,6 +581,32 @@ namespace Oqtane.ChatHubs.Hubs
             {
                 var exceptConnectionIds = this.chatHubService.GetAllExceptConnectionIds(user);
                 await this.UpdateRoomCreator(room, exceptConnectionIds);
+            }
+
+            if(cam.Status == ChatHubCamStatus.Streaming.ToString())
+            {
+                var contextRoomBroadcastingCams = this.chatHubRepository.GetChatHubCamsByRoomId(room.Id).Where(item => item.Status == ChatHubCamStatus.Broadcasting.ToString());
+                var userRooms = await this.chatHubRepository.GetChatHubRoomsByUser(user).FilterByModuleId(Int32.Parse(moduleId)).Where(room => room.CreatorId == user.UserId && room.Status == ChatHubRoomStatus.Enabled.ToString()).ToListAsync();
+                foreach (var userRoom in userRooms)
+                {
+                    var broadcastingCams = await this.chatHubRepository.GetChatHubCamsByRoomId(userRoom.Id).Where(cam => cam.Status == ChatHubCamStatus.Broadcasting.ToString()).ToListAsync();
+                    if (broadcastingCams.Any())
+                    {
+                        var streamingCams = await this.chatHubRepository.GetChatHubCamsByRoomId(userRoom.Id).Where(cam => cam.Status == ChatHubCamStatus.Streaming.ToString()).ToListAsync();
+                        foreach (var streamingCam in streamingCams)
+                        {
+                            var streamingConnection = await this.chatHubRepository.GetConnectionById(streamingCam.ChatHubConnectionId);
+                            var streamingUser = streamingConnection.User;
+                            var matched = contextRoomBroadcastingCams.Any(cam => cam.ChatHubConnectionId == streamingCam.ChatHubConnectionId);
+
+                            if (matched)
+                            {
+                                string message = $"{ user.DisplayName } matched { streamingUser.DisplayName }😂😂";
+                                await Clients.Clients(new string[] { streamingConnection.ConnectionId, Context.ConnectionId }).SendAsync("Matched", message);
+                            }
+                        }
+                    }
+                }
             }
         }
         [AllowAnonymous]

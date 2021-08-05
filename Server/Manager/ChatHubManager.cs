@@ -33,7 +33,7 @@ namespace Oqtane.ChatHubs.Manager
         {
             if (tenant.DBType == Oqtane.Shared.Constants.DefaultDBType)
             {
-                if (version == "4.2.7003")
+                if (version == "4.2.7004")
                 {
                     // version 1.0.0 used SQL scripts rather than migrations, so we need to seed the migration history table
                     _sql.ExecuteNonQuery(tenant, MigrationUtils.BuildInsertScript("ChatHub.01.00.00.00"));

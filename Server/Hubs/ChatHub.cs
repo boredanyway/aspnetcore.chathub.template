@@ -1105,7 +1105,7 @@ namespace Oqtane.ChatHubs.Hubs
         {
             string moduleId = Context.GetHttpContext().Request.Headers["moduleid"];
             ChatHubUser user = await this.GetChatHubUserAsync();
-            List<string> colors = new List<string>() { "lightgreen", "lightskyblue", "lightpink", "lightgrey", "lightgoldenrod", "lightcoral", "lightblue", "lavender", "thistle" };
+            List<string> colors = new List<string>() { "lightgreen", "lightskyblue", "lightpink", "lightgrey", "lightgoldenrodyellow", "lightcoral", "lightblue", "lavender", "thistle" };
 
             try
             {

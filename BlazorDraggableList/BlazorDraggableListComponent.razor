@@ -26,94 +26,94 @@
     }
 
     @@media(min-width: 576px) {
-        #@Id {
+        .draggable-container-horizontal {
             column-count: 2;
             column-gap: 0;
         }
 
-        .draggable-item-horizontal {
-            display: initial;
-            vertical-align: initial;
-            width: 100%;
+            .draggable-container-horizontal .draggable-item {
+                display: initial;
+                vertical-align: initial;
+                width: 100%;
         }
     }
 
     @@media(min-width: 768px) {
-        #@Id {
+        .draggable-container-horizontal {
             column-count: 2;
             column-gap: 0;
         }
 
-        .draggable-item-horizontal {
-            display: initial;
-            vertical-align: initial;
-            width: 100%;
-        }
+            .draggable-container-horizontal .draggable-item {
+                display: initial;
+                vertical-align: initial;
+                width: 100%;
+            }
     }
 
     @@media(min-width: 992px) {
-        #@Id {
+        .draggable-container-horizontal {
             column-count: initial;
             column-gap: initial;
         }
 
-        .draggable-item-horizontal {
-            display: inline-block;
-            vertical-align: middle;
-            width: 30% !important;
-        }
+            .draggable-container-horizontal .draggable-item {
+                display: inline-block;
+                vertical-align: middle;
+                width: 30% !important;
+            }
     }
 
     @@media(min-width: 1200px) {
-        #@Id {
+        .draggable-container-horizontal {
             column-count: initial;
             column-gap: initial;
         }
 
-        .draggable-item-horizontal {
-            display: inline-block;
-            vertical-align: middle;
-            width: 24% !important;
-        }
+            .draggable-container-horizontal .draggable-item {
+                display: inline-block;
+                vertical-align: middle;
+                width: 24.4% !important;
+            }
     }
 
     @@media(min-width: 1400px) {
-        #@Id {
+        .draggable-container-horizontal {
             column-count: initial;
             column-gap: initial;
         }
 
-        .draggable-item-horizontal {
-            display: inline-block;
-            vertical-align: middle;
-            width: 24% !important;
-        }
+            .draggable-container-horizontal .draggable-item {
+                display: inline-block;
+                vertical-align: middle;
+                width: 24.6% !important;
+            }
     }
 
     @@media(max-width: 575px) {
-        #@Id {
+        .draggable-container-horizontal {
             column-count: 2;
             column-gap: 0;
         }
 
-        .draggable-item-horizontal {
-            display: initial;
-            vertical-align: initial;
-            width: 100%;
-        }
+            .draggable-container-horizontal .draggable-item {
+                display: initial;
+                vertical-align: initial;
+                width: 100%;
+            }
     }
 
     @@media(max-width: 320px) {
-        #@Id {
+        .draggable-container-horizontal {
             column-count: 1;
             column-gap: 0;
         }
 
-        .draggable-item-horizontal {
-            display: initial;
-            vertical-align: initial;
-            width: 100%;
-        }
+            .draggable-container-horizontal .draggable-item {
+                display: initial;
+                vertical-align: initial;
+                width: 100%;
+            }
     }
 
 </style>
@@ -121,16 +121,16 @@
 @if (Items != null && Items.Any())
 {
 
-    <div id="@Id" class="w-100 overflow-auto my-md-4 @Class">
+    <div id="@Id" class="w-100 overflow-auto @Class @(Orientation == BlazorDraggableListOrientationType.Horizontal ? "draggable-container-horizontal" : "draggable-container-vertical")" style="@(Orientation == BlazorDraggableListOrientationType.Horizontal && Items.Count() == 1 ? "column-count: 1 !important;" : "")">
         <div class="align-items-center justify-content-center text-center w-100 @(Orientation == BlazorDraggableListOrientationType.Horizontal ? "" : "d-flex flex-column")">
 
             @for (int i = 0; i < Items.Count(); i++)
             {
                 var temp = i;
 
-                <div class="position-relative h-100 p-0 @(Orientation == BlazorDraggableListOrientationType.Horizontal ? "draggable-item-horizontal" : "")" style="@(Items.Count() == 1 ? "width: 100%;" : "")">
+                <div class="position-relative w-100 h-100 p-0 draggable-item">
 
-                    <div id="blazor-draggable-list-item-@temp" class="draggable-item" draggable="true">
+                    <div id="blazor-draggable-list-item-@temp" draggable="true">
                         @BlazorDraggableListItem(Items[temp])
                     </div>
 

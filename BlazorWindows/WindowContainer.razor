@@ -24,7 +24,7 @@
 
 @if (WindowItems.Count() >= 1 && RenderLivestreams)
 {
-<BlazorDraggableListComponent Items="WindowItems" Id="@DraggableLivestreamContainerElementId" Class="p-2 livestream-container-border blazor-window-nav" Orientation="@BlazorDraggableListOrientationType.Horizontal">
+<BlazorDraggableListComponent Items="WindowItems" Id="@DraggableLivestreamContainerElementId" Class="p-0 p-md-2 my-2 my-md-4 livestream-container-border blazor-window-nav" Orientation="@BlazorDraggableListOrientationType.Horizontal">
 
     <BlazorDraggableListItem>
         @context.WindowLivestream

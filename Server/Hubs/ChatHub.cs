@@ -33,8 +33,6 @@ namespace Oqtane.ChatHubs.Hubs
         private readonly IRoleRepository roles;
         private readonly IUserRoleRepository userRoles;
 
-        public static Dictionary<int, string> VideoFirstChunks = new Dictionary<int, string>();
-
         public ChatHub(
             IUserRepository userRepository,
             ChatHubRepository chatHubRepository,
@@ -700,7 +698,7 @@ namespace Oqtane.ChatHubs.Hubs
 
             if (user != null && targetUser != null)
             {
-                if (user == targetUser)
+                if (user.UserId == targetUser.UserId)
                 {
                     throw new HubException("Calling user cannot be target user.");
                 }
@@ -815,9 +813,9 @@ namespace Oqtane.ChatHubs.Hubs
                     await Clients.Group(roomId.ToString()).SendAsync("RemoveModerator", targetModeratorClientModel, roomId);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new HubException(ex.Message);
+                throw new HubException(exception.Message);
             }
         }
         [AllowAnonymous]
@@ -877,9 +875,9 @@ namespace Oqtane.ChatHubs.Hubs
                     await Clients.Group(roomId.ToString()).SendAsync("RemoveWhitelistUser", targetWhitelistUserClientModel, roomId);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new HubException(ex.Message);
+                throw new HubException(exception.Message);
             }
         }
         [AllowAnonymous]
@@ -911,9 +909,9 @@ namespace Oqtane.ChatHubs.Hubs
                     await Clients.Group(roomId.ToString()).SendAsync("AddBlacklistUser", targetBlacklistUserClientModel, roomId);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new HubException(ex.Message);
+                throw new HubException(exception.Message);
             }
         }
         [AllowAnonymous]
@@ -939,9 +937,9 @@ namespace Oqtane.ChatHubs.Hubs
                     await Clients.Group(roomId.ToString()).SendAsync("RemoveBlacklistUser", targetBlacklistUserClientModel, roomId);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new HubException(ex.Message);
+                throw new HubException(exception.Message);
             }
         }
 
@@ -1162,10 +1160,6 @@ namespace Oqtane.ChatHubs.Hubs
             Regex regex = new Regex(guestNamePattern);
             Match match = regex.Match(guestName);
             return match.Success;
-        }
-        public string CreateSignalRChatHubRoomGroupLevelName(string roomId, int userRoomLevel)
-        {
-            return $"roomId:{roomId};userRoomLevel:{userRoomLevel};";
         }
 
     }

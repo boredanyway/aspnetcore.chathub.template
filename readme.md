@@ -3,7 +3,7 @@
 </div>
 
 ## asp .net core blazor signalR entity framework video chat hub template
-
+Check out the new repository [here](https://github.com/boredanyway/aspnetcore.videochathub.template).
 You can download the latest oqtane.chathubs package <a href="https://www.nuget.org/packages/Oqtane.ChatHubs/">here</a> and upload and install directly on your website.
 
 #### Optional edit Default.razor under oqtane client oqtane themes

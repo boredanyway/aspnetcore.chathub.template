@@ -53,7 +53,8 @@ namespace Oqtane.ChatHubs.Services
         public List<ChatHubUser> IgnoredUsers { get; set; } = new List<ChatHubUser>();
         public List<ChatHubUser> IgnoredByUsers { get; set; } = new List<ChatHubUser>();
 
-        public Timer GetLobbyRoomsTimer { get; set; } = new Timer();
+        public Timer GetLobbiesTimer { get; set; } = new Timer();
+        public Timer GetViewersTimer { get; set; } = new Timer();
 
         public event EventHandler OnUpdateUI;
         public event EventHandler<ChatHubUser> OnUpdateConnectedUserEvent;
@@ -101,7 +102,6 @@ namespace Oqtane.ChatHubs.Services
             this.BlazorVideoService.StartVideoEvent += async (BlazorVideoModel model) => await this.StartCam(model);
             this.BlazorVideoService.StopVideoEvent += async (BlazorVideoModel model) => await this.StopCam(model);
             this.BlazorVideoService.BlazorVideoServiceExtension.OnDataAvailableEventHandler += async (string data, string id) => await OnDataAvailableEventHandlerExecute(data, id);
-
             this.BlazorAlertsService.OnAlertConfirmed += OnAlertConfirmedExecute;
 
             this.OnUpdateConnectedUserEvent += OnUpdateConnectedUserExecute;
@@ -131,9 +131,13 @@ namespace Oqtane.ChatHubs.Services
             this.OnClearHistoryEvent += OnClearHistoryExecute;
             this.OnMatchedEvent += MatchedEventExecute;
 
-            GetLobbyRoomsTimer.Elapsed += new ElapsedEventHandler(async (object source, ElapsedEventArgs e) => await OnGetLobbyRoomsTimerElapsed(source, e));
-            GetLobbyRoomsTimer.Interval = 10000;
-            GetLobbyRoomsTimer.Enabled = true;
+            this.GetLobbiesTimer.Elapsed += new ElapsedEventHandler(async (object source, ElapsedEventArgs e) => await OnGetLobbiesTimerElapsed(source, e));
+            this.GetLobbiesTimer.Interval = 10000;
+            this.GetLobbiesTimer.Enabled = true;
+
+            this.GetViewersTimer.Elapsed += new ElapsedEventHandler(async (object source, ElapsedEventArgs e) => await OnGetViewersTimerElapsed(source, e));
+            this.GetViewersTimer.Interval = 10000;
+            this.GetViewersTimer.Enabled = true;
         }
 
         private void MatchedEventExecute(object sender, string e)
@@ -772,9 +776,12 @@ namespace Oqtane.ChatHubs.Services
             this.RunUpdateUI();
         }
 
-        private async Task OnGetLobbyRoomsTimerElapsed(object source, ElapsedEventArgs e)
+        private async Task OnGetLobbiesTimerElapsed(object source, ElapsedEventArgs e)
         {
             await this.GetLobbyRooms();
+        }
+        private async Task OnGetViewersTimerElapsed(object source, ElapsedEventArgs e)
+        {
             await this.GetChatHubViewers();
         }
 
@@ -859,12 +866,34 @@ namespace Oqtane.ChatHubs.Services
             this.RunUpdateUI();
         }
 
+        public string ChatHubControllerApiUrl
+        {
+            get { return CreateApiUrl(SiteState.Alias, "ChatHub"); }
+        }
+        public async Task FixCorruptConnections(int ModuleId)
+        {
+            await HttpClient.DeleteAsync(ChatHubControllerApiUrl + "/fixcorruptconnections" + "?entityid=" + ModuleId);
+        }
+        public async Task CreateExampleData(int ModuleId)
+        {
+            await this.Connection.InvokeAsync("CreateExampleData").ContinueWith((task) =>
+            {
+                if (task.IsCompleted)
+                {
+                    this.HandleException(task);
+                }
+            });
+        }
+
+        public void RunUpdateUI()
+        {
+            this.OnUpdateUI.Invoke(this, EventArgs.Empty);
+        }
         public void Dispose()
         {
             this.BlazorVideoService.StartVideoEvent -= async (BlazorVideoModel model) => await this.StartCam(model);
             this.BlazorVideoService.StopVideoEvent -= async (BlazorVideoModel model) => await this.StopCam(model);
             this.BlazorVideoService.BlazorVideoServiceExtension.OnDataAvailableEventHandler -= async (string data, string id) => await OnDataAvailableEventHandlerExecute(data, id);
-
             this.BlazorAlertsService.OnAlertConfirmed -= OnAlertConfirmedExecute;
 
             this.OnUpdateConnectedUserEvent -= OnUpdateConnectedUserExecute;
@@ -894,31 +923,8 @@ namespace Oqtane.ChatHubs.Services
             this.OnClearHistoryEvent -= OnClearHistoryExecute;
             this.OnMatchedEvent -= MatchedEventExecute;
 
-            GetLobbyRoomsTimer.Elapsed -= new ElapsedEventHandler(async (object source, ElapsedEventArgs e) => await OnGetLobbyRoomsTimerElapsed(source, e));
-        }
-
-        public void RunUpdateUI()
-        {
-            this.OnUpdateUI.Invoke(this, EventArgs.Empty);
-        }
-
-        public string ChatHubControllerApiUrl
-        {
-            get { return CreateApiUrl(SiteState.Alias, "ChatHub"); }
-        }
-        public async Task FixCorruptConnections(int ModuleId)
-        {
-            await HttpClient.DeleteAsync(ChatHubControllerApiUrl + "/fixcorruptconnections" + "?entityid=" + ModuleId);
-        }
-        public async Task CreateExampleData(int ModuleId)
-        {
-            await this.Connection.InvokeAsync("CreateExampleData").ContinueWith((task) =>
-            {
-                if (task.IsCompleted)
-                {
-                    this.HandleException(task);
-                }
-            });
+            this.GetLobbiesTimer.Elapsed -= new ElapsedEventHandler(async (object source, ElapsedEventArgs e) => await OnGetLobbiesTimerElapsed(source, e));
+            this.GetViewersTimer.Elapsed -= new ElapsedEventHandler(async (object source, ElapsedEventArgs e) => await OnGetLobbiesTimerElapsed(source, e));
         }
 
     }
